@@ -12,7 +12,8 @@ setup(
     description='An easy-to-use library for skin tone classification',
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
-    packages=find_packages(),
+    packages=find_packages("skin-tone-classifier"),
+    package_dir={"": "skin-tone-classifier"},
     zip_safe=False,
 
     author='Chenglong Ma',
@@ -37,7 +38,6 @@ setup(
         "colormath~=3.0.0",
         "tqdm~=4.64.0"
     ],
-    package_dir={"": "skin-tone-classifier"},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
