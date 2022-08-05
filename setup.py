@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-VERSION = '0.1.1'
+VERSION = '0.1.2'
 
 with open('README.md') as f:
     LONG_DESCRIPTION = f.read()
@@ -12,23 +12,22 @@ setup(
     description='An easy-to-use library for skin tone classification',
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
-    packages=find_packages("skin-tone-classifier"),
-    package_dir={"": "skin-tone-classifier"},
+    packages=find_packages("src"),
+    package_dir={"": "src"},
     zip_safe=False,
 
     author='Chenglong Ma',
     author_email='chenglong.m@outlook.com',
-    keywords='skin tone, image recognition, face detection',
+    keywords='skin-tone image-recognition face-detection',
     url='https://chenglongma.com/SkinToneClassifier/',
     project_urls={
         "Documentation": "https://chenglongma.com/SkinToneClassifier/",
         "Code": "https://github.com/ChenglongMa/SkinToneClassifier",
         "Issue tracker": "https://github.com/ChenglongMa/SkinToneClassifier/issues",
     },
-
     entry_points={
         'console_scripts': [
-            'stone=skin-tone-classifier:main'
+            'stone=src.main'
         ],
     },
     install_requires=[
