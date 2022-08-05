@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-VERSION = '0.1.3'
+VERSION = '0.1.4'
 
 with open('README.md') as f:
     LONG_DESCRIPTION = f.read()
@@ -27,7 +27,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'stone=src.main:main'
+            'stone=stone.main:main'
         ],
     },
     install_requires=[
@@ -41,6 +41,8 @@ setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
-        "Topic :: Scientific/Engineering :: Image Recognition"
+        "Topic :: Scientific/Engineering :: Image Recognition",
+        "Topic :: Scientific/Engineering :: Image Processing",
+        "Environment :: Console",
     ],
 )

@@ -177,7 +177,7 @@ LOG = logging.getLogger(__name__)
 def main():
     # Setup logger
     now = datetime.now()
-    os.makedirs('../log', exist_ok=True)
+    os.makedirs('../../log', exist_ok=True)
 
     logging.basicConfig(
         filename=now.strftime('./log/log-%y%m%d%H%M.log'),
@@ -243,7 +243,7 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
 
     # Start - open file
-    f = open(os.path.join(args.output, '../result.csv'), 'w', encoding='UTF8')
+    f = open(os.path.join(args.output, '../../result.csv'), 'w', encoding='UTF8')
     header = 'file,face_location,' + ','.join([f'dominant_{i + 1},props_{i + 1}' for i in range(n_dominant_colors)]) + ',category, distance(0-100)\n'
     f.write(header)
 
@@ -289,3 +289,7 @@ def main():
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+
+if __name__ == '__main__':
+    main()
