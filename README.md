@@ -121,8 +121,7 @@ In default (i.e., `stone` without `-i` option), the app will search images in cu
 stone -c (or --categories) #373028 #422811 #fbf2f3
 ```
 
-NB: Values start with '#', default color categories are:
-`#373028`, `#422811`, `#513b2e`, `#6f503c`, `#81654f`, `#9d7a54`, `#bea07e`, `#e5c8a6`, `#e7c1b8`, `#f3dad6`, `#fbf2f3`
+NB: Values start with '#'.
 
 [//]: # (<div style="display:flex;">)
 
