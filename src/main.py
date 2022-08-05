@@ -88,7 +88,7 @@ def skin_label(colors, props, labels):
     return label_id, category_hex, distance
 
 
-def classify(image, labels, report_image):
+def classify(image, n_dominant_colors, labels, report_image, debug=False):
     image = image.copy()
     image = detect_skin(image)
 
@@ -173,8 +173,8 @@ def writerow(f, arr: list):
 
 LOG = logging.getLogger(__name__)
 
-if __name__ == '__main__':
 
+def main():
     # Setup logger
     now = datetime.now()
     os.makedirs('../log', exist_ok=True)
@@ -267,12 +267,12 @@ if __name__ == '__main__':
                     face = resized_image[y1:y2, x1:x2]
                     if debug:
                         final_image = draw_rects(resized_image, [x1, y1, x2, y2])
-                    res, _debug_img = classify(face, categories, final_image)
+                    res, _debug_img = classify(face, n_dominant_colors, categories, final_image, debug)
                     writerow(f, [basename, f'{x1}:{x2}'] + res)
                     debug_imgs.append(_debug_img)
             else:
                 LOG.info(f'Found 0 face, will detect global skin area instead')
-                res, _debug_img = classify(resized_image, categories, final_image)
+                res, _debug_img = classify(resized_image, n_dominant_colors, categories, final_image, debug)
                 writerow(f, [basename, 'NA'] + res)
                 debug_imgs.append(_debug_img)
 

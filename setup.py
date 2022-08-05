@@ -27,7 +27,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'stone=src.main'
+            'stone=src.main:main'
         ],
     },
     install_requires=[
