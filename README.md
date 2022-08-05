@@ -122,41 +122,77 @@ stone -c (or --categories) #373028 #422811 #fbf2f3
 ```
 
 NB: Values start with '#', default color categories are:
-<div style="display:flex;">
-   <p style="background-color:#373028; color: aliceblue; text-align:center; vertical-align: middle; width: 80px;float: start;">
-      #373028
-   </p>
-   <p style="background-color:#422811; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">
-      #422811
-   </p>
-   <p style="background-color:#513b2e; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">
-      #513b2e
-   </p>  
-   <p style="background-color:#6f503c; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">
-      #6f503c
-   </p>
-   <p style="background-color:#81654f; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">
-      #81654f
-   </p>
-   <p style="background-color:#9d7a54; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">
-      #9d7a54
-   </p>
-   <p style="background-color:#bea07e; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">
-      #bea07e
-   </p>
-   <p style="background-color:#e5c8a6; color: black; text-align:center; vertical-align: middle; width: 80px">
-      #e5c8a6
-   </p>
-   <p style="background-color:#e7c1b8; color: black; text-align:center; vertical-align: middle; width: 80px">
-      #e7c1b8
-   </p>
-   <p style="background-color:#f3dad6; color: black; text-align:center; vertical-align: middle; width: 80px">
-      #f3dad6
-   </p>
-   <p style="background-color:#fbf2f3; color: black; text-align:center; vertical-align: middle; width: 80px">
-      #fbf2f3
-   </p>
-</div>
+`#373028`, `#422811`, `#513b2e`, `#6f503c`, `#81654f`, `#9d7a54`, `#bea07e`, `#e5c8a6`, `#e7c1b8`, `#f3dad6`, `#fbf2f3`
+
+[//]: # (<div style="display:flex;">)
+
+[//]: # (   <p style="background-color:#373028; color: aliceblue; text-align:center; vertical-align: middle; width: 80px;float: start;">)
+
+[//]: # (      #373028)
+
+[//]: # (   </p>)
+
+[//]: # (   <p style="background-color:#422811; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">)
+
+[//]: # (      #422811)
+
+[//]: # (   </p>)
+
+[//]: # (   <p style="background-color:#513b2e; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">)
+
+[//]: # (      #513b2e)
+
+[//]: # (   </p>  )
+
+[//]: # (   <p style="background-color:#6f503c; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">)
+
+[//]: # (      #6f503c)
+
+[//]: # (   </p>)
+
+[//]: # (   <p style="background-color:#81654f; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">)
+
+[//]: # (      #81654f)
+
+[//]: # (   </p>)
+
+[//]: # (   <p style="background-color:#9d7a54; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">)
+
+[//]: # (      #9d7a54)
+
+[//]: # (   </p>)
+
+[//]: # (   <p style="background-color:#bea07e; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">)
+
+[//]: # (      #bea07e)
+
+[//]: # (   </p>)
+
+[//]: # (   <p style="background-color:#e5c8a6; color: black; text-align:center; vertical-align: middle; width: 80px">)
+
+[//]: # (      #e5c8a6)
+
+[//]: # (   </p>)
+
+[//]: # (   <p style="background-color:#e7c1b8; color: black; text-align:center; vertical-align: middle; width: 80px">)
+
+[//]: # (      #e7c1b8)
+
+[//]: # (   </p>)
+
+[//]: # (   <p style="background-color:#f3dad6; color: black; text-align:center; vertical-align: middle; width: 80px">)
+
+[//]: # (      #f3dad6)
+
+[//]: # (   </p>)
+
+[//]: # (   <p style="background-color:#fbf2f3; color: black; text-align:center; vertical-align: middle; width: 80px">)
+
+[//]: # (      #fbf2f3)
+
+[//]: # (   </p>)
+
+[//]: # (</div>)
 
 2.2 Use RGB tuple values
 
