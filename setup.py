@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-VERSION = '0.1.4'
+VERSION = '0.1.5'
 
 with open('README.md') as f:
     LONG_DESCRIPTION = f.read()
@@ -27,7 +27,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'stone=stone.main:main'
+            'stone = stone.__main__:main'
         ],
     },
     install_requires=[
