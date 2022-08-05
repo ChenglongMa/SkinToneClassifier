@@ -26,7 +26,7 @@ pip install skin-tone-classifier
 Given the famous photo of [Lenna](http://www.lenna.org/), to detect her skin tone,
 
 <div align="center">
-   <img src="http://www.lenna.org/len_std.jpg"  alt="Lenna picture" style="display: block; margin: auto"/>
+   <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std.jpg"  alt="Lenna picture" style="display: block; margin: auto"/>
 </div>
 just run:
 
@@ -37,7 +37,7 @@ stone -i /path/to/lenna.jpg --debug
 Then, you can find the processed image in `./debug` folder, e.g.,
 
 <div align="center">
-   <img src="./docs/lena_std-1.jpg"  alt="processed Lenna picture" style="display: block; margin: auto"/>
+   <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std-1.jpg"  alt="processed Lenna picture" style="display: block; margin: auto"/>
 </div>
 
 In this image, from left to right you can find the following information:
@@ -65,7 +65,7 @@ stone -h
 Output in console:
 
 ```text
-usage: main.py [-h] [-i IMAGE FILENAME [IMAGE FILENAME ...]]
+usage: stone [-h] [-i IMAGE FILENAME [IMAGE FILENAME ...]]
                [-c COLOR [COLOR ...]] [-d] [-o DIRECTORY] [--n_colors N]
                [--new_width WIDTH] [--scale SCALE] [--min_nbrs NEIGHBORS]
                [--min_size WIDTH [HEIGHT ...]]
