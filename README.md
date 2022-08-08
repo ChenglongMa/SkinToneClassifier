@@ -1,5 +1,8 @@
 # <u>S</u>kin <u>Tone</u> Classifier (stone)
 
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/skin-tone-classifier)
+![PyPI](https://img.shields.io/pypi/v/skin-tone-classifier)
+![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/ChenglongMa/SkinToneClassifier?include_prereleases)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 An easy-to-use library for skin tone classification.
