@@ -225,7 +225,7 @@ def main():
         if os.path.isdir(name):
             filenames.extend([glob.glob(os.path.join(name, i)) for i in valid_images])
         if os.path.isfile(name):
-            filenames.append(name)
+            filenames.append([name])
 
     filenames = [Path(f) for fs in filenames for f in fs]
     assert len(filenames) > 0, 'No valid images in the specified path.'
@@ -254,6 +254,9 @@ def main():
 
             LOG.info(f'\n----- Processing {basename} -----')
             ori_image = cv2.imread(str(filename.resolve()), cv2.IMREAD_UNCHANGED)
+            if not ori_image:
+                LOG.warning(f'{filename}.{extension} is not found or is not a valid image.')
+                continue
 
             resized_image = imutils.resize(ori_image, width=args.new_width)
             final_image = resized_image.copy()
