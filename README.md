@@ -53,9 +53,9 @@ In this image, from left to right you can find the following information:
 
 Furthermore, there will be a report file named `result.csv` which contains more detailed information, e.g.,
 
-|file|face_location|dominant_1|props_1|dominant_2|props_2|category| distance(0-100)|
-|-----|-----|-----|-----|-----|-----|-----|-----|
-|lena_std|84:153|#CB6268|0.51|#E1A299|0.49|#e7c1b8|17.37|
+| file     | face_location | dominant_1 | props_1 | dominant_2 | props_2 | category | PERLA | distance(0-100) |
+|----------|---------------|------------|---------|------------|---------|----------|-------|-----------------|
+| lena_std | 84:153        | #CB6268    | 0.51    | #E1A299    | 0.49    | #e7c1b8  | I     | 17.37           |
 
 ## Detailed Usage
 

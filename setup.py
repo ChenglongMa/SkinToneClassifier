@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-VERSION = '0.1.8'
+VERSION = '0.1.9'
 
 with open('README.md') as f:
     LONG_DESCRIPTION = f.read()
@@ -31,11 +31,11 @@ setup(
         ],
     },
     install_requires=[
-        "opencv-python~=4.6.0.66",
-        "imutils~=0.5.4",
-        "numpy~=1.21.5",
-        "colormath~=3.0.0",
-        "tqdm~=4.64.0"
+        "opencv-python>=4.6.0.66",
+        "imutils>=0.5.4",
+        "numpy>=1.21.5",
+        "colormath>=3.0.0",
+        "tqdm>=4.64.0"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",

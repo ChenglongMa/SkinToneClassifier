@@ -2,6 +2,7 @@ import argparse
 import glob
 import logging
 import os
+import re
 from datetime import datetime
 
 import cv2
@@ -13,6 +14,11 @@ from colormath.color_objects import sRGBColor, LabColor
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 from pathlib import Path
+
+
+def sort_file(filename: Path):
+    nums = re.findall(r'\d+', filename.stem)
+    return int(nums[0]) if nums else filename
 
 
 def detect_faces(image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30)):
@@ -77,18 +83,19 @@ def dominant_colors(image, n_clusters=3):
     return colors, props
 
 
-def skin_label(colors, props, labels):
-    lab_labels = [convert_color(sRGBColor.new_from_rgb_hex(lbl), LabColor) for lbl in labels]
+def skin_label(colors, props, categories, cate_labels):
+    lab_labels = [convert_color(sRGBColor.new_from_rgb_hex(lbl), LabColor) for lbl in categories]
     lab_colors = [convert_color(sRGBColor(rgb_r=r, rgb_g=g, rgb_b=b, is_upscaled=True), LabColor) for b, g, r in colors]
     distances = [np.sum([delta_e_cie2000(c, label) * p for c, p in zip(lab_colors, props)]) for label in lab_labels]
     label_id = np.argmin(distances)
     distance: float = distances[label_id]
-    category_hex = labels[label_id]
+    category_hex = categories[label_id]
+    PERLA = cate_labels[label_id]
     LOG.info(f'Classified color category: {category_hex}, distance: {distance}')
-    return label_id, category_hex, distance
+    return label_id, category_hex, PERLA, distance
 
 
-def classify(image, n_dominant_colors, labels, report_image, debug=False):
+def classify(image, n_dominant_colors, categories, cate_labels, report_image, debug=False):
     image = image.copy()
     image = detect_skin(image)
 
@@ -99,9 +106,9 @@ def classify(image, n_dominant_colors, labels, report_image, debug=False):
     prop_strs = ['%.2f' % p for p in props]
     res = list(np.hstack(list(zip(hex_colors, prop_strs))))
     LOG.info(f'Dominant color(s) with proportion: {res}')
-    label_id, category_hex, distance = skin_label(colors, props, labels)
+    label_id, category_hex, PERLA, distance = skin_label(colors, props, categories, cate_labels)
     distance = round(distance, 2)
-    res.extend([category_hex, distance])
+    res.extend([category_hex, PERLA, distance])
 
     debug_img = None
     if debug:
@@ -121,16 +128,16 @@ def classify(image, n_dominant_colors, labels, report_image, debug=False):
         color_bars = np.vstack(color_bars)
 
         label_bars = []
-        label_h = report_image.shape[0] // len(labels)
+        label_h = report_image.shape[0] // len(categories)
         label_w = color_w
         label_bgrs = []
-        for index, label_hex in enumerate(labels):
+        for label_hex in categories:
             hex_val = label_hex.lstrip('#')
             lr, lg, lb = [int(hex_val[i:i + 2], 16) for i in (0, 2, 4)]
             label_bgrs.append([lb, lg, lr])
             label_bar = create_bar(label_h, label_w, [lb, lg, lr])
             label_bars.append(label_bar)
-        padding_height = report_image.shape[0] - label_h * len(labels)
+        padding_height = report_image.shape[0] - label_h * len(categories)
         if padding_height > 0:
             padding = create_bar(padding_height, label_w, (255, 255, 255))
             label_bars.append(padding)
@@ -196,8 +203,11 @@ def main():
 
     default_categories = ["#373028", "#422811", "#513b2e", "#6f503c", "#81654f", "#9d7a54", "#bea07e", "#e5c8a6", "#e7c1b8", "#f3dad6", "#fbf2f3"]
 
+    default_labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[:len(default_categories)]
     parser.add_argument('-c', '--categories', nargs='+', default=default_categories, metavar='COLOR',
                         help='Skin tone categories; supports RGB hex value leading by # or RGB values separated by comma(,).')
+    parser.add_argument('-l', '--labels', nargs='+', default=default_labels, metavar='LABEL',
+                        help='Category labels; default values are uppercase alphabet list; separated by comma(,).')
     parser.add_argument('-d', '--debug', action='store_true', help='Whether to output processed images, used for debugging and verification.')
     parser.add_argument('-o', '--output', default='./', metavar='DIRECTORY',
                         help='The path of output file, defaults to current directory.')
@@ -229,10 +239,13 @@ def main():
 
     filenames = [Path(f) for fs in filenames for f in fs]
     assert len(filenames) > 0, 'No valid images in the specified path.'
+    # Sort filenames by (first) number extracted from the filename string
+    filenames.sort(key=sort_file)
     is_single_file = len(filenames) == 1
 
     debug: bool = args.debug
     categories: list[str] = args.categories
+    cate_labels = args.labels
     for idx, ct in enumerate(categories):
         if not ct.startswith('#') and len(ct.split(',')) == 3:
             r, g, b = ct.split(',')
@@ -244,7 +257,8 @@ def main():
 
     # Start - open file
     f = open(os.path.join(args.output, './result.csv'), 'w', encoding='UTF8')
-    header = 'file,face_location,' + ','.join([f'dominant_{i + 1},props_{i + 1}' for i in range(n_dominant_colors)]) + ',category, distance(0-100)\n'
+    header = 'file,face_location,' + ','.join(
+        [f'dominant_{i + 1},props_{i + 1}' for i in range(n_dominant_colors)]) + ',category,PERLA,distance(0-100)\n'
     f.write(header)
 
     # Start - processing images
@@ -254,7 +268,7 @@ def main():
 
             LOG.info(f'\n----- Processing {basename} -----')
             ori_image = cv2.imread(str(filename.resolve()), cv2.IMREAD_UNCHANGED)
-            if not ori_image:
+            if ori_image is None:
                 LOG.warning(f'{filename}.{extension} is not found or is not a valid image.')
                 continue
 
@@ -270,12 +284,12 @@ def main():
                     face = resized_image[y1:y2, x1:x2]
                     if debug:
                         final_image = draw_rects(resized_image, [x1, y1, x2, y2])
-                    res, _debug_img = classify(face, n_dominant_colors, categories, final_image, debug)
+                    res, _debug_img = classify(face, n_dominant_colors, categories, cate_labels, final_image, debug)
                     writerow(f, [basename, f'{x1}:{x2}'] + res)
                     debug_imgs.append(_debug_img)
             else:
                 LOG.info(f'Found 0 face, will detect global skin area instead')
-                res, _debug_img = classify(resized_image, n_dominant_colors, categories, final_image, debug)
+                res, _debug_img = classify(resized_image, n_dominant_colors, categories, cate_labels, final_image, debug)
                 writerow(f, [basename, 'NA'] + res)
                 debug_imgs.append(_debug_img)
 
