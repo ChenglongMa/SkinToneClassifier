@@ -194,7 +194,7 @@ def main():
     )
 
     # Setup arguments
-    parser = argparse.ArgumentParser(description='Skin Tone Classifier', formatter_class=argparse.RawTextHelpFormatter)
+    parser = argparse.ArgumentParser(description='CASCo', formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-i', '--images', nargs='+', default='./', metavar='IMAGE FILENAME',
                         help='Image filename(s) to process;\n'
                              'supports multiple values separated by space, e.g., "a.jpg b.png";\n'
