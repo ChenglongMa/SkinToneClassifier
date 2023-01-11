@@ -27,8 +27,8 @@ Please install **Miniconda** based on your OS following [this link](https://docs
    1. As I tested on my side, for macOS built on M1 chips, you choose `bash` installation script instead of `pkg` version.  
 2. Install Miniconda via `bash` script:
    1. Open "Terminal" app: Click the Launchpad icon <img src="https://help.apple.com/assets/61E89D604694F96BA04E7D79/61E89D614694F96BA04E7D80/en_AU/a1f94c9ca0de21571b88a8bf9aef36b8.png" alt="" height="30" width="30" originalimagename="SharedGlobalArt/AppIconTopic_Launchpad.png"> in the Dock, type "Terminal" in the search field, then click "Terminal".
-      
-      ![Find terminal](docs/wiki/find_terminal.png)
+
+      <img alt="Find terminal" src="docs/wiki/find_terminal.png" width="40%"/>
    2. Navigate to the folder of the downloaded file us `cd` command.
       1. `cd` means "**C**hange **D**irectory". Suppose the `Miniconda3-latest-MacOSX-arm64.sh` is in `~/Downloads`, you should run:
       ```shell
@@ -43,7 +43,7 @@ Please install **Miniconda** based on your OS following [this link](https://docs
       ![Install Miniconda](docs/wiki/installation.gif)
    5. Close the Terminal and reopen it again (**IMPORTANT!**). Then you will see `(base)` at the beginning of a command line:
       
-      ![Base keyword](docs/wiki/base_leading.png)
+      <img src="docs/wiki/base_leading.png" alt="Base keyword" width="80%"/>
 
 ### 2. Install SkinToneClassifier
 
@@ -108,3 +108,24 @@ Given a folder of images, e.g., `Portraits_LX` and an excel file, e.g., `Databas
      E.g., `LX (1).jpg`, `LX (2).jpg`, `LX (100).jpg` would be in correct order instead of `LX (1).jpg`, `LX (100).jpg`, `LX (2).jpg`.
    - When we have completed the previous step, now column "PERLA" of the two files should correspond to each other, we can copy it directly from `result.csv` to `Database_LX Legislatura_CASCo.xlsx`.
 6. Now we have done all the work 🎊.
+
+## Interpretation of the results file
+
+As shown above, each entry in `result.csv` has 9 fields, which summary the face area, dominant colors and classified color category for each file.
+
+Specifically, the meaning of each field is:
+
+* `file`: the filename of the image.
+* `face_location`: the coordinates of the detected face area, in the form of `top_left : bottom_left`.
+* `dominant_x`: the HEX value of `x`-th dominant color in the detected face area.
+* `props_x`: the proportion of `x`-th dominant color in the detected face area.
+* `category`: the HEX value of the assigned color category.
+* `PERLA`: the label of the assigned color category.
+* `distance(0-100)`: the distance between the assigned color category and the dominant colors in the face area. 
+   Values are between 0 and 100. A lower value indicates a more accurate classification, 
+   and we have more confidence in the result.
+
+   As shown in the histogram, the distance values in the result range from 5.77 to 20.48, with an average of 13.53.
+   The library achieves good performance. 
+   
+   <img src="docs/wiki/hist_distance.svg" alt="histogram" width="60%"/>
