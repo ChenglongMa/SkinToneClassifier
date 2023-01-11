@@ -205,9 +205,9 @@ def main():
 
     default_labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[:len(default_categories)]
     parser.add_argument('-c', '--categories', nargs='+', default=default_categories, metavar='COLOR',
-                        help='Skin tone categories; supports RGB hex value leading by # or RGB values separated by comma(,).')
+                        help='Skin tone categories; supports RGB hex value leading by # or RGB values separated by comma(,), e.g., -c #373028 #422811 or 255,255,255 100,100,100')
     parser.add_argument('-l', '--labels', nargs='+', default=default_labels, metavar='LABEL',
-                        help='Category labels; default values are uppercase alphabet list; separated by comma(,).')
+                        help='Category labels; default values are uppercase alphabet list.')
     parser.add_argument('-d', '--debug', action='store_true', help='Whether to output processed images, used for debugging and verification.')
     parser.add_argument('-o', '--output', default='./', metavar='DIRECTORY',
                         help='The path of output file, defaults to current directory.')
@@ -215,13 +215,13 @@ def main():
     parser.add_argument('--n_colors', type=int, metavar='N',
                         help='CONFIG: the number of dominant colors to be extracted, defaults to 2.', default=2)
     parser.add_argument('--new_width', type=int, metavar='WIDTH',
-                        help='CONFIG: resize the images with the specified width, defaults to 200.', default=200)
+                        help='CONFIG: resize the images with the specified width. Negative value will be ignored, defaults to -1.', default=-1)
 
     # Refer to https://stackoverflow.com/a/20805153/8860079
     parser.add_argument('--scale', type=float, help='CONFIG: how much the image size is reduced at each image scale, defaults to 1.1', default=1.1)
     parser.add_argument('--min_nbrs', type=int, metavar='NEIGHBORS',
                         help='CONFIG: how many neighbors each candidate rectangle should have to retain it.\n'
-                             'Higher value results in less detections but with higher quality.', default=5)
+                             'Higher value results in less detections but with higher quality, defaults to 5', default=5)
     parser.add_argument('--min_size', type=int, nargs='+', metavar=('WIDTH', 'HEIGHT'),
                         help='CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "30 30".', default=(30, 30))
 
@@ -272,7 +272,7 @@ def main():
                 LOG.warning(f'{filename}.{extension} is not found or is not a valid image.')
                 continue
 
-            resized_image = imutils.resize(ori_image, width=args.new_width)
+            resized_image = imutils.resize(ori_image, width=args.new_width) if args.new_width > 0 else ori_image
             final_image = resized_image.copy()
             faces = detect_faces(resized_image, args.scale, args.min_nbrs, min_size)
 
@@ -280,12 +280,13 @@ def main():
             if len(faces) > 0:
                 LOG.info(f'Found {len(faces)} face(s)')
                 for idx, (x1, y1, x2, y2) in enumerate(faces):
+                    sub_filename = f'{basename}-{idx + 1}'
                     LOG.info(f'Face {idx + 1} location: {x1}:{x2}')
                     face = resized_image[y1:y2, x1:x2]
                     if debug:
                         final_image = draw_rects(resized_image, [x1, y1, x2, y2])
                     res, _debug_img = classify(face, n_dominant_colors, categories, cate_labels, final_image, debug)
-                    writerow(f, [basename, f'{x1}:{x2}'] + res)
+                    writerow(f, [sub_filename, f'{x1}:{x2}'] + res)
                     debug_imgs.append(_debug_img)
             else:
                 LOG.info(f'Found 0 face, will detect global skin area instead')
