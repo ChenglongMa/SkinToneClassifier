@@ -16,6 +16,13 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 from pathlib import Path
 
 
+def patch_asscalar(a):
+    return np.asarray(a).item()
+
+
+setattr(np, "asscalar", patch_asscalar)
+
+
 def sort_file(filename: Path):
     nums = re.findall(r'\d+', filename.stem)
     return int(nums[0]) if nums else filename
