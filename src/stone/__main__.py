@@ -123,7 +123,7 @@ def classify(image, n_dominant_colors, categories, cate_labels, report_image, de
         color_w = 100
         total_height = 0
         for index, color in enumerate(colors):
-            color_h = round(report_image.shape[0] * props[index])
+            color_h = int(np.floor(report_image.shape[0] * props[index]))
             total_height += color_h
             bar = create_bar(color_h, color_w, color)
             color_bars.append(bar)
@@ -222,7 +222,7 @@ def main():
     parser.add_argument('--n_colors', type=int, metavar='N',
                         help='CONFIG: the number of dominant colors to be extracted, defaults to 2.', default=2)
     parser.add_argument('--new_width', type=int, metavar='WIDTH',
-                        help='CONFIG: resize the images with the specified width. Negative value will be ignored, defaults to -1.', default=-1)
+                        help='CONFIG: resize the images with the specified width. Negative value will be ignored, defaults to 250.', default=250)
 
     # Refer to https://stackoverflow.com/a/20805153/8860079
     parser.add_argument('--scale', type=float, help='CONFIG: how much the image size is reduced at each image scale, defaults to 1.1', default=1.1)
@@ -274,42 +274,48 @@ def main():
             basename, extension = filename.stem, filename.suffix
 
             LOG.info(f'\n----- Processing {basename} -----')
-            ori_image = cv2.imread(str(filename.resolve()), cv2.IMREAD_UNCHANGED)
-            if ori_image is None:
-                LOG.warning(f'{filename}.{extension} is not found or is not a valid image.')
+            try:
+                ori_image = cv2.imread(str(filename.resolve()), cv2.IMREAD_UNCHANGED)
+                if ori_image is None:
+                    LOG.warning(f'{filename}.{extension} is not found or is not a valid image.')
+                    continue
+
+                resized_image = imutils.resize(ori_image, width=args.new_width) if args.new_width > 0 else ori_image
+                final_image = resized_image.copy()
+                faces = detect_faces(resized_image, args.scale, args.min_nbrs, min_size)
+
+                debug_imgs = []
+                if len(faces) > 0:
+                    LOG.info(f'Found {len(faces)} face(s)')
+                    for idx, (x1, y1, x2, y2) in enumerate(faces):
+                        sub_filename = f'{basename}-{idx + 1}'
+                        LOG.info(f'Face {idx + 1} location: {x1}:{x2}')
+                        face = resized_image[y1:y2, x1:x2]
+                        if debug:
+                            final_image = draw_rects(resized_image, [x1, y1, x2, y2])
+                        res, _debug_img = classify(face, n_dominant_colors, categories, cate_labels, final_image, debug)
+                        writerow(f, [sub_filename, f'{x1}:{x2}'] + res)
+                        debug_imgs.append(_debug_img)
+                else:
+                    LOG.info(f'Found 0 face, will detect global skin area instead')
+                    res, _debug_img = classify(resized_image, n_dominant_colors, categories, cate_labels, final_image, debug)
+                    writerow(f, [basename, 'NA'] + res)
+                    debug_imgs.append(_debug_img)
+
+                if debug:
+                    debug_dir = os.path.join(output_dir, f'./debug/faces_{len(faces)}')
+                    os.makedirs(debug_dir, exist_ok=True)
+                    for idx, img in enumerate(debug_imgs):
+                        sub_filename = f'{basename}-{idx + 1}'
+                        debug_filename = os.path.join(debug_dir, f'{sub_filename}{extension}')
+                        cv2.imwrite(debug_filename, img)
+                        if is_single_file:
+                            cv2.imshow(f'Skin Tone Classifier - {sub_filename}', img)
+            except Exception as e:
+                LOG.error(f'Error occurred while processing {filename}: {e}')
+                writerow(f, [basename, f'Error: {e}'])
                 continue
 
-            resized_image = imutils.resize(ori_image, width=args.new_width) if args.new_width > 0 else ori_image
-            final_image = resized_image.copy()
-            faces = detect_faces(resized_image, args.scale, args.min_nbrs, min_size)
-
-            debug_imgs = []
-            if len(faces) > 0:
-                LOG.info(f'Found {len(faces)} face(s)')
-                for idx, (x1, y1, x2, y2) in enumerate(faces):
-                    sub_filename = f'{basename}-{idx + 1}'
-                    LOG.info(f'Face {idx + 1} location: {x1}:{x2}')
-                    face = resized_image[y1:y2, x1:x2]
-                    if debug:
-                        final_image = draw_rects(resized_image, [x1, y1, x2, y2])
-                    res, _debug_img = classify(face, n_dominant_colors, categories, cate_labels, final_image, debug)
-                    writerow(f, [sub_filename, f'{x1}:{x2}'] + res)
-                    debug_imgs.append(_debug_img)
-            else:
-                LOG.info(f'Found 0 face, will detect global skin area instead')
-                res, _debug_img = classify(resized_image, n_dominant_colors, categories, cate_labels, final_image, debug)
-                writerow(f, [basename, 'NA'] + res)
-                debug_imgs.append(_debug_img)
-
-            if debug:
-                debug_dir = os.path.join(output_dir, './debug')
-                os.makedirs(debug_dir, exist_ok=True)
-                for idx, img in enumerate(debug_imgs):
-                    sub_filename = f'{basename}-{idx + 1}'
-                    debug_filename = os.path.join(debug_dir, f'{sub_filename}{extension}')
-                    cv2.imwrite(debug_filename, img)
-                    if is_single_file:
-                        cv2.imshow(f'Skin Tone Classifier - {sub_filename}', img)
     f.close()
 
     cv2.waitKey(0)

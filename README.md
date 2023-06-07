@@ -105,10 +105,10 @@ optional arguments:
   -o DIRECTORY, --output DIRECTORY
                         The path of output file, defaults to the directory of this script.
   --n_colors N          CONFIG: the number of dominant colors to be extracted, defaults to 2.
-  --new_width WIDTH     CONFIG: resize the images with the specified width, defaults to 200.
+  --new_width WIDTH     CONFIG: resize the images with the specified width. Negative value will be ignored, defaults to 250.
   --scale SCALE         CONFIG: how much the image size is reduced at each image scale, defaults to 1.1
   --min_nbrs NEIGHBORS  CONFIG: how many neighbors each candidate rectangle should have to retain it.
-                                Higher value results in less detections but with higher quality.
+                                Higher value results in less detections but with higher quality, defaults to 5.
   --min_size WIDTH [HEIGHT ...]
                         CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "30 30".
 ```
@@ -242,7 +242,7 @@ If more than one faces are detected, there will be multiple rows for that image.
 stone -d (or --debug)
 ```
 
-This option will store the processed image (like the Lenna example above) in `./path/to/output/debug` folder.
+This option will store the processed image (like the Lenna example above) in `./path/to/output/debug/faces_<n>` folder, where `<n>` is the number of faces detected in the image.
 
 By default, to save space, the app does not store processed images.
 
