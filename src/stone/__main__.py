@@ -185,6 +185,23 @@ def writerow(f, arr: list):
     f.write(','.join(map(str, arr)) + '\n')
 
 
+def is_black_white(image, threshold=192):
+    """
+    Check if image is grayscale (black and white)
+    :param image:
+    :param threshold:
+    :return:
+    """
+    # Reading Images
+    h, w, c = image.shape
+
+    # Extracting Standard Deviation
+    standarddev = np.std(image, axis=2)
+    BelowT = np.sum(np.where(standarddev <= 25))
+    Prob_BT = BelowT / (h * w)
+    # Check with threshold
+    return Prob_BT >= threshold
+
 LOG = logging.getLogger(__name__)
 
 
@@ -207,14 +224,11 @@ def main():
                              'supports multiple values separated by space, e.g., "a.jpg b.png";\n'
                              'supports directory or file name(s), e.g., "./path/to/images/ a.jpg";\n'
                              'The app will search all images in current directory in default.')
-
-    default_categories = ["#373028", "#422811", "#513b2e", "#6f503c", "#81654f", "#9d7a54", "#bea07e", "#e5c8a6", "#e7c1b8", "#f3dad6", "#fbf2f3"]
-
-    default_labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[:len(default_categories)]
-    parser.add_argument('-c', '--categories', nargs='+', default=default_categories, metavar='COLOR',
-                        help='Skin tone categories; supports RGB hex value leading by # or RGB values separated by comma(,), e.g., -c #373028 #422811 or 255,255,255 100,100,100')
-    parser.add_argument('-l', '--labels', nargs='+', default=default_labels, metavar='LABEL',
-                        help='Category labels; default values are uppercase alphabet list.')
+    parser.add_argument('-c', '--categories', nargs='+', metavar='COLOR',
+                        help='Skin tone categories; supports RGB hex value leading by "#" or RGB values separated by comma(,), e.g., "-c #373028 #422811" or "-c 255,255,255 100,100,100"')
+    parser.add_argument('-l', '--labels', nargs='+', metavar='LABEL',
+                        help='Category labels; default values are the uppercase alphabet list.')
+    parser.add_argument('-t', '--image_type', default='auto', metavar='IMAGE TYPE', help='Specify whether the image is colored or black/white, defaults to "auto", which will be detected automatically.', choices=['auto', 'color', 'bw'])
     parser.add_argument('-d', '--debug', action='store_true', help='Whether to output processed images, used for debugging and verification.')
     parser.add_argument('-o', '--output', default='./', metavar='DIRECTORY',
                         help='The path of output file, defaults to current directory.')
@@ -224,7 +238,7 @@ def main():
     parser.add_argument('--new_width', type=int, metavar='WIDTH',
                         help='CONFIG: resize the images with the specified width. Negative value will be ignored, defaults to 250.', default=250)
 
-    # Refer to https://stackoverflow.com/a/20805153/8860079
+    # For the next parameters, refer to https://stackoverflow.com/a/20805153/8860079
     parser.add_argument('--scale', type=float, help='CONFIG: how much the image size is reduced at each image scale, defaults to 1.1', default=1.1)
     parser.add_argument('--min_nbrs', type=int, metavar='NEIGHBORS',
                         help='CONFIG: how many neighbors each candidate rectangle should have to retain it.\n'
@@ -251,12 +265,25 @@ def main():
     is_single_file = len(filenames) == 1
 
     debug: bool = args.debug
-    categories: list[str] = args.categories
-    cate_labels = args.labels
-    for idx, ct in enumerate(categories):
+
+    image_type = args.image_type
+
+    default_color_categories = ["#373028", "#422811", "#513b2e", "#6f503c", "#81654f", "#9d7a54", "#bea07e", "#e5c8a6", "#e7c1b8", "#f3dad6", "#fbf2f3"]
+
+    # Refer to this paper:
+    # Leigh, A., & Susilo, T. (2009). Is voting skin-deep? Estimating the effect of candidate ballot photographs on election outcomes. Journal of Economic Psychology, 30(1), 61-70.
+    default_bw_categories = ["#FFFFFF", "#F0F0F0", "#E0E0E0", "#D0D0D0", "#C0C0C0", "#B0B0B0", "#A0A0A0", "#909090", "#808080", "#707070", "#606060", "#505050", "#404040", "#303030", "#202020", "#101010", "#000000"]
+
+    default_labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+    specified_categories: list[str] = args.categories if args.categories else []
+    cate_labels = args.labels if args.labels else default_labels
+
+    for idx, ct in enumerate(specified_categories):
         if not ct.startswith('#') and len(ct.split(',')) == 3:
             r, g, b = ct.split(',')
-            categories[idx] = '#%02X%02X%02X' % (int(r), int(g), int(b))
+            specified_categories[idx] = '#%02X%02X%02X' % (int(r), int(g), int(b))
+    
     n_dominant_colors = args.n_colors
     min_size = args.min_size[:2]
     output_dir = args.output
@@ -264,8 +291,8 @@ def main():
 
     # Start - open file
     f = open(os.path.join(args.output, './result.csv'), 'w', encoding='UTF8')
-    header = 'file,face_location,' + ','.join(
-        [f'dominant_{i + 1},props_{i + 1}' for i in range(n_dominant_colors)]) + ',category,PERLA,distance(0-100)\n'
+    header = 'file,image type,face location,' + ','.join(
+        [f'dominant {i + 1},props {i + 1}' for i in range(n_dominant_colors)]) + ',category,PERLA,distance(0-100)\n'
     f.write(header)
 
     # Start - processing images
@@ -279,7 +306,14 @@ def main():
                 if ori_image is None:
                     LOG.warning(f'{filename}.{extension} is not found or is not a valid image.')
                     continue
-
+                is_bw = is_black_white(ori_image)
+                if image_type == 'auto':
+                        image_type = 'bw' if is_bw else 'color'
+                if len(specified_categories) == 0:
+                    categories = default_bw_categories if image_type == 'bw' else default_color_categories
+                else:
+                    categories = specified_categories
+                
                 resized_image = imutils.resize(ori_image, width=args.new_width) if args.new_width > 0 else ori_image
                 final_image = resized_image.copy()
                 faces = detect_faces(resized_image, args.scale, args.min_nbrs, min_size)
@@ -294,12 +328,12 @@ def main():
                         if debug:
                             final_image = draw_rects(resized_image, [x1, y1, x2, y2])
                         res, _debug_img = classify(face, n_dominant_colors, categories, cate_labels, final_image, debug)
-                        writerow(f, [sub_filename, f'{x1}:{x2}'] + res)
+                        writerow(f, [sub_filename, image_type, f'{x1}:{x2}'] + res)
                         debug_imgs.append(_debug_img)
                 else:
                     LOG.info(f'Found 0 face, will detect global skin area instead')
                     res, _debug_img = classify(resized_image, n_dominant_colors, categories, cate_labels, final_image, debug)
-                    writerow(f, [basename, 'NA'] + res)
+                    writerow(f, [basename, image_type, 'NA'] + res)
                     debug_imgs.append(_debug_img)
 
                 if debug:
