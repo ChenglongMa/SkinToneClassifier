@@ -221,14 +221,14 @@ def main():
     parser = argparse.ArgumentParser(description='Skin Tone Classifier', formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-i', '--images', nargs='+', default='./', metavar='IMAGE FILENAME',
                         help='Image filename(s) to process;\n'
-                             'supports multiple values separated by space, e.g., "a.jpg b.png";\n'
-                             'supports directory or file name(s), e.g., "./path/to/images/ a.jpg";\n'
+                             'Supports multiple values separated by space, e.g., "a.jpg b.png";\n'
+                             'Supports directory or file name(s), e.g., "./path/to/images/ a.jpg";\n'
                              'The app will search all images in current directory in default.')
     parser.add_argument('-c', '--categories', nargs='+', metavar='COLOR',
-                        help='Skin tone categories; supports RGB hex value leading by "#" or RGB values separated by comma(,), e.g., "-c #373028 #422811" or "-c 255,255,255 100,100,100"')
+                        help='Skin tone categories;\nSupports RGB hex value leading by "#" or RGB values separated by comma(,),\nE.g., "-c #373028 #422811" or "-c 255,255,255 100,100,100"')
     parser.add_argument('-l', '--labels', nargs='+', metavar='LABEL',
                         help='Category labels; default values are the uppercase alphabet list.')
-    parser.add_argument('-t', '--image_type', default='auto', metavar='IMAGE TYPE', help='Specify whether the image is colored or black/white, defaults to "auto", which will be detected automatically.', choices=['auto', 'color', 'bw'])
+    parser.add_argument('-t', '--image_type', default='auto', metavar='IMAGE TYPE', help='Specify whether the image is colored or black/white.\nValid choices are: "auto", "color" or "bw",\nDefaults to "auto", which will be detected automatically.', choices=['auto', 'color', 'bw'])
     parser.add_argument('-d', '--debug', action='store_true', help='Whether to output processed images, used for debugging and verification.')
     parser.add_argument('-o', '--output', default='./', metavar='DIRECTORY',
                         help='The path of output file, defaults to current directory.')
@@ -337,7 +337,7 @@ def main():
                     debug_imgs.append(_debug_img)
 
                 if debug:
-                    debug_dir = os.path.join(output_dir, f'./debug/faces_{len(faces)}')
+                    debug_dir = os.path.join(output_dir, f'./debug/{image_type}/faces_{len(faces)}')
                     os.makedirs(debug_dir, exist_ok=True)
                     for idx, img in enumerate(debug_imgs):
                         sub_filename = f'{basename}-{idx + 1}'
