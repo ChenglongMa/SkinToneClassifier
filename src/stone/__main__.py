@@ -38,6 +38,7 @@ def main():
     is_single_file = len(filenames) == 1
 
     debug: bool = args.debug
+    to_bw: bool = args.black_white
 
     default_color_palette = ["#373028", "#422811", "#513b2e", "#6f503c", "#81654f", "#9d7a54", "#bea07e", "#e5c8a6", "#e7c1b8", "#f3dad6",
                              "#fbf2f3"]
@@ -49,7 +50,7 @@ def main():
                           "#505050", "#404040", "#303030", "#202020", "#101010", "#000000"]
 
     specified_palette: list[str] = args.palette if args.palette is not None else []
-    tone_labels = args.labels
+    specified_tone_labels = args.labels
 
     for idx, ct in enumerate(specified_palette):
         if not ct.startswith('#') and len(ct.split(',')) == 3:
@@ -71,7 +72,6 @@ def main():
     with logging_redirect_tqdm():
         for filename in tqdm(filenames):
             basename, extension = filename.stem, filename.suffix
-            image_type = args.image_type
 
             LOG.info(f'\n----- Processing {basename} -----')
             # try:
@@ -80,14 +80,17 @@ def main():
                 LOG.warning(f'{filename}.{extension} is not found or is not a valid image.')
                 continue
             is_bw = is_black_white(image)
+            image_type = args.image_type
             if image_type == 'auto':
                 image_type = 'bw' if is_bw else 'color'
             if len(specified_palette) == 0:
-                skin_tone_palette = default_bw_palette if image_type == 'bw' else default_color_palette
+                skin_tone_palette = default_bw_palette if to_bw or is_bw else default_color_palette
             else:
                 skin_tone_palette = specified_palette
-            tone_labels = tone_labels or [alphabet_id(i) for i in range(len(skin_tone_palette))]
-            records, report_images = process(image, skin_tone_palette, tone_labels, new_width=args.new_width,
+            label_prefix = 'B' if to_bw or is_bw else 'C'
+            tone_labels = specified_tone_labels or [label_prefix + alphabet_id(i) for i in range(len(skin_tone_palette))]
+            assert len(skin_tone_palette) == len(tone_labels), 'argument -p/--palette and -l/--labels must have the same length.'
+            records, report_images = process(image, is_bw, to_bw, skin_tone_palette, tone_labels, new_width=args.new_width,
                                              n_dominant_colors=n_dominant_colors,
                                              scaleFactor=args.scale, minNeighbors=args.min_nbrs, minSize=min_size,
                                              verbose=debug)

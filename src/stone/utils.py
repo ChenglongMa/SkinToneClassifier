@@ -61,11 +61,13 @@ def build_arguments():
     parser.add_argument('-l', '--labels', nargs='+', metavar='LABEL',
                         help='Skin tone labels; default values are the uppercase alphabet list.')
     parser.add_argument('-t', '--image_type', default='auto', metavar='IMAGE TYPE',
-                        help='Specify whether the image is colored or black/white.\n'
+                        help='Specify whether the inputs image(s) is/are colored or black/white.\n'
                              'Valid choices are: "auto", "color" or "bw",\n'
                              'Defaults to "auto", which will be detected automatically.',
                         choices=['auto', 'color', 'bw'])
     parser.add_argument('-d', '--debug', action='store_true', help='Whether to output processed images, used for debugging and verification.')
+    parser.add_argument('-bw', '--black_white', action='store_true', help='Whether to convert the input to black/white image(s).\n'
+                                                                          'Then the app will use the black/white palette to classify the image.')
     parser.add_argument('-o', '--output', default='./', metavar='DIRECTORY',
                         help='The path of output file, defaults to current directory.')
 

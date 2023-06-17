@@ -83,7 +83,18 @@ def mask_face(image, face):
     return image
 
 
-def detect_skin(image):
+def detect_skin_in_bw(image):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    _, threshold = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+    skin_mask = cv2.morphologyEx(threshold, cv2.MORPH_CLOSE, kernel)
+
+    skin = cv2.bitwise_and(image, image, mask=skin_mask)
+    all_0 = np.isclose(skin, 0).all()
+    return image if all_0 else skin, skin_mask
+
+
+def detect_skin_in_color(image):
     # Converting from BGR Colours Space to HSV
     img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
@@ -109,8 +120,12 @@ def draw_rects(image, *rects, color=(255, 0, 0), thickness=2):
     return image
 
 
-def dominant_colors(image, n_clusters=2):
-    data = np.reshape(image, (-1, 3))
+def dominant_colors(image, to_bw, n_clusters=2):
+    if to_bw:
+        data = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    else:
+        data = image
+    data = np.reshape(data, (-1, 3))
     data = data[np.all(data != 0, axis=1)]
     data = np.float32(data)
 
@@ -131,6 +146,7 @@ def dominant_colors(image, n_clusters=2):
 def blur(image, degree=25):
     """
     Blur the image
+    :param image:
     :param degree: the degree of blur. The bigger, the more blur
     :return:
     """
@@ -150,10 +166,12 @@ def skin_tone(colors, props, skin_tone_palette, tone_labels):
     return tone_id, tone_hex, PERLA, distance
 
 
-def classify(image, skin_tone_palette, tone_labels, n_dominant_colors=2, verbose=False, report_image=None, use_face=True):
+def classify(image, is_bw, to_bw, skin_tone_palette, tone_labels, n_dominant_colors=2, verbose=False, report_image=None, use_face=True):
     """
     Classify the skin tone of the image
     :param image:
+    :param is_bw: whether the image is black and white
+    :param to_bw: whether to convert the image to black and white
     :param skin_tone_palette:
     :param tone_labels:
     :param n_dominant_colors:
@@ -162,8 +180,9 @@ def classify(image, skin_tone_palette, tone_labels, n_dominant_colors=2, verbose
     :param use_face: whether to use face area for detection
     :return:
     """
-    skin, skin_mask = detect_skin(image)
-    dmnt_colors, dmnt_props = dominant_colors(skin, n_dominant_colors)
+    detect_skin_fn = detect_skin_in_bw if is_bw else detect_skin_in_color
+    skin, skin_mask = detect_skin_fn(image)
+    dmnt_colors, dmnt_props = dominant_colors(skin, to_bw, n_dominant_colors)
     # Generate readable strings
     hex_colors = ['#%02X%02X%02X' % tuple(np.around([r, g, b]).astype(int)) for b, g, r in dmnt_colors]
     prop_strs = ['%.2f' % p for p in dmnt_props]
@@ -176,7 +195,7 @@ def classify(image, skin_tone_palette, tone_labels, n_dominant_colors=2, verbose
         return result,
 
     # 0. Create initial report image
-    report_image = initial_report_image(image, report_image, skin_mask, use_face)
+    report_image = initial_report_image(image, report_image, skin_mask, use_face, to_bw)
     bar_width = 100
 
     # 1. Create color bar for dominant colors
@@ -192,10 +211,12 @@ def classify(image, skin_tone_palette, tone_labels, n_dominant_colors=2, verbose
     return result, report_image
 
 
-def initial_report_image(image, report_image, skin_mask, use_face):
-    report_image = image if report_image is None else report_image
+def initial_report_image(face_image, report_image, skin_mask, use_face, to_bw):
+    report_image = face_image if report_image is None else report_image
+    if to_bw:
+        report_image = cv2.cvtColor(report_image, cv2.COLOR_BGR2GRAY)
     if use_face:
-        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        gray = cv2.cvtColor(face_image, cv2.COLOR_BGR2GRAY)
         skin_mask = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)[1]
     blurred_image = blur(report_image)
     non_skin_mask = cv2.bitwise_not(skin_mask)
@@ -264,7 +285,7 @@ def create_message_bar(dmnt_colors, dmnt_props, tone_hex, distance, bar_width):
     return msg_bar
 
 
-def process(image: np.ndarray, skin_tone_palette: list, tone_labels: list = None, new_width=-1, n_dominant_colors=2,
+def process(image: np.ndarray, is_bw: bool, to_bw: bool, skin_tone_palette: list, tone_labels: list = None, new_width=-1, n_dominant_colors=2,
             scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), biggest_only=True,
             verbose=False):
     image = resize(image, new_width)
@@ -275,13 +296,13 @@ def process(image: np.ndarray, skin_tone_palette: list, tone_labels: list = None
     LOG.info(f'Found {n_faces} face(s)')
     if n_faces == 0:
         LOG.info(f'To detect global skin area instead')
-        record, report_image = classify(image, skin_tone_palette, tone_labels, n_dominant_colors, verbose=verbose, use_face=False)
+        record, report_image = classify(image, is_bw, to_bw, skin_tone_palette, tone_labels, n_dominant_colors, verbose=verbose, use_face=False)
         records['NA'] = record
         report_images['NA'] = report_image
     # Otherwise, detect skin tone for each face
     for idx, face_coord in enumerate(face_coords):
-        masked_image = mask_face(image, face_coord)
-        record, report_image = classify(masked_image, skin_tone_palette, tone_labels, n_dominant_colors,
+        face_image = mask_face(image, face_coord)
+        record, report_image = classify(face_image, is_bw, to_bw, skin_tone_palette, tone_labels, n_dominant_colors,
                                         verbose=verbose, report_image=image, use_face=True)
         report_image = face_report_image(face_coord, idx, report_image)
         records[idx + 1] = record
