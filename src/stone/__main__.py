@@ -39,8 +39,6 @@ def main():
 
     debug: bool = args.debug
 
-    image_type = args.image_type
-
     default_color_palette = ["#373028", "#422811", "#513b2e", "#6f503c", "#81654f", "#9d7a54", "#bea07e", "#e5c8a6", "#e7c1b8", "#f3dad6",
                              "#fbf2f3"]
 
@@ -73,6 +71,7 @@ def main():
     with logging_redirect_tqdm():
         for filename in tqdm(filenames):
             basename, extension = filename.stem, filename.suffix
+            image_type = args.image_type
 
             LOG.info(f'\n----- Processing {basename} -----')
             # try:
