@@ -82,6 +82,6 @@ def build_arguments():
                         help='CONFIG: how many neighbors each candidate rectangle should have to retain it.\n'
                              'Higher value results in less detections but with higher quality, defaults to 5', default=5)
     parser.add_argument('--min_size', type=int, nargs='+', metavar=('WIDTH', 'HEIGHT'),
-                        help='CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "30 30".', default=(30, 30))
+                        help='CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".', default=(90, 90))
 
     return parser.parse_args()

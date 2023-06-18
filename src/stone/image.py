@@ -7,7 +7,7 @@ from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
 from colormath.color_objects import sRGBColor, LabColor
 
-LOG = logging.getLogger(__name__)
+# LOG = logging.getLogger(__name__)
 
 
 def create_color_bar(height, width, color):
@@ -106,7 +106,7 @@ def detect_skin_in_color(image):
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
     skin_mask = cv2.morphologyEx(skin_mask, cv2.MORPH_OPEN, kernel)
     skin_mask = cv2.morphologyEx(skin_mask, cv2.MORPH_CLOSE, kernel)
-    # skin_mask = cv2.GaussianBlur(skin_mask, ksize=(3, 3), sigmaX=0)
+    skin_mask = cv2.GaussianBlur(skin_mask, ksize=(3, 3), sigmaX=0)
 
     skin = cv2.bitwise_and(image, image, mask=skin_mask)
 
@@ -162,7 +162,7 @@ def skin_tone(colors, props, skin_tone_palette, tone_labels):
     distance: float = distances[tone_id]
     tone_hex = skin_tone_palette[tone_id].upper()
     PERLA = tone_labels[tone_id]
-    LOG.info(f'Classified skin tone: {tone_hex}, distance: {distance}')
+    # LOG.info(f'Classified skin tone: {tone_hex}, distance: {distance}')
     return tone_id, tone_hex, PERLA, distance
 
 
@@ -189,8 +189,8 @@ def classify(image, is_bw, to_bw, skin_tone_palette, tone_labels, n_dominant_col
     result = list(np.hstack(list(zip(hex_colors, prop_strs))))
     # Calculate skin tone
     tone_id, tone_hex, PERLA, distance = skin_tone(dmnt_colors, dmnt_props, skin_tone_palette, tone_labels)
-    distance = round(distance, 2)
-    result.extend([tone_hex, PERLA, distance])
+    accuracy = round(100 - distance, 2)
+    result.extend([tone_hex, PERLA, accuracy])
     if not verbose:
         return result,
 
@@ -293,9 +293,9 @@ def process(image: np.ndarray, is_bw: bool, to_bw: bool, skin_tone_palette: list
     records, report_images = {}, {}
     face_coords = detect_faces(image, scaleFactor, minNeighbors, minSize, biggest_only)
     n_faces = len(face_coords)
-    LOG.info(f'Found {n_faces} face(s)')
+    # LOG.info(f'Found {n_faces} face(s)')
     if n_faces == 0:
-        LOG.info(f'To detect global skin area instead')
+        # LOG.info(f'To detect global skin area instead')
         record, report_image = classify(image, is_bw, to_bw, skin_tone_palette, tone_labels, n_dominant_colors, verbose=verbose, use_face=False)
         records['NA'] = record
         report_images['NA'] = report_image
@@ -308,7 +308,7 @@ def process(image: np.ndarray, is_bw: bool, to_bw: bool, skin_tone_palette: list
         records[idx + 1] = record
         report_images[idx + 1] = report_image
 
-    return records, report_images
+    return records, report_images, face_coords
 
 
 def show(image):

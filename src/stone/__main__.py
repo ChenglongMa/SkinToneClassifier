@@ -3,6 +3,7 @@ import logging
 from datetime import datetime
 
 import cv2
+import matplotlib.pyplot as plt
 import numpy as np
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
@@ -65,62 +66,81 @@ def main():
     # Start - open file
     f = open(os.path.join(output_dir, './result.csv'), 'w', encoding='UTF8')
     header = 'file,image type,face id,' + ','.join(
-        [f'dominant {i + 1},props {i + 1}' for i in range(n_dominant_colors)]) + ',skin tone,PERLA,distance(0-100)\n'
+        [f'dominant {i + 1},props {i + 1}' for i in range(n_dominant_colors)]) + ',skin tone,PERLA,accuracy(0-100)\n'
     f.write(header)
-
+    faces = []
     # Start - processing images
     with logging_redirect_tqdm():
-        for filename in tqdm(filenames):
-            basename, extension = filename.stem, filename.suffix
-
-            LOG.info(f'\n----- Processing {basename} -----')
-            # try:
-            image: np.ndarray = cv2.imread(str(filename.resolve()), cv2.IMREAD_UNCHANGED)
-            if image is None:
-                LOG.warning(f'{filename}.{extension} is not found or is not a valid image.')
-                continue
-            is_bw = is_black_white(image)
-            image_type = args.image_type
-            if image_type == 'auto':
-                image_type = 'bw' if is_bw else 'color'
-            if len(specified_palette) == 0:
-                skin_tone_palette = default_bw_palette if to_bw or is_bw else default_color_palette
-            else:
-                skin_tone_palette = specified_palette
-            label_prefix = 'B' if to_bw or is_bw else 'C'
-            tone_labels = specified_tone_labels or [label_prefix + alphabet_id(i) for i in range(len(skin_tone_palette))]
-            assert len(skin_tone_palette) == len(tone_labels), 'argument -p/--palette and -l/--labels must have the same length.'
-            records, report_images = process(image, is_bw, to_bw, skin_tone_palette, tone_labels, new_width=args.new_width,
-                                             n_dominant_colors=n_dominant_colors,
-                                             scaleFactor=args.scale, minNeighbors=args.min_nbrs, minSize=min_size,
-                                             verbose=debug)
-
-            # Write to file
-            n_faces = len(records)
-            for face_id, record, in records.items():
-                if face_id == 'NA':
-                    n_faces = 0  # Did not detect any faces
-                image_name = f'{basename}-{face_id}'
-                writerow(f, [image_name, image_type, face_id] + record)
-            if debug:
-                debug_dir = os.path.join(output_dir, f'./debug/{image_type}/faces_{n_faces}')
-                os.makedirs(debug_dir, exist_ok=True)
-                for face_id, report_image in report_images.items():
+        with tqdm(filenames, desc='Processing images', unit='images') as pbar:
+            for filename in pbar:
+                basename, extension = filename.stem, filename.suffix
+                pbar.set_description(f"Processing {basename}")
+                # LOG.info(f'\n----- Processing {basename} -----')
+                # try:
+                image: np.ndarray = cv2.imread(str(filename.resolve()), cv2.IMREAD_UNCHANGED)
+                if image is None:
+                    LOG.warning(f'{filename}.{extension} is not found or is not a valid image.')
+                    continue
+                is_bw = is_black_white(image)
+                image_type = args.image_type
+                if image_type == 'auto':
+                    image_type = 'bw' if is_bw else 'color'
+                if len(specified_palette) == 0:
+                    skin_tone_palette = default_bw_palette if to_bw or is_bw else default_color_palette
+                else:
+                    skin_tone_palette = specified_palette
+                label_prefix = 'B' if to_bw or is_bw else 'C'
+                tone_labels = specified_tone_labels or [label_prefix + alphabet_id(i) for i in range(len(skin_tone_palette))]
+                assert len(skin_tone_palette) == len(tone_labels), 'argument -p/--palette and -l/--labels must have the same length.'
+                records, report_images, face_coords = process(image, is_bw, to_bw, skin_tone_palette, tone_labels, new_width=args.new_width,
+                                                              n_dominant_colors=n_dominant_colors,
+                                                              scaleFactor=args.scale, minNeighbors=args.min_nbrs, minSize=min_size,
+                                                              verbose=debug)
+                faces.extend(face_coords)
+                # Write to file
+                n_faces = len(records)
+                for face_id, record, in records.items():
+                    if face_id == 'NA':
+                        n_faces = 0  # Did not detect any faces
                     image_name = f'{basename}-{face_id}'
-                    report_filename = os.path.join(debug_dir, f'{image_name}{extension}')
-                    cv2.imwrite(report_filename, report_image)
-                    if is_single_file:
-                        cv2.imshow(f'Skin Tone Classifier - {image_name}', report_image)
+                    writerow(f, [image_name, image_type, face_id] + record)
+                    pbar.set_postfix({
+                        'Image Type': image_type,
+                        '#Faces': n_faces,
+                        'Face ID': face_id,
+                        'Skin Tone': record[-3],
+                        'Label': record[-2],
+                        'Accuracy': record[-1]
+                    })
+                if debug:
+                    debug_dir = os.path.join(output_dir, f'./debug/{image_type}/faces_{n_faces}')
+                    os.makedirs(debug_dir, exist_ok=True)
+                    for face_id, report_image in report_images.items():
+                        image_name = f'{basename}-{face_id}'
+                        report_filename = os.path.join(debug_dir, f'{image_name}{extension}')
+                        cv2.imwrite(report_filename, report_image)
+                        if is_single_file:
+                            cv2.imshow(f'Skin Tone Classifier - {image_name}', report_image)
 
-            # except Exception as e:
-            #     LOG.error(f'Error occurred while processing {filename}: {e}')
-            # writerow(f, [basename, f'Error: {e}'])
-            # continue
+                # except Exception as e:
+                #     LOG.error(f'Error occurred while processing {filename}: {e}')
+                # writerow(f, [basename, f'Error: {e}'])
+                # continue
 
     f.close()
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+
+    faces = np.array(faces)
+    plt.figure(figsize=(10, 10))
+    width = faces[:, 2] - faces[:, 0]
+    height = faces[:, 3] - faces[:, 1]
+    plt.boxplot([width, height], labels=['Width', 'Height'])
+    plt.title('Face Size Distribution')
+    plt.savefig(os.path.join(output_dir, 'face_size.png'))
+    plt.show()
+    print(f'Average face size: {width:.2f} x {height:.2f} pixels')
 
 
 if __name__ == '__main__':
