@@ -7,7 +7,6 @@ from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
 from colormath.color_objects import sRGBColor, LabColor
 
-
 LOG = logging.getLogger(__name__)
 
 
@@ -25,7 +24,9 @@ def is_black_white(image, threshold=192) -> bool:
     :return:
     """
     # Reading Images
-    h, w, c = image.shape
+    if len(image.shape) == 2:
+        return True
+    h, w, *_ = image.shape
 
     # Extracting Standard Deviation
     std = np.std(image, axis=2)

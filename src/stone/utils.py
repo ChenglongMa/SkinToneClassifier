@@ -13,6 +13,8 @@ from pathlib import Path
 def alphabet_id(n):
     letters = string.ascii_uppercase
     n_letters = len(letters)
+    if n < n_letters:
+        return letters[n]
     _id = ""
 
     while n > 0:

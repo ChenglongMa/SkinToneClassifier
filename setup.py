@@ -32,7 +32,6 @@ setup(
     },
     install_requires=[
         "opencv-python>=4.6.0.66",
-        "imutils>=0.5.4",
         "numpy>=1.21.5",
         "colormath>=3.0.0",
         "tqdm>=4.64.0"

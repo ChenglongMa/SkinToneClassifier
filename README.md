@@ -7,13 +7,50 @@
 
 An easy-to-use library for skin tone classification.
 
-This can be used to detect face or skin area in the specified images.
+This can be used to detect **face** or **skin area** in the specified images.
 The detected skin tones are then classified into the specified color categories.
 The library finally generates results to report the detected faces (if any),
 dominant skin tones and color category.
 
 ---
+
+# Changelog (v0.2.0)
+
+In this version, we have made the following changes:
+
+1. ✨ **NEW!**: Now we support skin tone classification for **black and white** images.
+    * In this case, the app will use different skin tone palettes for color images and black/white images.
+    * We use a new parameter `-t` or `--image_type` to specify the type of the input image.
+      It can be `color`, `bw` or `auto`(default).
+      `auto` will let the app automatically detect whether the input is color or black/white image.
+    * We use a new parameter `-bw` or `--black_white` to specify whether to convert the input to black/white image.
+      If so, the app will convert the input to black/white image and then classify the skin tones based on the
+      black/white palette.
+    
+      For example:
+      <div style="display: flex; align-items: center;">
+         <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std-1.jpg" alt="Processing color image" style="display: block; margin: 20px">
+         <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std-1_bw.jpg" alt="Processing black/white image" style="display: block; margin: 20px">
+      </div>
+
+2. ✨ **NEW!**: Now we support **multiprocessing** for processing the images. It will largely speed up the processing.
+    * The number of processes is set to the number of CPU cores by default.
+    * You can specify the number of processes by `--n_workers` parameter.
+3. 🧬 **CHANGE!**: We add more details in the report image to facilitate the debugging, as shown above.
+    * We add the face id in the report image.
+    * We add the effective face or skin area in the report image. In this case, the other areas are blurred.
+4. 🧬 **CHANGE!**: Now, we save the report images into different folders based on their `image_type` (color or
+   black/white) and the number of detected faces.
+    * For example, if the input image is **color** and there are **2 faces** detected, the report image will be saved
+      in `./debug/color/faces_2/` folder.
+    * If the input image is **black/white** and no face has been detected, the report image will be saved
+      in `./debug/bw/faces_0/` folder.
+    * You can easily to tune the parameters and rerun the app based on the report images in the corresponding folder.
+5. 🐛 **FIX!**: We fix the bug that the app will crash when the input image has dimensionality errors.
+    * Now, the app won't crash and will report the error message in `./result.csv`.
+
 # Citation
+
 If you are interested in our work, please cite:
 
 ```text
@@ -31,12 +68,13 @@ eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1111/ssqu.13242},
 abstract = {Abstract Objective A growing body of literature reveals that skin color has significant effects on people's income, health, education, and employment. However, the ways in which skin color has been measured in empirical research have been criticized for being inaccurate, if not subjective and biased. Objective Introduce an objective, automatic, accessible and customizable Classification Algorithm for Skin Color (CASCo). Methods We review the methods traditionally used to measure skin color (verbal scales, visual aids or color palettes, photo elicitation, spectrometers and image-based algorithms), noting their shortcomings. We highlight the need for a different tool to measure skin color Results We present CASCo, a (social researcher-friendly) Python library that uses face detection, skin segmentation and k-means clustering algorithms to determine the skin tone category of portraits. Conclusion After assessing the merits and shortcomings of all the methods available, we argue CASCo is well equipped to overcome most challenges and objections posed against its alternatives. While acknowledging its limitations, we contend that CASCo should complement researchers. toolkit in this area.}
 }
 ```
+
 # Installation
 
 To install SkinToneClassifier:
 
 ```shell
-pip install skin-tone-classifier
+pip install skin-tone-classifier --upgrade
 ```
 
 # HOW TO USE
@@ -54,7 +92,7 @@ just run:
 stone -i /path/to/lenna.jpg --debug
 ```
 
-Then, you can find the processed image in `./debug` folder, e.g.,
+Then, you can find the processed image in `./debug/color/faces_1` folder, e.g.,
 
 <div align="center">
    <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std-1.jpg"  alt="processed Lenna picture" style="display: block; margin: auto"/>
@@ -62,17 +100,28 @@ Then, you can find the processed image in `./debug` folder, e.g.,
 
 In this image, from left to right you can find the following information:
 
-1. detected face enclosed by a rectangle.
+1. detected face with a label (Face 1) enclosed by a rectangle.
 2. dominant colors.
     1. _The number of colors depends on settings (default is 2) and their sizes depend on their proportion._
-3. specified color categories and the target label is enclosed by a rectangle.
+3. specified color palette and the target label is enclosed by a rectangle.
 4. you can find a summary text at the bottom.
 
 Furthermore, there will be a report file named `result.csv` which contains more detailed information, e.g.,
 
-| file     | face_location | dominant_1 | props_1 | dominant_2 | props_2 | category | PERLA | distance(0-100) |
-|----------|---------------|------------|---------|------------|---------|----------|-------|-----------------|
-| lena_std | 84:153        | #CB6268    | 0.51    | #E1A299    | 0.49    | #e7c1b8  | I     | 17.37           |
+| file       | image type | face id | dominant 1 | props 1 | dominant 2 | props 2 | skin tone | PERLA | accuracy(0-100) |
+|------------|------------|---------|------------|---------|------------|---------|-----------|-------|-----------------|
+| lena_std-1 | color      | 1       | #CF7371    | 0.52    | #E4A89F    | 0.48    | #E7C1B8   | CI    | 85.39           |
+
+### Interpretation of the table
+
+1. `file`: the filename of the processed image.
+2. `image type`: the type of the processed image, i.e., `color` or `bw` (black/white).
+3. `face id`: the id of the detected face, which matches the reported image. `NA` means no face has been detected.
+4. `dominant n`: the `n`-th dominant color of the detected face.
+5. `props n`: the proportion of the `n`-th dominant color, (0~1.0).
+6. `skin tone`: the skin tone category of the detected face.
+7. `PERLA`: the **label** of skin tone category of the detected face.
+8. `accuracy`: the accuracy of the skin tone category of the detected face, (0~100). The larger the better.
 
 ## Detailed Usage
 
@@ -85,10 +134,9 @@ stone -h
 Output in console:
 
 ```text
-usage: stone [-h] [-i IMAGE FILENAME [IMAGE FILENAME ...]]
-               [-c COLOR [COLOR ...]] [-d] [-o DIRECTORY] [--n_colors N]
-               [--new_width WIDTH] [--scale SCALE] [--min_nbrs NEIGHBORS]
-               [--min_size WIDTH [HEIGHT ...]]
+usage: stone [-h] [-i IMAGE FILENAME [IMAGE FILENAME ...]] [-p COLOR [COLOR ...]] [-l LABEL [LABEL ...]]
+                   [-t IMAGE TYPE] [-d] [-bw] [-o DIRECTORY] [--n_workers N_WORKERS] [--n_colors N]
+                   [--new_width WIDTH] [--scale SCALE] [--min_nbrs NEIGHBORS] [--min_size WIDTH [HEIGHT ...]]
 
 Skin Tone Classifier
 
@@ -96,21 +144,33 @@ optional arguments:
   -h, --help            show this help message and exit
   -i IMAGE FILENAME [IMAGE FILENAME ...], --images IMAGE FILENAME [IMAGE FILENAME ...]
                         Image filename(s) to process;
-                        supports multiple values separated by space, e.g., "a.jpg b.png";
-                        supports directory or file name(s), e.g., "./path/to/images/ a.jpg";
-                        The app will search all images in the directory of this script in default.
-  -c COLOR [COLOR ...], --categories COLOR [COLOR ...]
-                        Skin tone categories; supports RGB hex value leading by # or RGB values separated by comma(,).
+                        Supports multiple values separated by space, e.g., "a.jpg b.png";
+                        Supports directory or file name(s), e.g., "./path/to/images/ a.jpg";
+                        The app will search all images in current directory in default.
+  -p COLOR [COLOR ...], --palette COLOR [COLOR ...]
+                        Skin tone palette;
+                        Supports RGB hex value leading by "#" or RGB values separated by comma(,),
+                        E.g., "-p #373028 #422811" or "-p 255,255,255 100,100,100"
+  -l LABEL [LABEL ...], --labels LABEL [LABEL ...]
+                        Skin tone labels; default values are the uppercase alphabet list.
+  -t IMAGE TYPE, --image_type IMAGE TYPE
+                        Specify whether the inputs image(s) is/are colored or black/white.
+                        Valid choices are: "auto", "color" or "bw",
+                        Defaults to "auto", which will be detected automatically.
   -d, --debug           Whether to output processed images, used for debugging and verification.
+  -bw, --black_white    Whether to convert the input to black/white image(s).
+                        Then the app will use the black/white palette to classify the image.
   -o DIRECTORY, --output DIRECTORY
-                        The path of output file, defaults to the directory of this script.
+                        The path of output file, defaults to current directory.
+  --n_workers N_WORKERS
+                        The number of workers to process the images, defaults to the number of CPUs in the system.
   --n_colors N          CONFIG: the number of dominant colors to be extracted, defaults to 2.
   --new_width WIDTH     CONFIG: resize the images with the specified width. Negative value will be ignored, defaults to 250.
   --scale SCALE         CONFIG: how much the image size is reduced at each image scale, defaults to 1.1
   --min_nbrs NEIGHBORS  CONFIG: how many neighbors each candidate rectangle should have to retain it.
-                                Higher value results in less detections but with higher quality, defaults to 5.
+                        Higher value results in less detections but with higher quality, defaults to 5
   --min_size WIDTH [HEIGHT ...]
-                        CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "30 30".
+                        CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".
 ```
 
 ### Use Cases
@@ -138,80 +198,10 @@ In default (i.e., `stone` without `-i` option), the app will search images in cu
 2.1 Use hex values
 
 ```shell
-stone -c (or --categories) #373028 #422811 #fbf2f3
+stone -p (or --palette) #373028 #422811 #fbf2f3
 ```
 
-NB: Values start with '#'.
-
-[//]: # (<div style="display:flex;">)
-
-[//]: # (   <p style="background-color:#373028; color: aliceblue; text-align:center; vertical-align: middle; width: 80px;float: start;">)
-
-[//]: # (      #373028)
-
-[//]: # (   </p>)
-
-[//]: # (   <p style="background-color:#422811; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">)
-
-[//]: # (      #422811)
-
-[//]: # (   </p>)
-
-[//]: # (   <p style="background-color:#513b2e; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">)
-
-[//]: # (      #513b2e)
-
-[//]: # (   </p>  )
-
-[//]: # (   <p style="background-color:#6f503c; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">)
-
-[//]: # (      #6f503c)
-
-[//]: # (   </p>)
-
-[//]: # (   <p style="background-color:#81654f; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">)
-
-[//]: # (      #81654f)
-
-[//]: # (   </p>)
-
-[//]: # (   <p style="background-color:#9d7a54; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">)
-
-[//]: # (      #9d7a54)
-
-[//]: # (   </p>)
-
-[//]: # (   <p style="background-color:#bea07e; color: aliceblue; text-align:center; vertical-align: middle; width: 80px">)
-
-[//]: # (      #bea07e)
-
-[//]: # (   </p>)
-
-[//]: # (   <p style="background-color:#e5c8a6; color: black; text-align:center; vertical-align: middle; width: 80px">)
-
-[//]: # (      #e5c8a6)
-
-[//]: # (   </p>)
-
-[//]: # (   <p style="background-color:#e7c1b8; color: black; text-align:center; vertical-align: middle; width: 80px">)
-
-[//]: # (      #e7c1b8)
-
-[//]: # (   </p>)
-
-[//]: # (   <p style="background-color:#f3dad6; color: black; text-align:center; vertical-align: middle; width: 80px">)
-
-[//]: # (      #f3dad6)
-
-[//]: # (   </p>)
-
-[//]: # (   <p style="background-color:#fbf2f3; color: black; text-align:center; vertical-align: middle; width: 80px">)
-
-[//]: # (      #fbf2f3)
-
-[//]: # (   </p>)
-
-[//]: # (</div>)
+NB: Values start with '#' and are separated by space.
 
 2.2 Use RGB tuple values
 
@@ -236,19 +226,124 @@ The output folder will be created if it does not exist.
 In `result.csv`, each row is showing the color information of each detected face.
 If more than one faces are detected, there will be multiple rows for that image.
 
-#### 4. Store processed image for debugging
+#### 4. Store report images for debugging
 
 ```shell
 stone -d (or --debug)
 ```
 
-This option will store the processed image (like the Lenna example above) in `./path/to/output/debug/faces_<n>` folder, where `<n>` is the number of faces detected in the image.
+This option will store the report image (like the Lenna example above) in
+`./path/to/output/debug/<image type>/faces_<n>` folder,
+where `<image type>` indicates if the image is `color` or `bw` (black/white);
+`<n>` is the number of faces detected in the image.
 
-By default, to save space, the app does not store processed images.
+**By default, to save space, the app does not store report images.**
 
-Like in the `result.csv` file, there will be more than one processed images if 2 or more faces were detected.
+Like in the `result.csv` file, there will be more than one report images if 2 or more faces were detected.
 
-#### 5. Tune parameters of face detection
+#### 5. Specify the types of the input image(s)
+
+5.1 The input are color images
+
+```shell
+stone -t (or --image_type) color
+```
+
+5.2 The input are black/white images
+
+```shell
+stone -t (or --image_type) bw
+```
+
+5.3 **In default**, the app will detect the image type automatically, i.e.,
+
+```shell
+stone -t (or --image_type) auto
+```
+
+For `color` images, we use the `color` palette to detect faces:
+
+```shell
+#373028 #422811 #513b2e #6f503c #81654f #9d7a54 #bea07e #e5c8a6 #e7c1b8 #f3dad6 #fbf2f3
+```
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #373028; color: white">#373028</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #422811; color: white">#422811</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #513b2e; color: white">#513B2E</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #6f503c; color: white">#6F503C</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #81654f; color: white">#81654F</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #9d7a54; color: white">#9D7A54</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #bea07e;">#BEA07E</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #e5c8a6;">#E5C8A6</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #e7c1b8;">#E7C1B8</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #f3dad6;">#F3DAD6</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #fbf2f3;">#FBF2F3</div>
+
+
+(Please refer to our paper above for more details.)
+
+For `bw` images, we use the `bw` palette to detect faces:
+
+```shell
+#FFFFFF #F0F0F0 #E0E0E0 #D0D0D0 #C0C0C0 #B0B0B0 #A0A0A0 #909090 #808080 #707070 #606060 #505050 #404040 #303030 #202020 #101010 #000000
+```
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #FFFFFF;">#FFFFFF</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #F0F0F0;">#F0F0F0</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #E0E0E0;">#E0E0E0</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #D0D0D0;">#D0D0D0</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #C0C0C0;">#C0C0C0</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #B0B0B0;">#B0B0B0</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #A0A0A0;">#A0A0A0</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #909090;">#909090</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #808080; color: white">#808080</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #707070; color: white">#707070</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #606060; color: white">#606060</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #505050; color: white">#505050</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #404040; color: white">#404040</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #303030; color: white">#303030</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #202020; color: white">#202020</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #101010; color: white">#101010</div><br>
+<div style="display: inline-block; width: 75px; height: 30px; background-color: #000000; color: white">#000000</div><br>
+
+(Please refer to
+**Leigh, A., & Susilo, T. (2009). Is voting skin-deep? Estimating the effect of candidate ballot photographs on election
+outcomes. _Journal of Economic Psychology_, 30(1), 61-70.** for more details.)
+
+#### 6. Convert the `color` images to `black/white` images and then do the classification using `bw` palette
+
+```shell
+stone -bw (or --black_white)
+```
+
+For example:
+
+<div style="display: flex; align-items: center; justify-content: center;">
+    <div style="text-align: center;">
+        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std.jpg"  alt="Lenna picture" style="display: block; margin: 20px"/>
+        <p>Input</p>
+    </div>
+    <div style="text-align: center;">
+        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std_bw.jpg"  alt="Black/white Lenna picture" style="display: block; margin: 20px"/>
+        <p>Convert to black/white image</p>
+    </div>
+    <div style="text-align: center;">
+        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std-1_bw.jpg"  alt="Report image" style="display: block; margin: 20px"/>
+        <p>The final report image</p>
+    </div>
+</div>
+
+NB: we did not do the opposite, i.e., convert `black/white` images to `color` images 
+because the current AI models cannot accurately "guess" the color of the skin from a `black/white` image.
+It can further bias the analysis results.
+
+#### 7. Tune parameters of face detection
 
 The rest parameters of `CONFIG` are used to detect face.
-Please refer to https://stackoverflow.com/a/20805153/8860079 for detailed information. 
+Please refer to https://stackoverflow.com/a/20805153/8860079 for detailed information.
+
+#### 8. Multiprocessing settings
+
+```shell
+stone --n_workers <Any Positive Integer>
+```
+
+Use `--n_workers` to specify the number of workers to process images in parallel, defaults to the number of CPUs in your system.

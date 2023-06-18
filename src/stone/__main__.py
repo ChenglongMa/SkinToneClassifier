@@ -32,7 +32,7 @@ def process_image(filename, image_type_setting,
                   scale, min_nbrs, min_size, verbose):
     basename, extension = filename.stem, filename.suffix
 
-    image: np.ndarray = cv2.imread(str(filename.resolve()), cv2.IMREAD_UNCHANGED)
+    image: np.ndarray = cv2.imread(str(filename.resolve()), cv2.IMREAD_COLOR)
     if image is None:
         msg = f'{basename}.{extension} is not found or is not a valid image.'
         LOG.warning(msg)
