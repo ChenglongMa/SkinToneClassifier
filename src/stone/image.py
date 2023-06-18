@@ -7,7 +7,8 @@ from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
 from colormath.color_objects import sRGBColor, LabColor
 
-# LOG = logging.getLogger(__name__)
+
+LOG = logging.getLogger(__name__)
 
 
 def create_color_bar(height, width, color):
@@ -162,7 +163,6 @@ def skin_tone(colors, props, skin_tone_palette, tone_labels):
     distance: float = distances[tone_id]
     tone_hex = skin_tone_palette[tone_id].upper()
     PERLA = tone_labels[tone_id]
-    # LOG.info(f'Classified skin tone: {tone_hex}, distance: {distance}')
     return tone_id, tone_hex, PERLA, distance
 
 
@@ -278,8 +278,8 @@ def create_message_bar(dmnt_colors, dmnt_props, tone_hex, distance, bar_width):
 
     text_size, _ = cv2.getTextSize(msg, font, font_scale, thickness)
     line_height = text_size[1] + 10
-
-    cv2.putText(msg_bar, f'- Skin tone: {tone_hex}, distance: {distance}', (x, y + line_height), font, font_scale,
+    accuracy = round(100 - distance, 2)
+    cv2.putText(msg_bar, f'- Skin tone: {tone_hex}, accuracy: {accuracy}', (x, y + line_height), font, font_scale,
                 txt_colr, thickness, cv2.LINE_AA)
 
     return msg_bar
@@ -293,9 +293,8 @@ def process(image: np.ndarray, is_bw: bool, to_bw: bool, skin_tone_palette: list
     records, report_images = {}, {}
     face_coords = detect_faces(image, scaleFactor, minNeighbors, minSize, biggest_only)
     n_faces = len(face_coords)
-    # LOG.info(f'Found {n_faces} face(s)')
+
     if n_faces == 0:
-        # LOG.info(f'To detect global skin area instead')
         record, report_image = classify(image, is_bw, to_bw, skin_tone_palette, tone_labels, n_dominant_colors, verbose=verbose, use_face=False)
         records['NA'] = record
         report_images['NA'] = report_image
@@ -308,7 +307,7 @@ def process(image: np.ndarray, is_bw: bool, to_bw: bool, skin_tone_palette: list
         records[idx + 1] = record
         report_images[idx + 1] = report_image
 
-    return records, report_images, face_coords
+    return records, report_images
 
 
 def show(image):

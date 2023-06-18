@@ -4,11 +4,8 @@ import glob
 import os
 import re
 import string
+import sys
 from pathlib import Path
-
-
-def writerow(f, arr: list):
-    f.write(','.join(map(str, arr)) + '\n')
 
 
 # @functools.cache  # Python 3.9+
@@ -46,6 +43,10 @@ def sort_file(filename: Path):
     return int(nums[0]) if nums else filename
 
 
+def is_windows():
+    return sys.platform in ['win32', 'cygwin']
+
+
 def build_arguments():
     # Setup arguments
     parser = argparse.ArgumentParser(description='Skin Tone Classifier', formatter_class=argparse.RawTextHelpFormatter)
@@ -70,6 +71,8 @@ def build_arguments():
                                                                           'Then the app will use the black/white palette to classify the image.')
     parser.add_argument('-o', '--output', default='./', metavar='DIRECTORY',
                         help='The path of output file, defaults to current directory.')
+    parser.add_argument('--n_workers', type=int,
+                        help='The number of workers to process the images, defaults to the number of CPUs in the system.', default=0)
 
     parser.add_argument('--n_colors', type=int, metavar='N',
                         help='CONFIG: the number of dominant colors to be extracted, defaults to 2.', default=2)
