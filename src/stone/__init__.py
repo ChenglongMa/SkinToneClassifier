@@ -1,2 +1,2 @@
-from image import *
-from utils import *
+from stone.image import *
+from stone.utils import *

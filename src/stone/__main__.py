@@ -11,8 +11,8 @@ import numpy as np
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-from image import process, is_black_white
-from utils import build_arguments, alphabet_id, build_filenames, is_windows
+from stone.image import process, is_black_white
+from stone.utils import build_arguments, alphabet_id, build_filenames, is_windows
 
 
 def patch_asscalar(a):
