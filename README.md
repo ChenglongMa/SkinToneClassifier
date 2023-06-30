@@ -53,7 +53,7 @@ In this version, we have made the following changes:
 
 If you are interested in our work, please cite:
 
-```text
+```bibtex
 @article{https://doi.org/10.1111/ssqu.13242,
 author = {Rej\'{o}n Pi\tilde{n}a, Ren\'{e} Alejandro and Ma, Chenglong},
 title = {Classification Algorithm for Skin Color (CASCo): A new tool to measure skin color in social science research},
