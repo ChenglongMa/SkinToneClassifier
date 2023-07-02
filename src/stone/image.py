@@ -193,7 +193,7 @@ def classify(image, is_bw, to_bw, skin_tone_palette, tone_labels, n_dominant_col
     accuracy = round(100 - distance, 2)
     result.extend([tone_hex, PERLA, accuracy])
     if not verbose:
-        return result,
+        return result, None
 
     # 0. Create initial report image
     report_image = initial_report_image(image, report_image, skin_mask, use_face, to_bw)
@@ -318,6 +318,8 @@ def show(image):
 
 
 def face_report_image(face, idx, image):
+    if image is None:
+        return None
     x1, y1, x2, y2 = face
     width = x2 - x1
     height = 20
