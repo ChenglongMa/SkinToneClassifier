@@ -51,7 +51,8 @@ def process_image(filename, image_type_setting,
         skin_tone_palette = specified_palette
 
     tone_labels = specified_tone_labels or default_tone_labels['bw' if to_bw or is_bw else 'color']
-    assert len(skin_tone_palette) == len(tone_labels), 'argument -p/--palette and -l/--labels must have the same length.'
+    if len(skin_tone_palette) != len(tone_labels):
+        raise ValueError('argument -p/--palette and -l/--labels must have the same length.')
 
     try:
         records, report_images = process(image, is_bw, to_bw, skin_tone_palette, tone_labels,
