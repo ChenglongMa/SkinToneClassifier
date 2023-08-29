@@ -14,7 +14,23 @@ dominant skin tones and color category.
 
 ---
 
-# Changelog (v0.2.0)
+# Changelogs 
+
+## (v1.0.0)
+
+We officially release the 1.0.0 version of the library. In this version, we have made the following changes: 
+
+1. ✨ **NEW!**: We add the `threshold` parameter to control the proportion of face areas (Defaults to 0.3). 
+   * In previous versions, the library could incorrectly identify non-face areas as faces, such as shirts, collars, necks, etc.
+   In order to improve its accuracy, the new version will further calculate the proportion of skin in the recognized area 
+   after recognizing the facial area. If it is less than the `threshold` value, the recognition area will be ignored.
+   (While it's still not perfect, it's an improvement over what it was before.)
+2. ✨ **NEW!**: Now, we will back up the previous results if it already exists. 
+The backup file will be named as `result_bak_<current_timestamp>.csv`.
+3. 🐛 **FIX!**: We fix the bug that the `image_type` option does not work in the previous version.
+4. 🐛 **FIX!**: We fix the bug that the library will create an empty `log` folder when checking the help information by running `stone -h`.
+
+## (v0.2.0)
 
 In this version, we have made the following changes:
 
