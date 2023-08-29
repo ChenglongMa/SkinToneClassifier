@@ -184,9 +184,11 @@ optional arguments:
   --new_width WIDTH     CONFIG: resize the images with the specified width. Negative value will be ignored, defaults to 250.
   --scale SCALE         CONFIG: how much the image size is reduced at each image scale, defaults to 1.1
   --min_nbrs NEIGHBORS  CONFIG: how many neighbors each candidate rectangle should have to retain it.
-                        Higher value results in less detections but with higher quality, defaults to 5
+                        Higher value results in less detections but with higher quality, defaults to 5.
   --min_size WIDTH [HEIGHT ...]
                         CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".
+  --threshold THRESHOLD
+                        CONFIG: what proportion of the skin area is required to identify the face, defaults to 0.3.                     
 ```
 
 ### Use Cases

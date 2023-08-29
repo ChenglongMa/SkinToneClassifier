@@ -85,10 +85,10 @@ def build_arguments():
     parser.add_argument('--scale', type=float, help='CONFIG: how much the image size is reduced at each image scale, defaults to 1.1', default=1.1)
     parser.add_argument('--min_nbrs', type=int, metavar='NEIGHBORS',
                         help='CONFIG: how many neighbors each candidate rectangle should have to retain it.\n'
-                             'Higher value results in less detections but with higher quality, defaults to 5', default=5)
+                             'Higher value results in less detections but with higher quality, defaults to 5.', default=5)
     parser.add_argument('--min_size', type=int, nargs='+', metavar=('WIDTH', 'HEIGHT'),
                         help='CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".', default=(90, 90))
     parser.add_argument('--threshold', type=float, metavar='THRESHOLD', help='CONFIG: what proportion of the skin area is required to identify the '
-                                                                             'face, defaults to 0.3', default=0.3)
+                                                                             'face, defaults to 0.3.', default=0.3)
 
     return parser.parse_args()
