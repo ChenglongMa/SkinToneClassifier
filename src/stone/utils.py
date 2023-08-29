@@ -88,5 +88,7 @@ def build_arguments():
                              'Higher value results in less detections but with higher quality, defaults to 5', default=5)
     parser.add_argument('--min_size', type=int, nargs='+', metavar=('WIDTH', 'HEIGHT'),
                         help='CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".', default=(90, 90))
+    parser.add_argument('--threshold', type=float, metavar='THRESHOLD', help='CONFIG: what proportion of the skin area is required to identify the '
+                                                                             'face, defaults to 0.3', default=0.3)
 
     return parser.parse_args()

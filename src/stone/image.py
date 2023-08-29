@@ -56,7 +56,7 @@ def resize(image, width: int = -1, height: int = -1):
     return cv2.resize(image, (width, height))
 
 
-def detect_faces(image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), biggest_only=True):
+def detect_faces(image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), biggest_only=True, is_bw=False, threshold=0.3):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
 
@@ -74,7 +74,18 @@ def detect_faces(image, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), bigge
         return []
     # Change the format of faces from (x, y, w, h) to (x, y, x+w, y+h)
     faces[:, 2:] += faces[:, :2]
-    return faces
+    return [face for face in faces if is_face(face, image, is_bw, threshold)]
+
+
+def is_face(face_coord, image, is_bw, threshold=0.3):
+    x1, y1, x2, y2 = face_coord
+    face_image = image[y1:y2, x1:x2]
+    detect_skin_fn = detect_skin_in_bw if is_bw else detect_skin_in_color
+    _, skin_mask = detect_skin_fn(face_image)
+    skin_pixels = cv2.countNonZero(skin_mask)
+    total_pixels = face_image.shape[0] * face_image.shape[1]
+    skin_ratio = skin_pixels / total_pixels
+    return skin_ratio >= threshold
 
 
 def mask_face(image, face):
@@ -287,12 +298,11 @@ def create_message_bar(dmnt_colors, dmnt_props, tone_hex, distance, bar_width):
 
 
 def process(image: np.ndarray, is_bw: bool, to_bw: bool, skin_tone_palette: list, tone_labels: list = None, new_width=-1, n_dominant_colors=2,
-            scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), biggest_only=True,
-            verbose=False):
+            scaleFactor=1.1, minNeighbors=5, minSize=(30, 30), biggest_only=True, threshold=0.3, verbose=False):
     image = resize(image, new_width)
 
     records, report_images = {}, {}
-    face_coords = detect_faces(image, scaleFactor, minNeighbors, minSize, biggest_only)
+    face_coords = detect_faces(image, scaleFactor, minNeighbors, minSize, biggest_only, is_bw, threshold)
     n_faces = len(face_coords)
 
     if n_faces == 0:

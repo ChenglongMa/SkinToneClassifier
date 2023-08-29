@@ -29,7 +29,7 @@ def process_image(filename, image_type_setting,
                   specified_palette, default_palette,
                   specified_tone_labels, default_tone_labels,
                   to_bw, new_width, n_dominant_colors,
-                  scale, min_nbrs, min_size, verbose):
+                  scale, min_nbrs, min_size, threshold, verbose):
     basename, extension = filename.stem, filename.suffix
 
     image: np.ndarray = cv2.imread(str(filename.resolve()), cv2.IMREAD_COLOR)
@@ -45,6 +45,8 @@ def process_image(filename, image_type_setting,
     image_type = image_type_setting
     if image_type == 'auto':
         image_type = 'bw' if is_bw else 'color'
+    else:
+        is_bw = image_type == 'bw'
     if len(specified_palette) == 0:
         skin_tone_palette = default_palette['bw' if to_bw or is_bw else 'color']
     else:
@@ -57,7 +59,8 @@ def process_image(filename, image_type_setting,
     try:
         records, report_images = process(image, is_bw, to_bw, skin_tone_palette, tone_labels,
                                          new_width=new_width, n_dominant_colors=n_dominant_colors,
-                                         scaleFactor=scale, minNeighbors=min_nbrs, minSize=min_size, verbose=verbose)
+                                         scaleFactor=scale, minNeighbors=min_nbrs, minSize=min_size, threshold=threshold,
+                                         verbose=verbose)
         return {
             'basename': basename,
             'extension': extension,
@@ -76,6 +79,7 @@ def process_image(filename, image_type_setting,
 
 
 def main():
+    args = build_arguments()
     # Setup logger
     now = datetime.now()
     os.makedirs('./log', exist_ok=True)
@@ -86,8 +90,6 @@ def main():
         format='[%(asctime)s] {%(filename)s:%(lineno)4d} %(levelname)s - %(message)s',
         datefmt='%H:%M:%S'
     )
-
-    args = build_arguments()
 
     filenames = build_filenames(args.images)
     is_single_file = len(filenames) == 1
@@ -127,6 +129,7 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
     result_filename = os.path.join(output_dir, './result.csv')
     image_type_setting = args.image_type
+    threshold = args.threshold
 
     def write_to_csv(row: list):
         with lock:
@@ -139,7 +142,7 @@ def main():
 
     # Backup result.csv if exists
     if os.path.exists(result_filename):
-        renamed_file = os.path.join(output_dir, './result_bak.csv')
+        renamed_file = os.path.join(output_dir, now.strftime('./result_bak_%y%m%d%H%M.csv'))
         shutil.move(result_filename, renamed_file)
     header = 'file,image type,face id,' + ','.join(
         [f'dominant {i + 1},props {i + 1}' for i in range(n_dominant_colors)]) + ',skin tone,PERLA,accuracy(0-100)'
@@ -150,7 +153,7 @@ def main():
                                     specified_palette=specified_palette, default_palette=default_tone_palette,
                                     specified_tone_labels=specified_tone_labels, default_tone_labels=default_tone_labels,
                                     to_bw=to_bw, new_width=new_width, n_dominant_colors=n_dominant_colors,
-                                    scale=scale, min_nbrs=min_nbrs, min_size=min_size, verbose=debug)
+                                    scale=scale, min_nbrs=min_nbrs, min_size=min_size, threshold=threshold, verbose=debug)
 
     with logging_redirect_tqdm():
         with tqdm(filenames, desc='Processing images', unit='images') as pbar:
