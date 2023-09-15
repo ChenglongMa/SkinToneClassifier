@@ -14,23 +14,35 @@ dominant skin tones and color category.
 
 ---
 
-# Changelogs 
+# Changelogs
 
-## (v1.0.0)
+## v1.0.1
 
-We officially release the 1.0.0 version of the library. In this version, we have made the following changes: 
+1. 👋 **BYE**: We have removed the function to pop up a resulting window when processing a **single** image.
 
-1. ✨ **NEW!**: We add the `threshold` parameter to control the proportion of face areas (Defaults to 0.3). 
-   * In previous versions, the library could incorrectly identify non-face areas as faces, such as shirts, collars, necks, etc.
-   In order to improve its accuracy, the new version will further calculate the proportion of skin in the recognized area 
-   after recognizing the facial area. If it is less than the `threshold` value, the recognition area will be ignored.
-   (While it's still not perfect, it's an improvement over what it was before.)
-2. ✨ **NEW!**: Now, we will back up the previous results if it already exists. 
-The backup file will be named as `result_bak_<current_timestamp>.csv`.
+    * It can raise an error when running the app in a **web browser** environment, e.g., Jupyter Notebook or Google
+      Colab.
+    * If you want to see the processed image, please use the `-d` option to store the report image in the `./debug`
+      folder.
+
+## v1.0.0
+
+We have officially released the 1.0.0 version of the library. In this version, we have made the following changes:
+
+1. ✨ **NEW!**: We add the `threshold` parameter to control the proportion of face areas (Defaults to 0.3).
+    * In previous versions, the library could incorrectly identify non-face areas as faces, such as shirts, collars,
+      necks, etc.
+      In order to improve its accuracy, the new version will further calculate the proportion of skin in the recognized
+      area
+      after recognizing the facial area. If it is less than the `threshold` value, the recognition area will be ignored.
+      (While it's still not perfect, it's an improvement over what it was before.)
+2. ✨ **NEW!**: Now, we will back up the previous results if it already exists.
+   The backup file will be named as `result_bak_<current_timestamp>.csv`.
 3. 🐛 **FIX!**: We fix the bug that the `image_type` option does not work in the previous version.
-4. 🐛 **FIX!**: We fix the bug that the library will create an empty `log` folder when checking the help information by running `stone -h`.
+4. 🐛 **FIX!**: We fix the bug that the library will create an empty `log` folder when checking the help information by
+   running `stone -h`.
 
-## (v0.2.0)
+## v0.2.0
 
 In this version, we have made the following changes:
 
@@ -42,7 +54,7 @@ In this version, we have made the following changes:
     * We use a new parameter `-bw` or `--black_white` to specify whether to convert the input to black/white image.
       If so, the app will convert the input to black/white image and then classify the skin tones based on the
       black/white palette.
-    
+
       For example:
       <div style="display: flex; align-items: center;">
          <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std-1.jpg" alt="Processing color image" style="display: block; margin: 20px">
@@ -71,17 +83,17 @@ If you are interested in our work, please cite:
 
 ```bibtex
 @article{https://doi.org/10.1111/ssqu.13242,
-author = {Rej\'{o}n Pi\tilde{n}a, Ren\'{e} Alejandro and Ma, Chenglong},
-title = {Classification Algorithm for Skin Color (CASCo): A new tool to measure skin color in social science research},
-journal = {Social Science Quarterly},
-volume = {n/a},
-number = {n/a},
-pages = {},
-keywords = {colorism, measurement, photo elicitation, racism, skin color, spectrometers},
-doi = {https://doi.org/10.1111/ssqu.13242},
-url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/ssqu.13242},
-eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1111/ssqu.13242},
-abstract = {Abstract Objective A growing body of literature reveals that skin color has significant effects on people's income, health, education, and employment. However, the ways in which skin color has been measured in empirical research have been criticized for being inaccurate, if not subjective and biased. Objective Introduce an objective, automatic, accessible and customizable Classification Algorithm for Skin Color (CASCo). Methods We review the methods traditionally used to measure skin color (verbal scales, visual aids or color palettes, photo elicitation, spectrometers and image-based algorithms), noting their shortcomings. We highlight the need for a different tool to measure skin color Results We present CASCo, a (social researcher-friendly) Python library that uses face detection, skin segmentation and k-means clustering algorithms to determine the skin tone category of portraits. Conclusion After assessing the merits and shortcomings of all the methods available, we argue CASCo is well equipped to overcome most challenges and objections posed against its alternatives. While acknowledging its limitations, we contend that CASCo should complement researchers. toolkit in this area.}
+    author = {Rej\'{o}n Pi\tilde{n}a, Ren\'{e} Alejandro and Ma, Chenglong},
+    title = {Classification Algorithm for Skin Color (CASCo): A new tool to measure skin color in social science research},
+    journal = {Social Science Quarterly},
+    volume = {n/a},
+    number = {n/a},
+    pages = {},
+    keywords = {colorism, measurement, photo elicitation, racism, skin color, spectrometers},
+    doi = {https://doi.org/10.1111/ssqu.13242},
+    url = {https://onlinelibrary.wiley.com/doi/abs/10.1111/ssqu.13242},
+    eprint = {https://onlinelibrary.wiley.com/doi/pdf/10.1111/ssqu.13242},
+    abstract = {Abstract Objective A growing body of literature reveals that skin color has significant effects on people's income, health, education, and employment. However, the ways in which skin color has been measured in empirical research have been criticized for being inaccurate, if not subjective and biased. Objective Introduce an objective, automatic, accessible and customizable Classification Algorithm for Skin Color (CASCo). Methods We review the methods traditionally used to measure skin color (verbal scales, visual aids or color palettes, photo elicitation, spectrometers and image-based algorithms), noting their shortcomings. We highlight the need for a different tool to measure skin color Results We present CASCo, a (social researcher-friendly) Python library that uses face detection, skin segmentation and k-means clustering algorithms to determine the skin tone category of portraits. Conclusion After assessing the merits and shortcomings of all the methods available, we argue CASCo is well equipped to overcome most challenges and objections posed against its alternatives. While acknowledging its limitations, we contend that CASCo should complement researchers. toolkit in this area.}
 }
 ```
 
@@ -118,7 +130,7 @@ In this image, from left to right you can find the following information:
 
 1. detected face with a label (Face 1) enclosed by a rectangle.
 2. dominant colors.
-    1. _The number of colors depends on settings (default is 2) and their sizes depend on their proportion._
+    1. _The number of colors depends on settings (default is 2), and their sizes depend on their proportion._
 3. specified color palette and the target label is enclosed by a rectangle.
 4. you can find a summary text at the bottom.
 
@@ -137,7 +149,7 @@ Furthermore, there will be a report file named `result.csv` which contains more 
 5. `props n`: the proportion of the `n`-th dominant color, (0~1.0).
 6. `skin tone`: the skin tone category of the detected face.
 7. `PERLA`: the **label** of skin tone category of the detected face.
-8. `accuracy`: the accuracy of the skin tone category of the detected face, (0~100). The larger the better.
+8. `accuracy`: the accuracy of the skin tone category of the detected face, (0~100). The larger, the better.
 
 ## Detailed Usage
 
@@ -284,6 +296,7 @@ For `color` images, we use the `color` palette to detect faces:
 ```shell
 #373028 #422811 #513b2e #6f503c #81654f #9d7a54 #bea07e #e5c8a6 #e7c1b8 #f3dad6 #fbf2f3
 ```
+
 <div style="display: inline-block; width: 85px; height: 30px; background-color: #373028; color: white">#373028</div>
 <div style="display: inline-block; width: 85px; height: 30px; background-color: #422811; color: white">#422811</div>
 <div style="display: inline-block; width: 85px; height: 30px; background-color: #513b2e; color: white">#513B2E</div>
@@ -304,6 +317,7 @@ For `bw` images, we use the `bw` palette to detect faces:
 ```shell
 #FFFFFF #F0F0F0 #E0E0E0 #D0D0D0 #C0C0C0 #B0B0B0 #A0A0A0 #909090 #808080 #707070 #606060 #505050 #404040 #303030 #202020 #101010 #000000
 ```
+
 <div style="display: inline-block; width: 85px; height: 30px; background-color: #FFFFFF;">#FFFFFF</div>
 <div style="display: inline-block; width: 85px; height: 30px; background-color: #F0F0F0;">#F0F0F0</div>
 <div style="display: inline-block; width: 85px; height: 30px; background-color: #E0E0E0;">#E0E0E0</div>
@@ -349,7 +363,7 @@ For example:
     </div>
 </div>
 
-NB: we did not do the opposite, i.e., convert `black/white` images to `color` images 
+NB: we did not do the opposite, i.e., convert `black/white` images to `color` images
 because the current AI models cannot accurately "guess" the color of the skin from a `black/white` image.
 It can further bias the analysis results.
 
@@ -364,4 +378,5 @@ Please refer to https://stackoverflow.com/a/20805153/8860079 for detailed inform
 stone --n_workers <Any Positive Integer>
 ```
 
-Use `--n_workers` to specify the number of workers to process images in parallel, defaults to the number of CPUs in your system.
+Use `--n_workers` to specify the number of workers to process images in parallel, defaults to the number of CPUs in your
+system.
