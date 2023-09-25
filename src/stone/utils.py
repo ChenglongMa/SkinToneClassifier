@@ -6,9 +6,18 @@ import re
 import string
 import sys
 from pathlib import Path
+from typing import Union
+from urllib.parse import urlparse
 
 
-# @functools.cache  # Python 3.9+
+class ArgumentError(ValueError):
+    """
+    Wrapper for argument error. This exception will be raised when the arguments are invalid.
+    """
+    pass
+
+
+# @functools.cache # Python 3.9+
 @functools.lru_cache(maxsize=128)  # Python 3.2+
 def alphabet_id(n):
     letters = string.ascii_uppercase
@@ -25,24 +34,48 @@ def alphabet_id(n):
     return _id
 
 
-def build_filenames(images):
-    filenames = []
+def is_url(text):
+    return urlparse(text).scheme in ["http", "https"]
+
+
+def extract_filename_and_extension(url):
+    """
+    Extract base filename and extension from the url.
+    :param url: URL with filename and extension, e.g., https://example.com/images/pic.jpg?param=value
+    :return: Base filename and extension, e.g., pic, jpg
+    """
+    parsed_url = urlparse(url)
+    path = parsed_url.path
+    filename = path.split("/")[-1]
+    basename, *extension = filename.split(".")
+    return basename, f".{extension[0]}" if extension else None
+
+
+def build_image_paths(images):
+    filenames, urls = [], []
     valid_images = ["*.jpg", "*.gif", "*.png", "*.jpeg", "*.webp", "*.tif"]
     for name in images:
         if os.path.isdir(name):
-            filenames.extend([glob.glob(os.path.join(name, i)) for i in valid_images])
-        if os.path.isfile(name):
+            filenames.extend([glob.glob(os.path.join(name, "./**/", i), recursive=True) for i in valid_images])
+        elif os.path.isfile(name):
             filenames.append([name])
-    filenames = [Path(f) for fs in filenames for f in fs]
-    assert len(filenames) > 0, "No valid images in the specified path."
-    # Sort filenames by (first) number extracted from the filename string
-    filenames.sort(key=sort_file)
-    return filenames
+        elif is_url(name):
+            urls.append(name)
+    paths = [Path(f) for fs in filenames for f in fs] + urls
+    if len(paths) == 0:
+        raise FileNotFoundError("No valid images in the specified path.")
+    # Sort paths by (first) number extracted from the filename string
+    paths.sort(key=sort_file)
+    return paths
 
 
-def sort_file(filename: Path):
-    nums = re.findall(r"\d+", filename.stem)
-    return int(nums[0]) if nums else filename
+def sort_file(path: Union[str, Path]):
+    if isinstance(path, Path):
+        basename = path.stem
+    else:
+        basename, *_ = extract_filename_and_extension(path)
+    nums = re.findall(r"\d+", basename)
+    return int(nums[0]) if nums else 0
 
 
 def is_windows():
@@ -61,10 +94,21 @@ def build_arguments():
         nargs="+",
         default="./",
         metavar="IMAGE FILENAME",
-        help="Image filename(s) to process;\n"
+        help="Image filename(s) or URLs to process;\n"
         'Supports multiple values separated by space, e.g., "a.jpg b.png";\n'
         'Supports directory or file name(s), e.g., "./path/to/images/ a.jpg";\n'
+        'Supports URL(s), e.g., "https://example.com/images/pic.jpg" since v1.1.0+.\n'
         "The app will search all images in current directory in default.",
+    )
+    parser.add_argument(
+        "-t",
+        "--image_type",
+        default="auto",
+        metavar="IMAGE TYPE",
+        help="Specify whether the input image(s) is/are colored or black/white.\n"
+        'Valid choices are: "auto", "color" or "bw",\n'
+        'Defaults to "auto", which will be detected automatically.',
+        choices=["auto", "color", "bw"],
     )
     parser.add_argument(
         "-p",
@@ -80,30 +124,22 @@ def build_arguments():
         "--labels",
         nargs="+",
         metavar="LABEL",
-        help="Skin tone labels; default values are the uppercase alphabet list.",
-    )
-    parser.add_argument(
-        "-t",
-        "--image_type",
-        default="auto",
-        metavar="IMAGE TYPE",
-        help="Specify whether the inputs image(s) is/are colored or black/white.\n"
-        'Valid choices are: "auto", "color" or "bw",\n'
-        'Defaults to "auto", which will be detected automatically.',
-        choices=["auto", "color", "bw"],
+        help="Skin tone labels; default values are the uppercase alphabet list leading by the image type ('C' for 'color'; 'B' for 'Black&White'), "
+        "e.g., ['CA', 'CB', ..., 'CZ'] or ['BA', 'BB', ..., 'BZ'].",
     )
     parser.add_argument(
         "-d",
         "--debug",
         action="store_true",
-        help="Whether to output processed images, used for debugging and verification.",
+        help="Whether to generate report images, used for debugging and verification."
+        "The report images will be saved in the './debug' directory.",
     )
     parser.add_argument(
         "-bw",
         "--black_white",
         action="store_true",
         help="Whether to convert the input to black/white image(s).\n"
-        "Then the app will use the black/white palette to classify the image.",
+        "If true, the app will use the black/white palette to classify the image.",
     )
     parser.add_argument(
         "-o",
@@ -161,8 +197,7 @@ def build_arguments():
         "--threshold",
         type=float,
         metavar="THRESHOLD",
-        help="CONFIG: what proportion of the skin area is required to identify the "
-        "face, defaults to 0.3.",
+        help="CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.3.",
         default=0.3,
     )
 

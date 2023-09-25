@@ -1,5 +1,10 @@
+import functools
 import logging
 import math
+import re
+import urllib.error
+from pathlib import Path
+from urllib.request import urlopen
 
 import cv2
 import numpy as np
@@ -7,7 +12,108 @@ from colormath.color_conversions import convert_color
 from colormath.color_diff import delta_e_cie2000
 from colormath.color_objects import sRGBColor, LabColor
 
+from stone.utils import is_url, extract_filename_and_extension, alphabet_id, ArgumentError
+
 LOG = logging.getLogger(__name__)
+
+DEFAULT_TONE_PALETTE = {
+    "color": [
+        "#373028",
+        "#422811",
+        "#513b2e",
+        "#6f503c",
+        "#81654f",
+        "#9d7a54",
+        "#bea07e",
+        "#e5c8a6",
+        "#e7c1b8",
+        "#f3dad6",
+        "#fbf2f3",
+    ],
+    # Refer to this paper:
+    # Leigh, A., & Susilo, T. (2009). Is voting skin-deep? Estimating the effect of candidate ballot photographs on election outcomes.
+    # Journal of Economic Psychology, 30(1), 61-70.
+    "bw": [
+        "#FFFFFF",
+        "#F0F0F0",
+        "#E0E0E0",
+        "#D0D0D0",
+        "#C0C0C0",
+        "#B0B0B0",
+        "#A0A0A0",
+        "#909090",
+        "#808080",
+        "#707070",
+        "#606060",
+        "#505050",
+        "#404040",
+        "#303030",
+        "#202020",
+        "#101010",
+        "#000000",
+    ],
+}
+
+DEFAULT_TONE_LABELS = {
+    "color": ["C" + alphabet_id(i) for i in range(len(DEFAULT_TONE_PALETTE["color"]))],
+    "bw": ["B" + alphabet_id(i) for i in range(len(DEFAULT_TONE_PALETTE["bw"]))],
+}
+
+
+@functools.lru_cache(maxsize=128)  # Python 3.2+
+def normalize_color(color):
+    hex_color_pattern = re.compile(r"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$")
+    decimal_color_pattern = re.compile(
+        r"^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+        r",\s*(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"
+        r",\s*(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+    )
+    if decimal_color_pattern.match(color):
+        r, g, b = map(int, color.split(","))
+        color = "#{:02X}{:02X}{:02X}".format(r, g, b)
+        return color
+    if hex_color_pattern.match(color):
+        return color.upper()
+    raise ArgumentError(f"Invalid color code: {color}")
+
+
+@functools.lru_cache(maxsize=128)  # Python 3.2+
+def normalize_palette(palette):
+    return [normalize_color(color) for color in palette]
+
+
+def load_image(filename_or_url, flags=cv2.IMREAD_COLOR):
+    if isinstance(filename_or_url, str):
+        if is_url(filename_or_url):
+            base_filename, extension = extract_filename_and_extension(filename_or_url)
+            image = image_from_url(filename_or_url, flags)
+            return image, base_filename, extension
+        filename_or_url = Path(filename_or_url)
+    if not Path(filename_or_url).exists():
+        raise FileNotFoundError(f"{filename_or_url} is not found.")
+    base_filename, extension = filename_or_url.stem, filename_or_url.suffix
+    filename = str(filename_or_url.resolve())
+    image = cv2.imread(filename, flags)
+    return image, base_filename, extension
+
+
+def image_from_url(url, flags=cv2.IMREAD_COLOR):
+    """
+    Read image from url.
+    Refer to https://stackoverflow.com/a/55026951/8860079
+    :param url:
+    :param flags:
+    :return:
+    """
+    try:
+        resp = urlopen(url)
+        image = np.asarray(bytearray(resp.read()), dtype="uint8")
+        image = cv2.imdecode(image, flags)
+    except urllib.error.HTTPError as e:
+        raise FileNotFoundError(f"{url} is not found.") from e
+    except Exception as e:
+        raise ArgumentError(f"{url} is not a valid image.") from e
+    return image
 
 
 def create_color_bar(height, width, color):
@@ -68,15 +174,9 @@ def detect_faces(
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     gray = cv2.equalizeHist(gray)
 
-    cascade = cv2.CascadeClassifier(
-        cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
-    )
+    cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
-    flags = (
-        cv2.CASCADE_SCALE_IMAGE | cv2.CASCADE_FIND_BIGGEST_OBJECT
-        if biggest_only
-        else cv2.CASCADE_SCALE_IMAGE
-    )
+    flags = cv2.CASCADE_SCALE_IMAGE | cv2.CASCADE_FIND_BIGGEST_OBJECT if biggest_only else cv2.CASCADE_SCALE_IMAGE
     faces = cascade.detectMultiScale(
         gray,
         scaleFactor=scaleFactor,
@@ -158,49 +258,38 @@ def dominant_colors(image, to_bw, n_clusters=2):
 
     criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
     flags = cv2.KMEANS_RANDOM_CENTERS
-    compactness, labels, colors = cv2.kmeans(
-        data, n_clusters, None, criteria, 10, flags
-    )
+    compactness, labels, colors = cv2.kmeans(data, n_clusters, None, criteria, 10, flags)
     labels, counts = np.unique(labels, return_counts=True)
 
     order = (-counts).argsort()
     colors = colors[order]
     counts = counts[order]
 
-    props = counts / counts.sum()
+    percents = counts / counts.sum()
 
-    return colors, props
+    return colors, percents
 
 
 def blur(image, degree=25):
     """
     Blur the image
     :param image:
-    :param degree: the degree of blur. The bigger, the more blur
+    :param degree: The degree of blur. The bigger, the more blur
     :return:
     """
     ksize = degree, degree
     return cv2.blur(image, ksize)
 
 
-def skin_tone(colors, props, skin_tone_palette, tone_labels):
-    lab_tones = [
-        convert_color(sRGBColor.new_from_rgb_hex(rgb), LabColor)
-        for rgb in skin_tone_palette
-    ]
-    lab_colors = [
-        convert_color(sRGBColor(rgb_r=r, rgb_g=g, rgb_b=b, is_upscaled=True), LabColor)
-        for b, g, r in colors
-    ]
-    distances = [
-        np.sum([delta_e_cie2000(c, label) * p for c, p in zip(lab_colors, props)])
-        for label in lab_tones
-    ]
+def skin_tone(colors, percents, skin_tone_palette, tone_labels):
+    lab_tones = [convert_color(sRGBColor.new_from_rgb_hex(rgb), LabColor) for rgb in skin_tone_palette]
+    lab_colors = [convert_color(sRGBColor(rgb_r=r, rgb_g=g, rgb_b=b, is_upscaled=True), LabColor) for b, g, r in colors]
+    distances = [np.sum([delta_e_cie2000(c, label) * p for c, p in zip(lab_colors, percents)]) for label in lab_tones]
     tone_id = np.argmin(distances)
     distance: float = distances[tone_id]
     tone_hex = skin_tone_palette[tone_id].upper()
-    PERLA = tone_labels[tone_id]
-    return tone_id, tone_hex, PERLA, distance
+    tone_label = tone_labels[tone_id]
+    return tone_id, tone_hex, tone_label, distance
 
 
 def classify(
@@ -217,32 +306,29 @@ def classify(
     """
     Classify the skin tone of the image
     :param image:
-    :param is_bw: whether the image is black and white
+    :param is_bw: Whether the image is black and white
     :param to_bw: whether to convert the image to black and white
     :param skin_tone_palette:
     :param tone_labels:
     :param n_dominant_colors:
-    :param verbose:
-    :param report_image: the image to draw the report on
+    :param verbose: Whether to output the report image
+    :param report_image: The image to draw the report on
     :param use_face: whether to use face area for detection
     :return:
     """
     detect_skin_fn = detect_skin_in_bw if is_bw else detect_skin_in_color
     skin, skin_mask = detect_skin_fn(image)
-    dmnt_colors, dmnt_props = dominant_colors(skin, to_bw, n_dominant_colors)
+    dmnt_colors, dmnt_pcts = dominant_colors(skin, to_bw, n_dominant_colors)
     # Generate readable strings
-    hex_colors = [
-        "#%02X%02X%02X" % tuple(np.around([r, g, b]).astype(int))
-        for b, g, r in dmnt_colors
-    ]
-    prop_strs = ["%.2f" % p for p in dmnt_props]
-    result = list(np.hstack(list(zip(hex_colors, prop_strs))))
+    hex_colors = ["#%02X%02X%02X" % tuple(np.around([r, g, b]).astype(int)) for b, g, r in dmnt_colors]
+    pct_strs = ["%.2f" % p for p in dmnt_pcts]
+    result = {"dominant_colors": [{"color": color, "percent": pct} for color, pct in zip(hex_colors, pct_strs)]}
     # Calculate skin tone
-    tone_id, tone_hex, PERLA, distance = skin_tone(
-        dmnt_colors, dmnt_props, skin_tone_palette, tone_labels
-    )
+    tone_id, tone_hex, tone_label, distance = skin_tone(dmnt_colors, dmnt_pcts, skin_tone_palette, tone_labels)
     accuracy = round(100 - distance, 2)
-    result.extend([tone_hex, PERLA, accuracy])
+    result["skin_tone"] = tone_hex
+    result["tone_label"] = tone_label
+    result["accuracy"] = accuracy
     if not verbose:
         return result, None
 
@@ -251,20 +337,14 @@ def classify(
     bar_width = 100
 
     # 1. Create color bar for dominant colors
-    color_bars = create_dominant_color_bar(
-        report_image, dmnt_colors, dmnt_props, bar_width
-    )
+    color_bars = create_dominant_color_bar(report_image, dmnt_colors, dmnt_pcts, bar_width)
 
-    # 2. Create color bar for skin tone list
-    palette_bars = create_tone_palette_bar(
-        report_image, tone_id, skin_tone_palette, bar_width
-    )
+    # 2. Create color bar for a skin tone list
+    palette_bars = create_tone_palette_bar(report_image, tone_id, skin_tone_palette, bar_width)
 
     # 3. Combine all bars and report image
     report_image = np.hstack([report_image, color_bars, palette_bars])
-    msg_bar = create_message_bar(
-        dmnt_colors, dmnt_props, tone_hex, distance, report_image.shape[1]
-    )
+    msg_bar = create_message_bar(dmnt_colors, dmnt_pcts, tone_hex, distance, report_image.shape[1])
     report_image = np.vstack([report_image, msg_bar])
     return result, report_image
 
@@ -279,19 +359,19 @@ def initial_report_image(face_image, report_image, skin_mask, use_face, to_bw):
     blurred_image = blur(report_image)
     non_skin_mask = cv2.bitwise_not(skin_mask)
     edges = cv2.Canny(skin_mask, 50, 150)
-    report_image = cv2.bitwise_and(
-        report_image, report_image, mask=skin_mask
-    ) + cv2.bitwise_and(blurred_image, blurred_image, mask=non_skin_mask)
+    report_image = cv2.bitwise_and(report_image, report_image, mask=skin_mask) + cv2.bitwise_and(
+        blurred_image, blurred_image, mask=non_skin_mask
+    )
     contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cv2.drawContours(report_image, contours, -1, (255, 0, 0), 2)
     return report_image
 
 
-def create_dominant_color_bar(report_image, dmnt_colors, dmnt_props, bar_width):
+def create_dominant_color_bar(report_image, dmnt_colors, dmnt_pcts, bar_width):
     color_bars = []
     total_height = 0
-    for color, prop in zip(dmnt_colors, dmnt_props):
-        bar_height = int(math.floor(report_image.shape[0] * prop))
+    for color, pct in zip(dmnt_colors, dmnt_pcts):
+        bar_height = int(math.floor(report_image.shape[0] * pct))
         total_height += bar_height
         bar = create_color_bar(bar_height, bar_width, color)
         color_bars.append(bar)
@@ -325,11 +405,11 @@ def create_tone_palette_bar(report_image, tone_id, skin_tone_palette, bar_width)
     return bar
 
 
-def create_message_bar(dmnt_colors, dmnt_props, tone_hex, distance, bar_width):
+def create_message_bar(dmnt_colors, dmnt_pcts, tone_hex, distance, bar_width):
     msg_bar = create_color_bar(height=50, width=bar_width, color=(243, 239, 214))
     b, g, r = np.around(dmnt_colors[0]).astype(int)
     dominant_color_hex = "#%02X%02X%02X" % (r, g, b)
-    prop = f"{dmnt_props[0] * 100:.2f}%"
+    pct = f"{dmnt_pcts[0] * 100:.2f}%"
 
     font, font_scale, txt_colr, thickness, line_type = (
         cv2.FONT_HERSHEY_SIMPLEX,
@@ -339,7 +419,7 @@ def create_message_bar(dmnt_colors, dmnt_props, tone_hex, distance, bar_width):
         cv2.LINE_AA,
     )
     x, y = 2, 15
-    msg = f"- Dominant color: {dominant_color_hex}, proportion: {prop}"
+    msg = f"- Dominant color: {dominant_color_hex}, percent: {pct}"
     cv2.putText(msg_bar, msg, (x, y), font, font_scale, txt_colr, thickness, line_type)
 
     text_size, _ = cv2.getTextSize(msg, font, font_scale, thickness)
@@ -359,7 +439,7 @@ def create_message_bar(dmnt_colors, dmnt_props, tone_hex, distance, bar_width):
     return msg_bar
 
 
-def process(
+def process_image(
     image: np.ndarray,
     is_bw: bool,
     to_bw: bool,
@@ -376,10 +456,8 @@ def process(
 ):
     image = resize(image, new_width)
 
-    records, report_images = {}, {}
-    face_coords = detect_faces(
-        image, scaleFactor, minNeighbors, minSize, biggest_only, is_bw, threshold
-    )
+    records, report_images = [], {}
+    face_coords = detect_faces(image, scaleFactor, minNeighbors, minSize, biggest_only, is_bw, threshold)
     n_faces = len(face_coords)
 
     if n_faces == 0:
@@ -393,7 +471,8 @@ def process(
             verbose=verbose,
             use_face=False,
         )
-        records["NA"] = record
+        record["face_id"] = "NA"
+        records.append(record)
         report_images["NA"] = report_image
     # Otherwise, detect skin tone for each face
     for idx, face_coord in enumerate(face_coords):
@@ -409,15 +488,16 @@ def process(
             report_image=image,
             use_face=True,
         )
+        record["face_id"] = idx + 1
+        records.append(record)
         report_image = face_report_image(face_coord, idx, report_image)
-        records[idx + 1] = record
         report_images[idx + 1] = report_image
 
     return records, report_images
 
 
 def show(image):
-    cv2.imshow("image", image)
+    cv2.imshow("Skin Tone Classifier", image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 

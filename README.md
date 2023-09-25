@@ -29,7 +29,7 @@ dominant skin tones and color category.
 
 We have officially released the 1.0.0 version of the library. In this version, we have made the following changes:
 
-1. ✨ **NEW!**: We add the `threshold` parameter to control the proportion of face areas (Defaults to 0.3).
+1. ✨ **NEW!**: We add the `threshold` parameter to control the minimum percentage of required face areas (Defaults to 0.3).
     * In previous versions, the library could incorrectly identify non-face areas as faces, such as shirts, collars,
       necks, etc.
       In order to improve its accuracy, the new version will further calculate the proportion of skin in the recognized
@@ -136,7 +136,7 @@ In this image, from left to right you can find the following information:
 
 Furthermore, there will be a report file named `result.csv` which contains more detailed information, e.g.,
 
-| file       | image type | face id | dominant 1 | props 1 | dominant 2 | props 2 | skin tone | PERLA | accuracy(0-100) |
+| file       | image type | face id | dominant 1 | props 1 | dominant 2 | props 2 | skin tone | tone label | accuracy(0-100) |
 |------------|------------|---------|------------|---------|------------|---------|-----------|-------|-----------------|
 | lena_std-1 | color      | 1       | #CF7371    | 0.52    | #E4A89F    | 0.48    | #E7C1B8   | CI    | 85.39           |
 
@@ -148,7 +148,7 @@ Furthermore, there will be a report file named `result.csv` which contains more 
 4. `dominant n`: the `n`-th dominant color of the detected face.
 5. `props n`: the proportion of the `n`-th dominant color, (0~1.0).
 6. `skin tone`: the skin tone category of the detected face.
-7. `PERLA`: the **label** of skin tone category of the detected face.
+7. `tone label`: the **label** of skin tone category of the detected face.
 8. `accuracy`: the accuracy of the skin tone category of the detected face, (0~100). The larger, the better.
 
 ## Detailed Usage
