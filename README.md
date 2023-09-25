@@ -35,6 +35,9 @@ In this version, we have made the following changes:
 5. 🐛 **FIX!**: We fixed a bug where the app would not correctly sort files that did not contain numbers in their
    filenames.
 
+<details>
+  <summary><i>Click here to show more.</i></summary>
+
 ## v1.0.1
 
 1. 👋 **BYE**: We have removed the function to pop up a resulting window when processing a **single** image.
@@ -97,6 +100,8 @@ In this version, we have made the following changes:
 5. 🐛 **FIX!**: We fix the bug that the app will crash when the input image has dimensionality errors.
     * Now, the app won't crash and will report the error message in `./result.csv`.
 
+</details>
+
 # Citation
 
 If you are interested in our work, please cite:
@@ -148,7 +153,7 @@ Then, you can find the processed image in `./debug/color/faces_1` folder, e.g.,
 
 In this image, from left to right you can find the following information:
 
-1. detected face with a label (Face 1) enclosed by a rectangle.
+1. detected face with a label (*Face 1*) enclosed by a rectangle.
 2. dominant colors.
     1. _The number of colors depends on settings (default is 2), and their sizes depend on their proportion._
 3. specified color palette and the target label is enclosed by a rectangle.
@@ -162,7 +167,8 @@ Furthermore, there will be a report file named `result.csv` which contains more 
 
 ### Interpretation of the table
 
-1. `file`: the filename of the processed image. **NB: The filename pattern of report image is `<file>-<face id>`**
+1. `file`: the filename of the processed image.
+    * **NB: The filename pattern of report image is `<file>-<face id>`**
 2. `image type`: the type of the processed image, i.e., `color` or `bw` (black/white).
 3. `face id`: the id of the detected face, which matches the reported image. `NA` means no face has been detected.
 4. `dominant n`: the `n`-th dominant color of the detected face.
@@ -407,17 +413,56 @@ system.
 
 #### 9. Used as a library by importing into other projects
 
+You can refer to the following code snippet:
+
 ```python
-from stone import process, show
+import stone
 from json import dumps
 
 # process the image
-result = process(image_path, image_type, palette, *other_args, return_report_image=True)
+result = stone.process(image_path, image_type, palette, *other_args, return_report_image=True)
 # show the report image
 report_images = result.pop("report_images")  # obtain and remove the report image from the `result`
 face_id = 1
-show(report_images[face_id])
+stone.show(report_images[face_id])
 
 # convert the result to json
 result_json = dumps(result)
+```
+
+`stone.process` is the main function to process the image.
+It has the same parameters as the command line version.
+
+It will return a `dict`, which contains the process result and report image(s) (if required,
+i.e., `return_report_image=True`).
+
+You can further use `stone.show` to show the report image(s). 
+And convert the result to `json` format.
+
+The `result_json` will be like:
+
+```json
+{
+  "basename": "lena_std",
+  "extension": ".jpg",
+  "image_type": "color",
+  "faces": [
+    {
+      "face_id": 1,
+      "dominant_colors": [
+        {
+          "color": "#CF7371",
+          "percent": "0.52"
+        },
+        {
+          "color": "#E4A89F",
+          "percent": "0.48"
+        }
+      ],
+      "skin_tone": "#E7C1B8",
+      "tone_label": "CI",
+      "accuracy": 85.39
+    }
+  ]
+}
 ```
