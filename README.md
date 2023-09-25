@@ -16,6 +16,25 @@ dominant skin tones and color category.
 
 # Changelogs
 
+## v1.1.0
+
+In this version, we have made the following changes:
+
+1. ✨ **NEW!**: Now, `stone` can not only be run on **the command line**, but can also be **imported** into other
+   projects for use. Check [this](#9-used-as-a-library-by-importing-into-other-projects) for more details.
+    * We expose the `process` and `show` functions in the `stone` package.
+2. ✨ **NEW!**: We add `URL` support for the input images.
+    * Now, you can specify the input image as a URL, e.g., `https://example.com/images/pic.jpg`. Of course, you can mix
+      the URLs and local filenames.
+3. ✨ **NEW!**: We add **recursive search** support for the input images.
+    * Now, when you specify the input image as a directory, e.g., `./path/to/images/`.
+      The app will search all images in the directory recursively.
+4. 🧬 **CHANGE!**: We change the column header in `result.csv`:
+    * `prop` => `percent`
+    * `PERLA` => `tone label`
+5. 🐛 **FIX!**: We fixed a bug where the app would not correctly sort files that did not contain numbers in their
+   filenames.
+
 ## v1.0.1
 
 1. 👋 **BYE**: We have removed the function to pop up a resulting window when processing a **single** image.
@@ -29,7 +48,8 @@ dominant skin tones and color category.
 
 We have officially released the 1.0.0 version of the library. In this version, we have made the following changes:
 
-1. ✨ **NEW!**: We add the `threshold` parameter to control the minimum percentage of required face areas (Defaults to 0.3).
+1. ✨ **NEW!**: We add the `threshold` parameter to control the minimum percentage of required face areas (Defaults to
+   0.3).
     * In previous versions, the library could incorrectly identify non-face areas as faces, such as shirts, collars,
       necks, etc.
       In order to improve its accuracy, the new version will further calculate the proportion of skin in the recognized
@@ -136,17 +156,17 @@ In this image, from left to right you can find the following information:
 
 Furthermore, there will be a report file named `result.csv` which contains more detailed information, e.g.,
 
-| file       | image type | face id | dominant 1 | props 1 | dominant 2 | props 2 | skin tone | tone label | accuracy(0-100) |
-|------------|------------|---------|------------|---------|------------|---------|-----------|-------|-----------------|
-| lena_std-1 | color      | 1       | #CF7371    | 0.52    | #E4A89F    | 0.48    | #E7C1B8   | CI    | 85.39           |
+| file     | image type | face id | dominant 1 | percent 1 | dominant 2 | percent 2 | skin tone | tone label | accuracy(0-100) |
+|----------|------------|---------|------------|-----------|------------|-----------|-----------|------------|-----------------|
+| lena_std | color      | 1       | #CF7371    | 0.52      | #E4A89F    | 0.48      | #E7C1B8   | CI         | 85.39           |
 
 ### Interpretation of the table
 
-1. `file`: the filename of the processed image.
+1. `file`: the filename of the processed image. **NB: The filename pattern of report image is `<file>-<face id>`**
 2. `image type`: the type of the processed image, i.e., `color` or `bw` (black/white).
 3. `face id`: the id of the detected face, which matches the reported image. `NA` means no face has been detected.
 4. `dominant n`: the `n`-th dominant color of the detected face.
-5. `props n`: the proportion of the `n`-th dominant color, (0~1.0).
+5. `percent n`: the percentage of the `n`-th dominant color, (0~1.0).
 6. `skin tone`: the skin tone category of the detected face.
 7. `tone label`: the **label** of skin tone category of the detected face.
 8. `accuracy`: the accuracy of the skin tone category of the detected face, (0~100). The larger, the better.
@@ -162,32 +182,36 @@ stone -h
 Output in console:
 
 ```text
-usage: stone [-h] [-i IMAGE FILENAME [IMAGE FILENAME ...]] [-p COLOR [COLOR ...]] [-l LABEL [LABEL ...]]
-                   [-t IMAGE TYPE] [-d] [-bw] [-o DIRECTORY] [--n_workers N_WORKERS] [--n_colors N]
-                   [--new_width WIDTH] [--scale SCALE] [--min_nbrs NEIGHBORS] [--min_size WIDTH [HEIGHT ...]]
+usage: __main__.py [-h] [-i IMAGE FILENAME [IMAGE FILENAME ...]]
+                   [-t IMAGE TYPE] [-p COLOR [COLOR ...]]
+                   [-l LABEL [LABEL ...]] [-d] [-bw] [-o DIRECTORY]
+                   [--n_workers N_WORKERS] [--n_colors N] [--new_width WIDTH]
+                   [--scale SCALE] [--min_nbrs NEIGHBORS]
+                   [--min_size WIDTH [HEIGHT ...]] [--threshold THRESHOLD]
 
 Skin Tone Classifier
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
   -i IMAGE FILENAME [IMAGE FILENAME ...], --images IMAGE FILENAME [IMAGE FILENAME ...]
-                        Image filename(s) to process;
+                        Image filename(s) or URLs to process;
                         Supports multiple values separated by space, e.g., "a.jpg b.png";
                         Supports directory or file name(s), e.g., "./path/to/images/ a.jpg";
+                        Supports URL(s), e.g., "https://example.com/images/pic.jpg" since v1.1.0+.
                         The app will search all images in current directory in default.
+  -t IMAGE TYPE, --image_type IMAGE TYPE
+                        Specify whether the input image(s) is/are colored or black/white.
+                        Valid choices are: "auto", "color" or "bw",
+                        Defaults to "auto", which will be detected automatically.
   -p COLOR [COLOR ...], --palette COLOR [COLOR ...]
                         Skin tone palette;
                         Supports RGB hex value leading by "#" or RGB values separated by comma(,),
                         E.g., "-p #373028 #422811" or "-p 255,255,255 100,100,100"
   -l LABEL [LABEL ...], --labels LABEL [LABEL ...]
-                        Skin tone labels; default values are the uppercase alphabet list.
-  -t IMAGE TYPE, --image_type IMAGE TYPE
-                        Specify whether the inputs image(s) is/are colored or black/white.
-                        Valid choices are: "auto", "color" or "bw",
-                        Defaults to "auto", which will be detected automatically.
-  -d, --debug           Whether to output processed images, used for debugging and verification.
+                        Skin tone labels; default values are the uppercase alphabet list leading by the image type ('C' for 'color'; 'B' for 'Black&White'), e.g., ['CA', 'CB', ..., 'CZ'] or ['BA', 'BB', ..., 'BZ'].
+  -d, --debug           Whether to generate report images, used for debugging and verification.The report images will be saved in the './debug' directory.
   -bw, --black_white    Whether to convert the input to black/white image(s).
-                        Then the app will use the black/white palette to classify the image.
+                        If true, the app will use the black/white palette to classify the image.
   -o DIRECTORY, --output DIRECTORY
                         The path of output file, defaults to current directory.
   --n_workers N_WORKERS
@@ -200,7 +224,7 @@ optional arguments:
   --min_size WIDTH [HEIGHT ...]
                         CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".
   --threshold THRESHOLD
-                        CONFIG: what proportion of the skin area is required to identify the face, defaults to 0.3.                     
+                        CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.3.                    
 ```
 
 ### Use Cases
@@ -380,3 +404,20 @@ stone --n_workers <Any Positive Integer>
 
 Use `--n_workers` to specify the number of workers to process images in parallel, defaults to the number of CPUs in your
 system.
+
+#### 9. Used as a library by importing into other projects
+
+```python
+from stone import process, show
+from json import dumps
+
+# process the image
+result = process(image_path, image_type, palette, *other_args, return_report_image=True)
+# show the report image
+report_images = result.pop("report_images")  # obtain and remove the report image from the `result`
+face_id = 1
+show(report_images[face_id])
+
+# convert the result to json
+result_json = dumps(result)
+```
