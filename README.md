@@ -35,7 +35,7 @@ In this version, we have made the following changes:
 5. 🐛 **FIX!**: We fixed a bug where the app would not correctly sort files that did not contain numbers in their
    filenames.
 
-<details>
+<details markdown="1">
   <summary><i>Click here to show more.</i></summary>
 
 ## v1.0.1
