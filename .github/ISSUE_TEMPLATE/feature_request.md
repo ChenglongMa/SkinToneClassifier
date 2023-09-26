@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: "[\U0001F4A1 FEAT]"
+title: "[\U0001F4A1 FEAT] Please describe what feature or solution you need."
 labels: enhancement
 assignees: ''
 
