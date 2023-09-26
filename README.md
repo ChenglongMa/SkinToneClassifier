@@ -1,4 +1,4 @@
-# <u>S</u>kin <u>Tone</u> Classifier (stone)
+# Skin Tone Classifier (stone)
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/skin-tone-classifier)
 ![PyPI](https://img.shields.io/pypi/v/skin-tone-classifier)
@@ -10,7 +10,7 @@ An easy-to-use library for skin tone classification.
 This can be used to detect **face** or **skin area** in the specified images.
 The detected skin tones are then classified into the specified color categories.
 The library finally generates results to report the detected faces (if any),
-dominant skin tones and color category.
+dominant skin tones and color categories.
 
 ---
 
@@ -466,3 +466,19 @@ The `result_json` will be like:
   ]
 }
 ```
+
+# Contributing
+
+👋 Welcome to **SkinToneClassifier**! We're excited to have your contributions. Here's how you can get involved:
+
+1. 💡 **Discuss New Ideas**: Have a creative idea or suggestion? Start a discussion in the [Discussions](https://github.com/ChenglongMa/SkinToneClassifier/discussions) tab to share your thoughts and gather feedback from the community.
+
+2. ❓ **Ask Questions**: Got questions or need clarification on something in the repository? Feel free to open an [Issue](https://github.com/ChenglongMa/SkinToneClassifier/issues) labeled as a "question" or participate in [Discussions](https://github.com/ChenglongMa/SkinToneClassifier/discussions).
+
+3. 🐛 **Issue a Bug**: If you've identified a bug or an issue with the code, please open a new [Issue](https://github.com/ChenglongMa/SkinToneClassifier/issues) with a clear description of the problem, steps to reproduce it, and your environment details.
+
+4. ✨ **Introduce New Features**: Want to add a new feature or enhancement to the project? Fork the repository, create a new branch, and submit a [Pull Request](https://github.com/ChenglongMa/SkinToneClassifier/pulls) with your changes. Make sure to follow our contribution guidelines.
+
+5. 💖 **Funding**: If you'd like to financially support the project, you can do so by [sponsoring the repository on GitHub](https://github.com/sponsors/ChenglongMa). Your contributions help us maintain and improve the project.
+
+Thank you for considering contributing to **SkinToneClassifier**. We value your input and look forward to collaborating with you!
