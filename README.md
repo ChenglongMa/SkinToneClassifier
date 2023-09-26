@@ -16,6 +16,33 @@ dominant skin tones and color categories.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+<details>
+<summary>Table of Contents</summary>
+
+- [Changelogs](#changelogs)
+  - [v1.1.0](#v110)
+  - [v1.0.1](#v101)
+  - [v1.0.0](#v100)
+  - [v0.2.0](#v020)
+- [Citation](#citation)
+- [Installation](#installation)
+- [HOW TO USE](#how-to-use)
+  - [Quick Start](#quick-start)
+    - [Interpretation of the table](#interpretation-of-the-table)
+  - [Detailed Usage](#detailed-usage)
+    - [Use Cases](#use-cases)
+      - [1. To process multiple images](#1-to-process-multiple-images)
+      - [2. To specify color categories](#2-to-specify-color-categories)
+      - [3. Specify output folder](#3-specify-output-folder)
+      - [4. Store report images for debugging](#4-store-report-images-for-debugging)
+      - [5. Specify the types of the input image(s)](#5-specify-the-types-of-the-input-images)
+      - [6. Convert the `color` images to `black/white` images and then do the classification using `bw` palette](#6-convert-the-color-images-to-blackwhite-images-and-then-do-the-classification-using-bw-palette)
+      - [7. Tune parameters of face detection](#7-tune-parameters-of-face-detection)
+      - [8. Multiprocessing settings](#8-multiprocessing-settings)
+      - [9. Used as a library by importing into other projects](#9-used-as-a-library-by-importing-into-other-projects)
+- [Contributing](#contributing)
+
+</details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Changelogs
