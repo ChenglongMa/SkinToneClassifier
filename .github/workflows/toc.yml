@@ -14,4 +14,4 @@ jobs:
 
       - uses: technote-space/toc-generator@v4
         with:
-          FOLDING: true
+          FOLDING: false
