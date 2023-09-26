@@ -39,11 +39,11 @@ In this version, we have made the following changes:
 5. 🐛 **FIX!**: We fixed a bug where the app would not correctly sort files that did not contain numbers in their
    filenames.
 
-<details markdown="1">
-  <summary><i>Click here to show more.</i></summary>
-
 ## v1.0.1
 
+<details markdown="1">
+  <summary><i>Click here to show more.</i></summary>
+   
 1. 👋 **BYE**: We have removed the function to pop up a resulting window when processing a **single** image.
 
     * It can raise an error when running the app in a **web browser** environment, e.g., Jupyter Notebook or Google
@@ -51,9 +51,14 @@ In this version, we have made the following changes:
     * If you want to see the processed image, please use the `-d` option to store the report image in the `./debug`
       folder.
 
+</details>
+
 ## v1.0.0
 
-We have officially released the 1.0.0 version of the library. In this version, we have made the following changes:
+<details markdown="1">
+  <summary><i>Click here to show more.</i></summary>
+   
+🎉**We have officially released the 1.0.0 version of the library!** In this version, we have made the following changes:
 
 1. ✨ **NEW!**: We add the `threshold` parameter to control the minimum percentage of required face areas (Defaults to
    0.3).
@@ -69,8 +74,13 @@ We have officially released the 1.0.0 version of the library. In this version, w
 4. 🐛 **FIX!**: We fix the bug that the library will create an empty `log` folder when checking the help information by
    running `stone -h`.
 
+</details>
+
 ## v0.2.0
 
+<details markdown="1">
+  <summary><i>Click here to show more.</i></summary>
+   
 In this version, we have made the following changes:
 
 1. ✨ **NEW!**: Now we support skin tone classification for **black and white** images.
