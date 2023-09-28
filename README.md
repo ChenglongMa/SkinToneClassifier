@@ -1,5 +1,9 @@
 # Skin Tone Classifier (stone)
 
+<div style="text-align:center;">
+    <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/stone-logo.png" alt="stone logo">
+</div>
+
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/skin-tone-classifier)
 ![PyPI](https://img.shields.io/pypi/v/skin-tone-classifier)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/ChenglongMa/SkinToneClassifier?include_prereleases)
@@ -20,26 +24,26 @@ dominant skin tones and color categories.
 <summary>Table of Contents</summary>
 
 - [Changelogs](#changelogs)
-  - [v1.1.0](#v110)
-  - [v1.0.1](#v101)
-  - [v1.0.0](#v100)
-  - [v0.2.0](#v020)
+    - [v1.1.0](#v110)
+    - [v1.0.1](#v101)
+    - [v1.0.0](#v100)
+    - [v0.2.0](#v020)
 - [Citation](#citation)
 - [Installation](#installation)
 - [HOW TO USE](#how-to-use)
-  - [Quick Start](#quick-start)
-    - [Interpretation of the table](#interpretation-of-the-table)
-  - [Detailed Usage](#detailed-usage)
-    - [Use Cases](#use-cases)
-      - [1. To process multiple images](#1-to-process-multiple-images)
-      - [2. To specify color categories](#2-to-specify-color-categories)
-      - [3. Specify output folder](#3-specify-output-folder)
-      - [4. Store report images for debugging](#4-store-report-images-for-debugging)
-      - [5. Specify the types of the input image(s)](#5-specify-the-types-of-the-input-images)
-      - [6. Convert the `color` images to `black/white` images and then do the classification using `bw` palette](#6-convert-the-color-images-to-blackwhite-images-and-then-do-the-classification-using-bw-palette)
-      - [7. Tune parameters of face detection](#7-tune-parameters-of-face-detection)
-      - [8. Multiprocessing settings](#8-multiprocessing-settings)
-      - [9. Used as a library by importing into other projects](#9-used-as-a-library-by-importing-into-other-projects)
+    - [Quick Start](#quick-start)
+        - [Interpretation of the table](#interpretation-of-the-table)
+    - [Detailed Usage](#detailed-usage)
+        - [Use Cases](#use-cases)
+            - [1. To process multiple images](#1-to-process-multiple-images)
+            - [2. To specify color categories](#2-to-specify-color-categories)
+            - [3. Specify output folder](#3-specify-output-folder)
+            - [4. Store report images for debugging](#4-store-report-images-for-debugging)
+            - [5. Specify the types of the input image(s)](#5-specify-the-types-of-the-input-images)
+            - [6. Convert the `color` images to `black/white` images and then do the classification using `bw` palette](#6-convert-the-color-images-to-blackwhite-images-and-then-do-the-classification-using-bw-palette)
+            - [7. Tune parameters of face detection](#7-tune-parameters-of-face-detection)
+            - [8. Multiprocessing settings](#8-multiprocessing-settings)
+            - [9. Used as a library by importing into other projects](#9-used-as-a-library-by-importing-into-other-projects)
 - [Contributing](#contributing)
 
 </details>
@@ -70,7 +74,7 @@ In this version, we have made the following changes:
 
 <details markdown="1">
   <summary><i>Click here to show more.</i></summary>
-   
+
 1. 👋 **BYE**: We have removed the function to pop up a resulting window when processing a **single** image.
 
     * It can raise an error when running the app in a **web browser** environment, e.g., Jupyter Notebook or Google
@@ -84,7 +88,7 @@ In this version, we have made the following changes:
 
 <details markdown="1">
   <summary><i>Click here to show more.</i></summary>
-   
+
 🎉**We have officially released the 1.0.0 version of the library!** In this version, we have made the following changes:
 
 1. ✨ **NEW!**: We add the `threshold` parameter to control the minimum percentage of required face areas (Defaults to
@@ -107,7 +111,7 @@ In this version, we have made the following changes:
 
 <details markdown="1">
   <summary><i>Click here to show more.</i></summary>
-   
+
 In this version, we have made the following changes:
 
 1. ✨ **NEW!**: Now we support skin tone classification for **black and white** images.
@@ -419,18 +423,18 @@ stone -bw (or --black_white)
 
 For example:
 
-<div style="display: flex; align-items: center; justify-content: center;">
-    <div style="text-align: center;">
-        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std.jpg"  alt="Lenna picture" style="display: block; margin: 20px"/>
-        <p>Input</p>
+<div style="display: flex; justify-content: center;align-items:flex-end;">
+    <div style="text-align: center;flex:1; margin:10px;">
+        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std.jpg"  alt="Lenna picture" />
+        <p>1. Input</p>
     </div>
-    <div style="text-align: center;">
-        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std_bw.jpg"  alt="Black/white Lenna picture" style="display: block; margin: 20px"/>
-        <p>Convert to black/white image</p>
+    <div style="text-align: center;flex:1; margin:10px;">
+        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std_bw.jpg"  alt="Black/white Lenna picture" />
+        <p>2. Convert to black/white image</p>
     </div>
-    <div style="text-align: center;">
-        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std_bw-1.jpg"  alt="Report image" style="display: block; margin: 20px"/>
-        <p>The final report image</p>
+    <div style="text-align: center;flex:1; margin:10px;">
+        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std_bw-1.jpg"  alt="Report image" />
+        <p>3. The final report image</p>
     </div>
 </div>
 
@@ -477,7 +481,7 @@ It has the same parameters as the command line version.
 It will return a `dict`, which contains the process result and report image(s) (if required,
 i.e., `return_report_image=True`).
 
-You can further use `stone.show` to show the report image(s). 
+You can further use `stone.show` to show the report image(s).
 And convert the result to `json` format.
 
 The `result_json` will be like:
@@ -512,14 +516,25 @@ The `result_json` will be like:
 
 👋 Welcome to **SkinToneClassifier**! We're excited to have your contributions. Here's how you can get involved:
 
-1. 💡 **Discuss New Ideas**: Have a creative idea or suggestion? Start a discussion in the [Discussions](https://github.com/ChenglongMa/SkinToneClassifier/discussions) tab to share your thoughts and gather feedback from the community.
+1. 💡 **Discuss New Ideas**: Have a creative idea or suggestion? Start a discussion in
+   the [Discussions](https://github.com/ChenglongMa/SkinToneClassifier/discussions) tab to share your thoughts and
+   gather feedback from the community.
 
-2. ❓ **Ask Questions**: Got questions or need clarification on something in the repository? Feel free to open an [Issue](https://github.com/ChenglongMa/SkinToneClassifier/issues) labeled as a "question" or participate in [Discussions](https://github.com/ChenglongMa/SkinToneClassifier/discussions).
+2. ❓ **Ask Questions**: Got questions or need clarification on something in the repository? Feel free to open
+   an [Issue](https://github.com/ChenglongMa/SkinToneClassifier/issues) labeled as a "question" or participate
+   in [Discussions](https://github.com/ChenglongMa/SkinToneClassifier/discussions).
 
-3. 🐛 **Issue a Bug**: If you've identified a bug or an issue with the code, please open a new [Issue](https://github.com/ChenglongMa/SkinToneClassifier/issues) with a clear description of the problem, steps to reproduce it, and your environment details.
+3. 🐛 **Issue a Bug**: If you've identified a bug or an issue with the code, please open a
+   new [Issue](https://github.com/ChenglongMa/SkinToneClassifier/issues) with a clear description of the problem, steps
+   to reproduce it, and your environment details.
 
-4. ✨ **Introduce New Features**: Want to add a new feature or enhancement to the project? Fork the repository, create a new branch, and submit a [Pull Request](https://github.com/ChenglongMa/SkinToneClassifier/pulls) with your changes. Make sure to follow our contribution guidelines.
+4. ✨ **Introduce New Features**: Want to add a new feature or enhancement to the project? Fork the repository, create a
+   new branch, and submit a [Pull Request](https://github.com/ChenglongMa/SkinToneClassifier/pulls) with your changes.
+   Make sure to follow our contribution guidelines.
 
-5. 💖 **Funding**: If you'd like to financially support the project, you can do so by [sponsoring the repository on GitHub](https://github.com/sponsors/ChenglongMa). Your contributions help us maintain and improve the project.
+5. 💖 **Funding**: If you'd like to financially support the project, you can do so
+   by [sponsoring the repository on GitHub](https://github.com/sponsors/ChenglongMa). Your contributions help us
+   maintain and improve the project.
 
-Thank you for considering contributing to **SkinToneClassifier**. We value your input and look forward to collaborating with you!
+Thank you for considering contributing to **SkinToneClassifier**. We value your input and look forward to collaborating
+with you!
