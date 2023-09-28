@@ -1,5 +1,3 @@
-# Skin Tone Classifier (stone)
-
 <div style="text-align:center;">
     <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/stone-logo.png" alt="stone logo">
 </div>
