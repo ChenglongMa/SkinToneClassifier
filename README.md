@@ -1,5 +1,5 @@
 <div style="text-align:center;">
-    <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/stone-logo.png" alt="stone logo">
+    <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/stone-logo.svg" alt="stone logo">
 </div>
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/skin-tone-classifier)

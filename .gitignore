@@ -1,6 +1,13 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
-.idea/
+
+.idea/shelf/
+.idea/workspace.xml
+# Editor-based HTTP Client requests
+.idea/httpRequests/
+# Datasource local storage ignored files
+.idea/dataSources/
+.idea/dataSources.local.xml
 debug*/
 log/
 result*.csv
