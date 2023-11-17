@@ -16,6 +16,7 @@ class ArgumentError(ValueError):
     """
     Wrapper for argument error. This exception will be raised when the arguments are invalid.
     """
+
     pass
 
 
@@ -53,12 +54,15 @@ def extract_filename_and_extension(url):
     return basename, f".{extension[0]}" if extension else None
 
 
-def build_image_paths(images):
+def build_image_paths(images_paths, recursive=False):
     filenames, urls = [], []
     valid_images = ["*.jpg", "*.gif", "*.png", "*.jpeg", "*.webp", "*.tif"]
-    for name in images:
+    if isinstance(images_paths, str):
+        images_paths = [images_paths]
+    recursive_flag = "**" if recursive else ""
+    for name in images_paths:
         if os.path.isdir(name):
-            filenames.extend([glob.glob(os.path.join(name, "./**/", i), recursive=True) for i in valid_images])
+            filenames.extend([glob.glob(os.path.join(name, recursive_flag, i), recursive=recursive) for i in valid_images])
         elif os.path.isfile(name):
             filenames.append([name])
         elif is_url(name):
@@ -94,7 +98,7 @@ def build_arguments():
         "-i",
         "--images",
         nargs="+",
-        default="./",
+        default=["./"],
         metavar="IMAGE FILENAME",
         help="Image filename(s) or URLs to process;\n"
         'Supports multiple values separated by space, e.g., "a.jpg b.png";\n'
@@ -102,6 +106,13 @@ def build_arguments():
         'Supports URL(s), e.g., "https://example.com/images/pic.jpg" since v1.1.0+.\n'
         "The app will search all images in current directory in default.",
     )
+    parser.add_argument(
+        "-r",
+        "--recursive",
+        action="store_true",
+        help="Whether to search images recursively in the specified directory.",
+    )
+
     parser.add_argument(
         "-t",
         "--image_type",

@@ -73,7 +73,7 @@ def main():
         datefmt="%H:%M:%S",
     )
 
-    image_paths = build_image_paths(args.images)
+    image_paths = build_image_paths(args.images, args.recursive)
 
     debug: bool = args.debug
     to_bw: bool = args.black_white
