@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import Union
 from urllib.parse import urlparse
 
+from stone.version import __version__
+
 
 class ArgumentError(ValueError):
     """
@@ -199,6 +201,13 @@ def build_arguments():
         metavar="THRESHOLD",
         help="CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.3.",
         default=0.3,
+    )
+    parser.add_argument(
+        "-v",
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+        help="Show the version number and exit.",
     )
 
     return parser.parse_args()

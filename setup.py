@@ -1,14 +1,16 @@
 from setuptools import setup
 from setuptools import find_packages
 
-VERSION = "1.1.0"
+VERSION = {}
+with open("src/stone/version.py", "r", encoding="utf-8") as fp:
+    exec(fp.read(), VERSION)
 
 with open("README.md", "r", encoding="utf-8") as f:
     LONG_DESCRIPTION = f.read()
 
 setup(
     name="skin-tone-classifier",
-    version=VERSION,
+    version=VERSION["__version__"],
     description="An easy-to-use library for skin tone classification",
     long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
@@ -40,5 +42,9 @@ setup(
         "Topic :: Scientific/Engineering :: Image Recognition",
         "Topic :: Scientific/Engineering :: Image Processing",
         "Environment :: Console",
+        "Environment :: Web Environment",
+        "Environment :: Win32 (MS Windows)",
+        "Environment :: MacOS X",
+        "Environment :: Other Environment",
     ],
 )
