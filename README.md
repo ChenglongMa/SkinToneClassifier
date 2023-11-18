@@ -47,7 +47,20 @@ dominant skin tones and color categories.
 
 # Changelogs
 
+## v1.1.1
+
+In this version, we have made the following changes:
+
+1. ✨ **NEW!**: We add the `-v` (or `--version`) option to show the version number.
+2. ✨ **NEW!**: We add the `-r` (or `--recursive`) option to **enable** recursive search for images.
+    * For example, `stone -i ./path/to/images/ -r` will search all images in the `./path/to/images/` directory **and its subdirectories**.
+    * `stone -i ./path/to/images/` will only search images in the `./path/to/images/` directory.
+3. 🐛 **FIX!**: We fixed a bug where the app cannot correctly identify the current folder if `-i` option is not specified.
+
 ## v1.1.0
+
+<details markdown="1">
+  <summary><i>Click here to show more.</i></summary>
 
 In this version, we have made the following changes:
 
@@ -65,6 +78,8 @@ In this version, we have made the following changes:
     * `PERLA` => `tone label`
 5. 🐛 **FIX!**: We fixed a bug where the app would not correctly sort files that did not contain numbers in their
    filenames.
+
+</details>
 
 ## v1.0.1
 
@@ -165,10 +180,18 @@ If you are interested in our work, please cite:
 
 # Installation
 
-To install SkinToneClassifier:
+## Install from pip
 
 ```shell
 pip install skin-tone-classifier --upgrade
+```
+
+## Install from source
+
+```shell
+git clone git@github.com:ChenglongMa/SkinToneClassifier.git
+cd SkinToneClassifier
+pip install -e . --verbose
 ```
 
 # HOW TO USE
@@ -246,6 +269,7 @@ options:
                         Supports directory or file name(s), e.g., "./path/to/images/ a.jpg";
                         Supports URL(s), e.g., "https://example.com/images/pic.jpg" since v1.1.0+.
                         The app will search all images in current directory in default.
+  -r, --recursive       Whether to search images recursively in the specified directory.
   -t IMAGE TYPE, --image_type IMAGE TYPE
                         Specify whether the input image(s) is/are colored or black/white.
                         Valid choices are: "auto", "color" or "bw",
@@ -271,7 +295,8 @@ options:
   --min_size WIDTH [HEIGHT ...]
                         CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".
   --threshold THRESHOLD
-                        CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.3.                    
+                        CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.3.
+  -v, --version         Show the version number and exit.                    
 ```
 
 ### Use Cases
