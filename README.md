@@ -21,12 +21,15 @@ dominant skin tones and color categories.
 **Table of Contents**
 
 - [Changelogs](#changelogs)
+  - [v1.1.1](#v111)
   - [v1.1.0](#v110)
   - [v1.0.1](#v101)
   - [v1.0.0](#v100)
   - [v0.2.0](#v020)
 - [Citation](#citation)
 - [Installation](#installation)
+  - [Install from pip](#install-from-pip)
+  - [Install from source](#install-from-source)
 - [HOW TO USE](#how-to-use)
   - [Quick Start](#quick-start)
     - [Interpretation of the table](#interpretation-of-the-table)
