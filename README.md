@@ -249,18 +249,16 @@ Furthermore, there will be a report file named `result.csv` which contains more 
 To see the usage and parameters, run:
 
 ```shell
-stone -h
+stone -h (or --help)
 ```
 
 Output in console:
 
 ```text
-usage: __main__.py [-h] [-i IMAGE FILENAME [IMAGE FILENAME ...]]
-                   [-t IMAGE TYPE] [-p COLOR [COLOR ...]]
-                   [-l LABEL [LABEL ...]] [-d] [-bw] [-o DIRECTORY]
-                   [--n_workers N_WORKERS] [--n_colors N] [--new_width WIDTH]
-                   [--scale SCALE] [--min_nbrs NEIGHBORS]
-                   [--min_size WIDTH [HEIGHT ...]] [--threshold THRESHOLD]
+usage: stone [-h] [-i IMAGE FILENAME [IMAGE FILENAME ...]] [-r] [-t IMAGE TYPE] [-p PALETTE [PALETTE ...]]
+             [-l LABELS [LABELS ...]] [-d] [-bw] [-o DIRECTORY] [--n_workers WORKERS] [--n_colors COLORS]
+             [--new_width WIDTH] [--scale SCALE] [--min_nbrs NEIGHBORS] [--min_size WIDTH [HEIGHT ...]]
+             [--threshold THRESHOLD] [-v]
 
 Skin Tone Classifier
 
@@ -277,20 +275,19 @@ options:
                         Specify whether the input image(s) is/are colored or black/white.
                         Valid choices are: "auto", "color" or "bw",
                         Defaults to "auto", which will be detected automatically.
-  -p COLOR [COLOR ...], --palette COLOR [COLOR ...]
+  -p PALETTE [PALETTE ...], --palette PALETTE [PALETTE ...]
                         Skin tone palette;
                         Supports RGB hex value leading by "#" or RGB values separated by comma(,),
                         E.g., "-p #373028 #422811" or "-p 255,255,255 100,100,100"
-  -l LABEL [LABEL ...], --labels LABEL [LABEL ...]
+  -l LABELS [LABELS ...], --labels LABELS [LABELS ...]
                         Skin tone labels; default values are the uppercase alphabet list leading by the image type ('C' for 'color'; 'B' for 'Black&White'), e.g., ['CA', 'CB', ..., 'CZ'] or ['BA', 'BB', ..., 'BZ'].
   -d, --debug           Whether to generate report images, used for debugging and verification.The report images will be saved in the './debug' directory.
   -bw, --black_white    Whether to convert the input to black/white image(s).
                         If true, the app will use the black/white palette to classify the image.
   -o DIRECTORY, --output DIRECTORY
                         The path of output file, defaults to current directory.
-  --n_workers N_WORKERS
-                        The number of workers to process the images, defaults to the number of CPUs in the system.
-  --n_colors N          CONFIG: the number of dominant colors to be extracted, defaults to 2.
+  --n_workers WORKERS   The number of workers to process the images, defaults to the number of CPUs in the system.
+  --n_colors COLORS     CONFIG: the number of dominant colors to be extracted, defaults to 2.
   --new_width WIDTH     CONFIG: resize the images with the specified width. Negative value will be ignored, defaults to 250.
   --scale SCALE         CONFIG: how much the image size is reduced at each image scale, defaults to 1.1
   --min_nbrs NEIGHBORS  CONFIG: how many neighbors each candidate rectangle should have to retain it.
@@ -299,7 +296,7 @@ options:
                         CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".
   --threshold THRESHOLD
                         CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.3.
-  -v, --version         Show the version number and exit.                    
+  -v, --version         Show the version number and exit.
 ```
 
 ### Use Cases
