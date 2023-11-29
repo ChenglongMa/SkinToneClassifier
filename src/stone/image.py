@@ -176,7 +176,7 @@ def detect_faces(
 
     cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
-    flags = cv2.CASCADE_SCALE_IMAGE | cv2.CASCADE_FIND_BIGGEST_OBJECT if biggest_only else cv2.CASCADE_SCALE_IMAGE
+    flags = (cv2.CASCADE_SCALE_IMAGE | cv2.CASCADE_FIND_BIGGEST_OBJECT) if biggest_only else cv2.CASCADE_SCALE_IMAGE
     faces = cascade.detectMultiScale(
         gray,
         scaleFactor=scaleFactor,
@@ -192,6 +192,15 @@ def detect_faces(
 
 
 def is_face(face_coord, image, is_bw, threshold=0.3):
+    """
+    Check if the face is a real face.
+    Method: detect the skin area in the "face" and check if the skin area is larger than the threshold
+    :param face_coord:
+    :param image:
+    :param is_bw:
+    :param threshold:
+    :return:
+    """
     x1, y1, x2, y2 = face_coord
     face_image = image[y1:y2, x1:x2]
     detect_skin_fn = detect_skin_in_bw if is_bw else detect_skin_in_color
@@ -205,7 +214,7 @@ def is_face(face_coord, image, is_bw, threshold=0.3):
 def mask_face(image, face):
     x1, y1, x2, y2 = face
     mask = np.zeros(image.shape[:2], dtype=np.uint8)
-    mask[y1:y2, x1:x2] = 255
+    mask[y1:y2, x1:x2] = 255  # Fill with white color
     image = cv2.bitwise_and(image, image, mask=mask)
     return image
 
@@ -222,7 +231,7 @@ def detect_skin_in_bw(image):
 
 
 def detect_skin_in_color(image):
-    # Converting from BGR Colours Space to HSV
+    # Converting from BGR Colors Space to HSV
     img = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
 
     # Defining skin Thresholds
@@ -250,6 +259,7 @@ def draw_rects(image, *rects, color=(255, 0, 0), thickness=2):
 def dominant_colors(image, to_bw, n_clusters=2):
     if to_bw:
         data = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        data = cv2.cvtColor(data, cv2.COLOR_GRAY2BGR)
     else:
         data = image
     data = np.reshape(data, (-1, 3))
@@ -305,9 +315,9 @@ def classify(
 ):
     """
     Classify the skin tone of the image
-    :param image:
+    :param image: Entire image or image with non-face areas masked
     :param is_bw: Whether the image is black and white
-    :param to_bw: whether to convert the image to black and white
+    :param to_bw: Whether to convert the image to black and white
     :param skin_tone_palette:
     :param tone_labels:
     :param n_dominant_colors:
@@ -353,6 +363,7 @@ def initial_report_image(face_image, report_image, skin_mask, use_face, to_bw):
     report_image = face_image if report_image is None else report_image
     if to_bw:
         report_image = cv2.cvtColor(report_image, cv2.COLOR_BGR2GRAY)
+        report_image = cv2.cvtColor(report_image, cv2.COLOR_GRAY2BGR)
     if use_face:
         gray = cv2.cvtColor(face_image, cv2.COLOR_BGR2GRAY)
         skin_mask = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)[1]
@@ -461,6 +472,7 @@ def process_image(
     n_faces = len(face_coords)
 
     if n_faces == 0:
+        # If no face is detected, find skin area in the whole image and classify.
         record, report_image = classify(
             image,
             is_bw,

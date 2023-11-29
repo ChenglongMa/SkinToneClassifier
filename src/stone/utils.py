@@ -97,6 +97,11 @@ def is_windows():
     return sys.platform in ["win32", "cygwin"]
 
 
+def is_debugging():
+    gettrace = getattr(sys, "gettrace", None)
+    return gettrace is not None and gettrace()
+
+
 def build_arguments():
     # Setup arguments
     parser = argparse.ArgumentParser(

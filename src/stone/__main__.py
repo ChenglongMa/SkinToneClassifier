@@ -13,7 +13,7 @@ from tqdm.contrib.logging import logging_redirect_tqdm
 
 from stone.api import process
 from stone.image import normalize_palette
-from stone.utils import build_arguments, build_image_paths, is_windows, ArgumentError
+from stone.utils import build_arguments, build_image_paths, is_windows, ArgumentError, is_debugging
 
 LOG = logging.getLogger(__name__)
 lock = threading.Lock()
@@ -33,6 +33,22 @@ def process_in_main(
     threshold=0.3,
     return_report_image=False,
 ):
+    """
+    This is a wrapper function that calls process() in the main process to avoid pickling error.
+    :param filename_or_url:
+    :param image_type:
+    :param tone_palette:
+    :param tone_labels:
+    :param convert_to_black_white:
+    :param n_dominant_colors:
+    :param new_width:
+    :param scale:
+    :param min_nbrs:
+    :param min_size:
+    :param threshold:
+    :param return_report_image:
+    :return:
+    """
     try:
         return process(
             filename_or_url,
@@ -117,9 +133,8 @@ def main():
     write_to_csv(header.split(","))
 
     # Start
-
     process_wrapper = functools.partial(
-        process_in_main,
+        process if is_debugging() else process_in_main,
         image_type=image_type_setting,
         tone_palette=specified_palette,
         tone_labels=specified_tone_labels,

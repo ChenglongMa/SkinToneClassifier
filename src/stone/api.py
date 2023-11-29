@@ -63,16 +63,16 @@ def process(
     is_bw = is_black_white(image)
     decoded_image_type = image_type
     if image_type == "auto":
-        decoded_image_type = "bw" if is_bw else "color"
+        decoded_image_type = "bw" if convert_to_black_white or is_bw else "color"
     else:
         is_bw = image_type == "bw"
 
     if tone_palette is None or len(tone_palette) == 0:
-        skin_tone_palette = DEFAULT_TONE_PALETTE["bw" if convert_to_black_white or is_bw else "color"]
+        skin_tone_palette = DEFAULT_TONE_PALETTE[decoded_image_type]
     else:
         skin_tone_palette = normalize_palette(tone_palette)
 
-    skin_tone_labels = tone_labels or DEFAULT_TONE_LABELS["bw" if convert_to_black_white or is_bw else "color"]
+    skin_tone_labels = tone_labels or DEFAULT_TONE_LABELS[decoded_image_type]
     if len(skin_tone_palette) != len(skin_tone_labels):
         raise ArgumentError("argument -p/--palette and -l/--labels must have the same length.")
 
