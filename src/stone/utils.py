@@ -226,8 +226,8 @@ def build_arguments():
         "--threshold",
         type=float,
         metavar="THRESHOLD",
-        help="CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.3.",
-        default=0.3,
+        help="CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.15.",
+        default=0.15,
     )
     parser.add_argument(
         "-v",

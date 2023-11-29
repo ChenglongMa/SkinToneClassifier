@@ -28,7 +28,7 @@ def process(
     scale=1.1,
     min_nbrs=5,
     min_size=(90, 90),
-    threshold=0.3,
+    threshold=0.15,
     return_report_image=False,
 ):
     """
@@ -47,7 +47,7 @@ def process(
     :param min_nbrs: How many neighbors each candidate rectangle should have to retain it.
            Higher value results in less detections but with higher quality, defaults to 5.
     :param min_size: Minimum possible face size. Faces smaller than that are ignored, defaults to (90, 90).
-    :param threshold: What percentage of the skin area is required to identify the face, defaults to 0.3.
+    :param threshold: What percentage of the skin area is required to identify the face, defaults to 0.15.
     :param return_report_image: Whether to return the report image(s) in the result. Defaults to False.
     :return:
     """

@@ -5,7 +5,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/skin-tone-classifier)
 ![PyPI](https://img.shields.io/pypi/v/skin-tone-classifier)
 ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/ChenglongMa/SkinToneClassifier?include_prereleases)
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+![GitHub License](https://img.shields.io/github/license/ChenglongMa/SkinToneClassifier)
 
 An easy-to-use library for skin tone classification.
 
@@ -49,6 +49,14 @@ dominant skin tones and color categories.
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Changelogs
+
+## v1.1.2
+
+In this version, we have made the following changes:
+
+1. 🐛 **FIX!**: We fixed a bug where the app will crash when using the `-bw` option.
+    Error message: `cannot reshape array of size 62500 into shape (3)`.
+2. 🐛 **FIX!**: We fixed a bug where the app may identify the image type as `color` when using the `-bw` option.
 
 ## v1.1.1
 
@@ -106,7 +114,7 @@ In this version, we have made the following changes:
 🎉**We have officially released the 1.0.0 version of the library!** In this version, we have made the following changes:
 
 1. ✨ **NEW!**: We add the `threshold` parameter to control the minimum percentage of required face areas (Defaults to
-   0.3).
+   0.15).
     * In previous versions, the library could incorrectly identify non-face areas as faces, such as shirts, collars,
       necks, etc.
       In order to improve its accuracy, the new version will further calculate the proportion of skin in the recognized
@@ -295,7 +303,7 @@ options:
   --min_size WIDTH [HEIGHT ...]
                         CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".
   --threshold THRESHOLD
-                        CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.3.
+                        CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.15.
   -v, --version         Show the version number and exit.
 ```
 
