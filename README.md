@@ -21,6 +21,7 @@ dominant skin tones and color categories.
 **Table of Contents**
 
 - [Changelogs](#changelogs)
+  - [v1.1.2](#v112)
   - [v1.1.1](#v111)
   - [v1.1.0](#v110)
   - [v1.0.1](#v101)
