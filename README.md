@@ -3,9 +3,10 @@
 </div>
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/skin-tone-classifier)
-![PyPI](https://img.shields.io/pypi/v/skin-tone-classifier)
-![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/ChenglongMa/SkinToneClassifier?include_prereleases)
-![GitHub License](https://img.shields.io/github/license/ChenglongMa/SkinToneClassifier)
+[![PyPI](https://img.shields.io/pypi/v/skin-tone-classifier)](https://pypi.org/project/skin-tone-classifier/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/skin-tone-classifier)](https://pypi.org/project/skin-tone-classifier/)
+[![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/ChenglongMa/SkinToneClassifier?include_prereleases)](https://github.com/ChenglongMa/SkinToneClassifier/releases/latest)
+[![GitHub License](https://img.shields.io/github/license/ChenglongMa/SkinToneClassifier)](https://github.com/ChenglongMa/SkinToneClassifier/blob/main/LICENSE)
 
 An easy-to-use library for skin tone classification.
 
