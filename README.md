@@ -7,6 +7,7 @@
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/skin-tone-classifier)](https://pypi.org/project/skin-tone-classifier/)
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/ChenglongMa/SkinToneClassifier?include_prereleases)](https://github.com/ChenglongMa/SkinToneClassifier/releases/latest)
 [![GitHub License](https://img.shields.io/github/license/ChenglongMa/SkinToneClassifier)](https://github.com/ChenglongMa/SkinToneClassifier/blob/main/LICENSE)
+![GitHub Repo stars](https://img.shields.io/github/stars/ChenglongMa/SkinToneClassifier)
 
 An easy-to-use library for skin tone classification.
 
@@ -14,6 +15,8 @@ This can be used to detect **face** or **skin area** in the specified images.
 The detected skin tones are then classified into the specified color categories.
 The library finally generates results to report the detected faces (if any),
 dominant skin tones and color categories.
+
+*If you find this project helpful, please consider giving it a star* ⭐. *It would be a great encouragement for me!*
 
 ---
 
