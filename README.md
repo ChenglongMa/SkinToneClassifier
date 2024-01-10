@@ -152,8 +152,8 @@ In this version, we have made the following changes:
 
       For example:
       <div style="display: flex; align-items: center;">
-         <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std-1.jpg" alt="Processing color image" style="display: block; margin: 20px">
-         <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std_bw-1.jpg" alt="Processing black/white image" style="display: block; margin: 20px">
+         <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo-1.png" alt="Processing color image" style="display: block; margin: 20px">
+         <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo_bw-1.png" alt="Processing black/white image" style="display: block; margin: 20px">
       </div>
 
 2. ✨ **NEW!**: Now we support **multiprocessing** for processing the images. It will largely speed up the processing.
@@ -214,21 +214,22 @@ pip install -e . --verbose
 
 ## Quick Start
 
-Given the famous photo of [Lenna](http://www.lenna.org/), to detect her skin tone,
+To detect the skin tone in a portrait, e.g.,
 
 <div align="center">
-   <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std.jpg"  alt="Lenna picture" style="display: block; margin: auto"/>
+   <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo.png"  alt="Demo picture" style="display: block; margin: auto"/>
 </div>
-just run:
+
+Just run:
 
 ```shell
-stone -i /path/to/lenna.jpg --debug
+stone -i /path/to/demo.png --debug
 ```
 
 Then, you can find the processed image in `./debug/color/faces_1` folder, e.g.,
 
 <div align="center">
-   <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std-1.jpg"  alt="processed Lenna picture" style="display: block; margin: auto"/>
+   <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo-1.png"  alt="processed demo picture" style="display: block; margin: auto"/>
 </div>
 
 In this image, from left to right you can find the following information:
@@ -243,12 +244,12 @@ Furthermore, there will be a report file named `result.csv` which contains more 
 
 | file     | image type | face id | dominant 1 | percent 1 | dominant 2 | percent 2 | skin tone | tone label | accuracy(0-100) |
 |----------|------------|---------|------------|-----------|------------|-----------|-----------|------------|-----------------|
-| lena_std | color      | 1       | #CF7371    | 0.52      | #E4A89F    | 0.48      | #E7C1B8   | CI         | 85.39           |
+| demo.png | color      | 1       | #C99676    | 0.67      | #805341    | 0.33      | #9D7A54   | CF         | 86.27           |
 
 ### Interpretation of the table
 
 1. `file`: the filename of the processed image.
-    * **NB: The filename pattern of report image is `<file>-<face id>`**
+    * **NB: The filename pattern of report image is `<file>-<face id>.<extension>`**
 2. `image type`: the type of the processed image, i.e., `color` or `bw` (black/white).
 3. `face id`: the id of the detected face, which matches the reported image. `NA` means no face has been detected.
 4. `dominant n`: the `n`-th dominant color of the detected face.
@@ -371,7 +372,7 @@ If more than one faces are detected, there will be multiple rows for that image.
 stone -d (or --debug)
 ```
 
-This option will store the report image (like the Lenna example above) in
+This option will store the report image (like the demo portrait above) in
 `./path/to/output/debug/<image type>/faces_<n>` folder,
 where `<image type>` indicates if the image is `color` or `bw` (black/white);
 `<n>` is the number of faces detected in the image.
@@ -459,15 +460,15 @@ For example:
 
 <div style="display: flex; justify-content: center;align-items:flex-end;">
     <div style="text-align: center;flex:1; margin:10px;">
-        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std.jpg"  alt="Lenna picture" />
+        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo.png"  alt="Demo picture" />
         <p>1. Input</p>
     </div>
     <div style="text-align: center;flex:1; margin:10px;">
-        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std_bw.jpg"  alt="Black/white Lenna picture" />
+        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo_bw.png"  alt="Black/white Demo picture" />
         <p>2. Convert to black/white image</p>
     </div>
     <div style="text-align: center;flex:1; margin:10px;">
-        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/lena_std_bw-1.jpg"  alt="Report image" />
+        <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo_bw-1.png"  alt="Report image" />
         <p>3. The final report image</p>
     </div>
 </div>
@@ -522,25 +523,25 @@ The `result_json` will be like:
 
 ```json
 {
-  "basename": "lena_std",
-  "extension": ".jpg",
+  "basename": "demo",
+  "extension": ".png",
   "image_type": "color",
   "faces": [
     {
       "face_id": 1,
       "dominant_colors": [
         {
-          "color": "#CF7371",
-          "percent": "0.52"
+          "color": "#C99676",
+          "percent": "0.67"
         },
         {
-          "color": "#E4A89F",
-          "percent": "0.48"
+          "color": "#805341",
+          "percent": "0.33"
         }
       ],
-      "skin_tone": "#E7C1B8",
-      "tone_label": "CI",
-      "accuracy": 85.39
+      "skin_tone": "#9D7A54",
+      "tone_label": "CF",
+      "accuracy": 86.27
     }
   ]
 }
@@ -569,6 +570,10 @@ The `result_json` will be like:
 5. 💖 **Funding**: If you'd like to financially support the project, you can do so
    by [sponsoring the repository on GitHub](https://github.com/sponsors/ChenglongMa). Your contributions help us
    maintain and improve the project.
+
+# Disclaimer
+
+The images used in this project are from [Flickr-Faces-HQ Dataset (FFHQ)](https://github.com/NVlabs/ffhq-dataset), which is licensed under the [Creative Commons BY-NC-SA 4.0 license](https://github.com/NVlabs/ffhq-dataset/blob/master/LICENSE.txt)
 
 Thank you for considering contributing to **SkinToneClassifier**. We value your input and look forward to collaborating
 with you!
