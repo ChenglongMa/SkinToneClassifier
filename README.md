@@ -50,6 +50,7 @@ dominant skin tones and color categories.
       - [8. Multiprocessing settings](#8-multiprocessing-settings)
       - [9. Used as a library by importing into other projects](#9-used-as-a-library-by-importing-into-other-projects)
 - [Contributing](#contributing)
+- [Disclaimer](#disclaimer)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
