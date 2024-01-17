@@ -213,6 +213,11 @@ pip install -e . --verbose
 
 # HOW TO USE
 
+> [!TIP]
+> 
+> You can combine the following documents and [running examples](https://colab.research.google.com/drive/1k-cryEZ9PInJRXWIi17ib66ufYV2Ikwe?usp=sharing) in Google Colab to understand the usage of this library more intuitively.
+> See the running examples [here](https://colab.research.google.com/drive/1k-cryEZ9PInJRXWIi17ib66ufYV2Ikwe?usp=sharing).
+
 ## Quick Start
 
 To detect the skin tone in a portrait, e.g.,
