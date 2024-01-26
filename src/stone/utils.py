@@ -1,6 +1,6 @@
 import argparse
 import functools
-import glob
+import logging
 import os
 import re
 import string
@@ -10,6 +10,8 @@ from typing import Union
 from urllib.parse import urlparse
 
 from stone.package import __version__, __package_name__
+
+LOG = logging.getLogger(__name__)
 
 
 class ArgumentError(ValueError):
@@ -151,8 +153,11 @@ def build_arguments():
         "--labels",
         nargs="+",
         metavar="LABELS",
-        help="Skin tone labels; default values are the uppercase alphabet list leading by the image type ('C' for 'color'; 'B' for 'Black&White'), "
-        "e.g., ['CA', 'CB', ..., 'CZ'] or ['BA', 'BB', ..., 'BZ'].",
+        help="Skin tone labels;\n"
+        "Default values are the uppercase alphabet list leading by the image type ('C' for 'color'; 'B' for 'Black&White'), "
+        "e.g., ['CA', 'CB', ..., 'CZ'] or ['BA', 'BB', ..., 'BZ'].\n"
+        "Since v1.2.0, supports range of labels, e.g., 'A-Z' or '1-10'.\n"
+        "Refer to https://github.com/ChenglongMa/SkinToneClassifier for more details."
     )
     parser.add_argument(
         "-d",
@@ -238,6 +243,46 @@ def build_arguments():
     )
 
     return parser.parse_args()
+
+
+def resolve_labels(labels: list):
+    if len(labels) != 1:
+        return labels
+    label = labels[0]
+
+    separator = r"[-,~:;_]"
+    pattern = rf"^([a-zA-Z0-9]+){separator}([a-zA-Z0-9]+)(?:{separator}([-+]?\d+))?$"
+    match = re.match(pattern, label)
+    if match is None:
+        return labels
+    start, end, step = match.groups()
+    if not step:
+        step = 1
+    else:
+        step = int(step)
+    if step == 0:
+        LOG.warning(f"The specified step in the '--label' setting ('{label}') cannot be 0; resetting to 1.")
+        step = 1
+    if step < 0:
+        start, end = end, start
+
+    if start.isdigit() and end.isalpha() or start.isalpha() and end.isdigit():
+        LOG.warning(
+            f"Invalid '--label' setting ('{label}'): The start value ({start}) and the end value ({end}) should be both digits or both letters."
+        )
+        return labels
+    if start >= end:
+        LOG.warning(
+            f"Invalid '--label' setting ('{label}'): The start value ({start}) should be less than the end value ({end})."
+        )
+        return labels
+    if start.isdigit() and end.isdigit():
+        start, end = int(start), int(end)
+        return [str(i) for i in range(start, end + 1, step)]
+    if start.isalpha() and end.isalpha():
+        start, end = start.upper(), end.upper()
+        return [chr(i) for i in range(ord(start), ord(end) + 1, step)]
+    return labels
 
 
 def get_latest_version_from_pypi(package_name):

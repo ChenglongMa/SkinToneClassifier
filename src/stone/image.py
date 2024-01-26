@@ -393,6 +393,17 @@ def create_dominant_color_bar(report_image, dmnt_colors, dmnt_pcts, bar_width):
     return np.vstack(color_bars)
 
 
+def hex_to_bgr(hex_color):
+    hex_value = hex_color.lstrip("#")
+    r, g, b = [int(hex_value[i : i + 2], 16) for i in (0, 2, 4)]
+    return [b, g, r]
+
+
+def rgb_to_hex(rgb_color):
+    r, g, b = rgb_color
+    return "#%02X%02X%02X" % (r, g, b)
+
+
 def create_tone_palette_bar(report_image, tone_id, skin_tone_palette, bar_width):
     palette_bars = []
     tone_height = report_image.shape[0] // len(skin_tone_palette)
@@ -508,8 +519,9 @@ def process_image(
     return records, report_images
 
 
-def show(image):
-    cv2.imshow("Skin Tone Classifier", image)
+def show(image, title=None):
+    title = f" - {title}" if title else ""
+    cv2.imshow(f"Skin Tone Classifier{title}", image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 

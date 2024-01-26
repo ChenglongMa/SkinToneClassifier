@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from stone.utils import build_image_paths
+from stone.utils import build_image_paths, resolve_labels
 
 
 class TestUtils(unittest.TestCase):
@@ -86,6 +86,34 @@ class TestUtils(unittest.TestCase):
     def test_no_valid_images(self):
         with self.assertRaises(FileNotFoundError):
             build_image_paths("/path/to/nonexistent")
+
+    def test_resolve_labels_in_digits(self):
+        start, end, step = 1, 12, 1
+        labels = [f"{start}-{end}"]
+        expected = "1 2 3 4 5 6 7 8 9 10 11 12".split()
+        actual = resolve_labels(labels)
+        self.assertListEqual(actual, expected)
+
+    def test_resolve_labels_in_alphabet(self):
+        start, end, step = "a", "z", 2
+        labels = [f"{start}-{end}-{step}"]
+        expected = list("ACEGIKMOQSUWY")
+        actual = resolve_labels(labels)
+        self.assertListEqual(actual, expected)
+
+    def test_resolve_labels_step_is_zero(self):
+        start, end, step = "a", "z", 0
+        labels = [f"{start}-{end}-{step}"]
+        expected = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        actual = resolve_labels(labels)
+        self.assertListEqual(actual, expected)
+
+    def test_resolve_labels_start_less_than_end(self):
+        start, end, step = 12, 1, 1
+        labels = [f"{start}-{end}"]
+        expected = labels
+        actual = resolve_labels(labels)
+        self.assertListEqual(actual, expected)
 
 
 if __name__ == "__main__":

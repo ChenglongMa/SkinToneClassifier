@@ -1,2 +1,2 @@
-__version__ = "1.1.2"
+__version__ = "1.2.0"
 __package_name__ = "skin-tone-classifier"

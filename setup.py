@@ -29,15 +29,22 @@ setup(
     entry_points={
         "console_scripts": ["stone = stone.__main__:main"],
     },
+    python_requires=">=3.8",
     install_requires=[
         "opencv-python>=4.6.0.66",
         "numpy>=1.21.5",
         "colormath>=3.0.0",
         "tqdm>=4.64.0",
         "colorama>=0.4.6",
+        "packaging>=23.1",
+        "requests>=2.31.0",
     ],
     classifiers=[
-        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
         "Topic :: Scientific/Engineering :: Image Recognition",
@@ -46,6 +53,7 @@ setup(
         "Environment :: Web Environment",
         "Environment :: Win32 (MS Windows)",
         "Environment :: MacOS X",
+        "Environment :: Unix",
         "Environment :: Other Environment",
     ],
 )
