@@ -27,34 +27,34 @@ for me!*
 **Table of Contents**
 
 - [Installation](#installation)
-  - [Install from pip](#install-from-pip)
-  - [Install from source](#install-from-source)
+    - [Install from pip](#install-from-pip)
+    - [Install from source](#install-from-source)
 - [HOW TO USE](#how-to-use)
-  - [Quick Start](#quick-start)
-    - [Use `stone` in a GUI](#use-stone-in-a-gui)
-    - [Use `stone` in command line interface (CLI)](#use-stone-in-command-line-interface-cli)
-    - [Interpretation of the table](#interpretation-of-the-table)
-  - [Detailed Usage](#detailed-usage)
-    - [Use Cases](#use-cases)
-      - [1. Process multiple images](#1-process-multiple-images)
-      - [2. Specify color categories](#2-specify-color-categories)
-      - [3. Specify category labels](#3-specify-category-labels)
-      - [4. Specify output folder](#4-specify-output-folder)
-      - [5. Store report images for debugging](#5-store-report-images-for-debugging)
-      - [6. Specify the types of the input image(s)](#6-specify-the-types-of-the-input-images)
-      - [7. Convert the `color` images to `black/white` images](#7-convert-the-color-images-to-blackwhite-images)
-      - [8. Tune parameters of face detection](#8-tune-parameters-of-face-detection)
-      - [9. Multiprocessing settings](#9-multiprocessing-settings)
-      - [10. Used as a library by importing into other projects](#10-used-as-a-library-by-importing-into-other-projects)
+    - [Quick Start](#quick-start)
+        - [Use `stone` in a GUI](#use-stone-in-a-gui)
+        - [Use `stone` in command line interface (CLI)](#use-stone-in-command-line-interface-cli)
+        - [Interpretation of the table](#interpretation-of-the-table)
+    - [Detailed Usage](#detailed-usage)
+        - [Use Cases](#use-cases)
+            - [1. Process multiple images](#1-process-multiple-images)
+            - [2. Specify color categories](#2-specify-color-categories)
+            - [3. Specify category labels](#3-specify-category-labels)
+            - [4. Specify output folder](#4-specify-output-folder)
+            - [5. Store report images for debugging](#5-store-report-images-for-debugging)
+            - [6. Specify the types of the input image(s)](#6-specify-the-types-of-the-input-images)
+            - [7. Convert the `color` images to `black/white` images](#7-convert-the-color-images-to-blackwhite-images)
+            - [8. Tune parameters of face detection](#8-tune-parameters-of-face-detection)
+            - [9. Multiprocessing settings](#9-multiprocessing-settings)
+            - [10. Used as a library by importing into other projects](#10-used-as-a-library-by-importing-into-other-projects)
 - [Changelogs](#changelogs)
-  - [v1.2.0](#v120)
-  - [v1.1.3](#v113)
-  - [v1.1.2](#v112)
-  - [v1.1.1](#v111)
-  - [v1.1.0](#v110)
-  - [v1.0.1](#v101)
-  - [v1.0.0](#v100)
-  - [v0.2.0](#v020)
+    - [v1.2.0](#v120)
+    - [v1.1.3](#v113)
+    - [v1.1.2](#v112)
+    - [v1.1.1](#v111)
+    - [v1.1.0](#v110)
+    - [v1.0.1](#v101)
+    - [v1.0.0](#v100)
+    - [v0.2.0](#v020)
 - [Citation](#citation)
 - [Contributing](#contributing)
 - [Disclaimer](#disclaimer)
@@ -93,7 +93,8 @@ pip install -e . --verbose
 
 ### Use `stone` in a GUI
 
-✨ Since v1.2.0, we have provided a GUI version of `stone` for users who are not familiar with the command line interface.
+✨ Since v1.2.0, we have provided a GUI version of `stone` for users who are not familiar with the command line
+interface.
 
 ![stone GUI](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/gui.png)
 
@@ -101,7 +102,7 @@ Instead of typing commands in the terminal, you can use the config GUI of `stone
 
 Steps:
 
-1. Open the terminal that can run `stone` (e.g., `Powershell` in Windows or `Terminal` in macOS). 
+1. Open the terminal that can run `stone` (e.g., `Powershell` in Windows or `Terminal` in macOS).
 2. Type `stone` (without any parameters) or `stone --gui` and press <kbd>Enter</kbd> to open the GUI.
 3. Specify the parameters in each tab.
 4. Click the `Start` button to start processing the images.
@@ -109,13 +110,18 @@ Steps:
 Hopefully, this can make it easier for you to use `stone` 🍻!
 
 > [!IMPORTANT]
-> 
+>
 > The GUI version of `stone` is still in the **beta** stage.
-> 
-> It can only support Python **3.9** and **3.10** versions.
-> 
+>
+> It supports Python **3.9** only.
+>
 > I will try to rebuild the wheels for other Python versions in the future.
+>
+> If you prefer to use Python **3.10.x** or above, please install v1.1.2, 
+> which has the same features except for the GUI.
 > 
+> `pip install skin-tone-classifier==1.1.2`
+>
 
 ### Use `stone` in command line interface (CLI)
 
