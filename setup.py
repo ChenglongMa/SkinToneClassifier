@@ -30,7 +30,7 @@ setup(
     entry_points={
         "console_scripts": ["stone = stone.__main__:main"],
     },
-    python_requires=">=3.9, <3.10",
+    python_requires=">=3.9",
     install_requires=[
         "opencv-python>=4.9.0.80",
         "numpy>=1.21.5",
@@ -39,15 +39,13 @@ setup(
         "colorama>=0.4.6",
         "packaging>=23.1",
         "requests>=2.31.0",
-        "gooey==1.0.8.1",
-        "wxPython==4.1.1",
-        "colored==1.3.93"
+        "gooey @ https://github.com/ChenglongMa/Gooey/tarball/mine#egg=Gooey-1.2.0-ALPHA"
     ],
     classifiers=[
         "Programming Language :: Python :: 3.9",
-        # "Programming Language :: Python :: 3.10",
-        # "Programming Language :: Python :: 3.11",
-        # "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
         "Topic :: Scientific/Engineering :: Image Recognition",

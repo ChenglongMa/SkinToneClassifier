@@ -231,6 +231,7 @@ if not use_cli and "--ignore-gooey" not in sys.argv:
     from importlib.resources import files
 
     main = Gooey(
+        show_preview_warning=False,
         advanced=True,  # fixme: `False` is not working
         dump_build_config=False,  # fixme: `True` is not working, as the path cannot be resolved correctly
         target="stone",

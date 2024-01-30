@@ -102,26 +102,21 @@ Instead of typing commands in the terminal, you can use the config GUI of `stone
 
 Steps:
 
-1. Open the terminal that can run `stone` (e.g., `Powershell` in Windows or `Terminal` in macOS).
+1. Open the terminal that can run `stone` (e.g., `PowerShell` in Windows or `Terminal` in macOS).
 2. Type `stone` (without any parameters) or `stone --gui` and press <kbd>Enter</kbd> to open the GUI.
 3. Specify the parameters in each tab.
 4. Click the `Start` button to start processing the images.
 
 Hopefully, this can make it easier for you to use `stone` 🍻!
 
-> [!IMPORTANT]
->
-> The GUI version of `stone` is still in the **beta** stage.
->
-> It supports Python **3.9** only.
->
-> I will try to rebuild the wheels for other Python versions in the future.
->
-> If you prefer to use Python **3.10.x** or above, please install v1.1.2, 
-> which has the same features except for the GUI.
+> [!TIP]
 > 
-> `pip install skin-tone-classifier==1.1.2`
->
+> It is recommended to install v1.2.1, which supports Python 3.9+.
+> 
+> If you have installed v1.2.0, please upgrade to v1.2.1 by running 
+> 
+> `pip install skin-tone-classifier --upgrade`
+> 
 
 ### Use `stone` in command line interface (CLI)
 
