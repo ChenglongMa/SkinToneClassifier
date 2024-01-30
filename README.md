@@ -108,6 +108,15 @@ Steps:
 
 Hopefully, this can make it easier for you to use `stone` 🍻!
 
+> [!IMPORTANT]
+> 
+> The GUI version of `stone` is still in the **beta** stage.
+> 
+> It can only support Python **3.9** and **3.10** versions.
+> 
+> I will try to rebuild the wheels for other Python versions in the future.
+> 
+
 ### Use `stone` in command line interface (CLI)
 
 To detect the skin tone in a portrait, e.g.,
