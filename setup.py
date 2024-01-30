@@ -39,7 +39,9 @@ setup(
         "colorama>=0.4.6",
         "packaging>=23.1",
         "requests>=2.31.0",
-        "gooey @ https://github.com/ChenglongMa/Gooey/tarball/mine#egg=Gooey-1.2.0-ALPHA"
+        "gooey>=1.0.8.1",
+        "re-wx==0.0.10",
+        "colored==1.3.93",
     ],
     classifiers=[
         "Programming Language :: Python :: 3.9",

@@ -273,7 +273,8 @@ def build_arguments():
         "--image_dirs",
         nargs="+",
         metavar="Image Directories",
-        widget="MultiDirChooser",
+        widget="DirChooser",
+        # widget="MultiDirChooser", # fixme: enable this widget when issues are fixed
         gooey_options={
             "message": "Select directories to process",
             "initial_value": os.getcwd(),
