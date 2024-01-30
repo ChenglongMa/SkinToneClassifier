@@ -77,6 +77,16 @@ cd SkinToneClassifier
 pip install -e . --verbose
 ```
 
+> [!TIP]
+>
+> If you encounter the following problem:
+> 
+> [`ImportError: DLL load failed while importing _core: The specified module could not be found`](https://stackoverflow.com/q/52306805/8860079)
+> 
+> Please download and install **Visual C++ Redistributable** at [here](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#visual-studio-2015-2017-2019-and-2022).
+>
+> Then this error will be gone.
+
 # HOW TO USE
 
 > [!TIP]
