@@ -56,7 +56,6 @@ setup(
         "Environment :: Web Environment",
         "Environment :: Win32 (MS Windows)",
         "Environment :: MacOS X",
-        "Environment :: Unix",
         "Environment :: Other Environment",
     ],
 )
