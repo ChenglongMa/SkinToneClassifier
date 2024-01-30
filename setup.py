@@ -16,7 +16,6 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages("src"),
     package_dir={"": "src"},
-    # package_data={'stone': ["ui/*.png"]},
     include_package_data=True,
     zip_safe=False,
     author=PACKAGE["__author__"],

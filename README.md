@@ -88,6 +88,25 @@ pip install -e . --verbose
 
 ## Quick Start
 
+### Use `stone` in a GUI
+
+✨ Since v1.2.0, we have provided a GUI version of `stone` for users who are not familiar with the command line interface.
+
+![stone GUI](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/gui.png)
+
+Instead of typing commands in the terminal, you can use the config GUI of `stone` to process the images.
+
+Steps:
+
+1. Open the terminal that can run `stone` (e.g., `Powershell` in Windows or `Terminal` in macOS). 
+2. Type `stone` (without any parameters) or `stone --gui` and press <kbd>Enter</kbd> to open the GUI.
+3. Specify the parameters in each tab.
+4. Click the `Start` button to start processing the images.
+
+Hopefully, this can make it easier for you to use `stone` 🍻!
+
+### Use `stone` in command line interface (CLI)
+
 To detect the skin tone in a portrait, e.g.,
 
 <div align="center">
@@ -483,6 +502,19 @@ The `result_json` will be like:
 ```
 
 # Changelogs
+
+## v1.2.0
+
+<details markdown="1" open>
+  <summary><i>Click here to show more.</i></summary>
+
+In this version, we have made the following changes:
+
+1. ✨ **NEW!**: We add a GUI version of `stone` for users who are not familiar with the command line interface.
+    * You can use the config GUI of `stone` to process the images.
+    * See more information at [here](#use-stone-in-a-gui).
+
+</details>
 
 ## v1.1.3
 

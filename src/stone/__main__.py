@@ -170,6 +170,8 @@ def main():
         threshold=threshold,
         return_report_image=debug,
     )
+    print("The program is processing your images...")
+    print("Please wait for the program to finish.")
     with logging_redirect_tqdm():
         with tqdm(image_paths, desc="Processing images", unit="images") as pbar:
             for result in pool.imap(process_wrapper, image_paths):
@@ -224,7 +226,6 @@ def main():
 
 sys.argv.remove("--gui") if "--gui" in sys.argv else None
 if not use_cli and "--ignore-gooey" not in sys.argv:
-
     from gooey import Gooey
 
     from importlib.resources import files
