@@ -1,5 +1,5 @@
 include README.md
 include LICENSE
 include MANIFEST.in
-recursive-include src/stone/ui/images *
+recursive-include src/stone/ui *
 recursive-exclude * *.py[co]

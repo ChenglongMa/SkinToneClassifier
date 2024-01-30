@@ -1,4 +1,4 @@
-__version__ = "1.2.1"
+__version__ = "1.2.2"
 __package_name__ = "skin-tone-classifier"
 __app_name__ = "Skin Tone Classifier"
 __description__ = "An easy-to-use library for skin tone classification"
