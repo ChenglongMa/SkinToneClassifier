@@ -2,6 +2,7 @@ import functools
 import logging
 import os
 import shutil
+import sys
 import threading
 from datetime import datetime
 from multiprocessing import freeze_support, cpu_count, Pool
@@ -10,13 +11,35 @@ import cv2
 import numpy as np
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
+from typing import List
 
 from stone.api import process
 from stone.image import normalize_palette
-from stone.utils import build_arguments, build_image_paths, is_windows, ArgumentError, is_debugging
+from stone.utils import (
+    build_arguments,
+    build_image_paths,
+    is_windows,
+    ArgumentError,
+    is_debugging,
+    resolve_labels,
+)
+from stone.package import (
+    __app_name__,
+    __version__,
+    __description__,
+    __copyright__,
+    __url__,
+    __author__,
+    __license__,
+    __code__,
+    __issues__,
+    __package_name__,
+)
 
 LOG = logging.getLogger(__name__)
 lock = threading.Lock()
+
+use_cli = len(sys.argv) > 1 and "--gui" not in sys.argv
 
 
 def process_in_main(
@@ -94,12 +117,12 @@ def main():
     debug: bool = args.debug
     to_bw: bool = args.black_white
 
-    specified_palette: list[str] = args.palette
+    specified_palette: List[str] = args.palette
 
     if specified_palette is not None and len(specified_palette) > 0:
         specified_palette = normalize_palette(specified_palette)
 
-    specified_tone_labels = args.labels
+    specified_tone_labels = resolve_labels(args.labels)
 
     new_width = args.new_width
     n_dominant_colors = args.n_colors
@@ -147,6 +170,8 @@ def main():
         threshold=threshold,
         return_report_image=debug,
     )
+    print("The program is processing your images...")
+    print("Please wait for the program to finish.")
     with logging_redirect_tqdm():
         with tqdm(image_paths, desc="Processing images", unit="images") as pbar:
             for result in pool.imap(process_wrapper, image_paths):
@@ -198,6 +223,47 @@ def main():
     pool.close()
     pool.join()
 
+
+sys.argv.remove("--gui") if "--gui" in sys.argv else None
+if not use_cli and "--ignore-gooey" not in sys.argv:
+    from gooey import Gooey
+
+    from importlib.resources import files
+
+    main = Gooey(
+        advanced=True,  # fixme: `False` is not working
+        dump_build_config=False,  # fixme: `True` is not working, as the path cannot be resolved correctly
+        target="stone",
+        suppress_gooey_flag=True,
+        program_name=f"{__app_name__} v{__version__}",
+        required_cols=1,
+        optional_cols=1,
+        image_dir=str(files("stone.ui")),
+        tabbed_groups=True,
+        navigation="Tabbed",
+        richtext_controls=True,
+        use_cmd_args=True,
+        menu=[
+            {
+                "name": "Help",
+                "items": [
+                    {
+                        "type": "AboutDialog",
+                        "menuTitle": "About",
+                        "name": __app_name__,
+                        "description": __description__,
+                        "version": __version__,
+                        "copyright": __copyright__,
+                        "website": __url__,
+                        "developer": __author__,
+                        "license": __license__,
+                    },
+                    {"type": "Link", "menuTitle": "Documentation", "url": __code__},
+                    {"type": "Link", "menuTitle": "Report Bugs", "url": __issues__},
+                ],
+            },
+        ],
+    )(main)
 
 if __name__ == "__main__":
     if is_windows():
