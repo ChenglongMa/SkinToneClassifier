@@ -33,6 +33,7 @@ for me!*
   - [1. How to install Python and `stone`](#1-how-to-install-python-and-stone)
   - [2. Use `stone` in GUI mode](#2-use-stone-in-gui-mode)
   - [3. Use `stone` in CLI mode](#3-use-stone-in-cli-mode)
+  - [4. Use `stone` in Python scripts](#4-use-stone-in-python-scripts)
 - [Installation](#installation)
   - [Install from pip](#install-from-pip)
   - [Install from source](#install-from-source)
