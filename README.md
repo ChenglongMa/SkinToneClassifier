@@ -69,21 +69,24 @@ for me!*
 
 Please visit the following video tutorials if you have no programming background or are unfamiliar with how to use Python and this library 💖
 
-<details markdown="1">
-  <summary><i>Click here to show more.</i></summary>
-
 ## Playlist
 
 [![playlist](https://img.youtube.com/vi/vu6whI0qcmU/0.jpg)](https://youtube.com/playlist?list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&si=ezxUR7McUbZa4clT)
 
+<details markdown="1">
+  <summary><i>Click here to show more.</i></summary>
+    
 ## 1. How to install Python and `stone`
 
-[![playlist](https://img.youtube.com/vi/vu6whI0qcmU/0.jpg)](https://www.youtube.com/watch?v=vu6whI0qcmU&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=1)
+[![installation](https://img.youtube.com/vi/vu6whI0qcmU/0.jpg)](https://www.youtube.com/watch?v=vu6whI0qcmU&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=1)
 
 ## 2. Use `stone` in GUI mode
 
-[![playlist](https://img.youtube.com/vi/08apMEogZgs/0.jpg)](https://www.youtube.com/watch?v=08apMEogZgs&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=2)
+[![use gui mode](https://img.youtube.com/vi/08apMEogZgs/0.jpg)](https://www.youtube.com/watch?v=08apMEogZgs&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=2)
 
+## 3. Use `stone` in CLI mode
+
+[![use cli mode](https://img.youtube.com/vi/rqJ62DijQaw/0.jpg)](https://www.youtube.com/watch?v=rqJ62DijQaw&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=3)
 
 _More videos are coming soon..._
 
