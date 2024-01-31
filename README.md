@@ -61,6 +61,30 @@ for me!*
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+# Video tutorials
+
+Please visit the following video tutorials if you have no programming background or are unfamiliar with how to use Python and this library 💖
+
+<details markdown="1">
+  <summary><i>Click here to show more.</i></summary>
+
+## Playlist
+
+[![playlist](https://img.youtube.com/vi/vu6whI0qcmU/0.jpg)](https://youtube.com/playlist?list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&si=ezxUR7McUbZa4clT)
+
+## 1. How to install Python and `stone`
+
+[![playlist](https://img.youtube.com/vi/vu6whI0qcmU/0.jpg)](https://www.youtube.com/watch?v=vu6whI0qcmU&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=1)
+
+## 2. Use `stone` in GUI mode
+
+[![playlist](https://img.youtube.com/vi/08apMEogZgs/0.jpg)](https://www.youtube.com/watch?v=08apMEogZgs&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=2)
+
+
+_More videos are coming soon..._
+
+</details>
+
 # Installation
 
 ## Install from pip
