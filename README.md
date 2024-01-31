@@ -7,6 +7,8 @@
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/skin-tone-classifier)](https://pypi.org/project/skin-tone-classifier/)
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/ChenglongMa/SkinToneClassifier?include_prereleases)](https://github.com/ChenglongMa/SkinToneClassifier/releases/latest)
 [![GitHub License](https://img.shields.io/github/license/ChenglongMa/SkinToneClassifier)](https://github.com/ChenglongMa/SkinToneClassifier/blob/main/LICENSE)
+[![youtube](https://img.shields.io/badge/YouTube-Skin_Tone_Classifier-FF0000?logo=youtube)](https://youtube.com/playlist?list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&si=ezxUR7McUbZa4clT)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1k-cryEZ9PInJRXWIi17ib66ufYV2Ikwe?usp=sharing)
 [![GitHub Repo stars](https://img.shields.io/github/stars/ChenglongMa/SkinToneClassifier)](https://github.com/ChenglongMa/SkinToneClassifier)
 
 An easy-to-use library for skin tone classification.
@@ -68,6 +70,8 @@ for me!*
 
 # Video tutorials
 
+[![youtube](https://img.shields.io/badge/YouTube-Skin_Tone_Classifier-FF0000?logo=youtube)](https://youtube.com/playlist?list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&si=ezxUR7McUbZa4clT)
+
 Please visit the following video tutorials if you have no programming background or are unfamiliar with how to use Python and this library 💖
 
 ## Playlist
@@ -79,15 +83,25 @@ Please visit the following video tutorials if you have no programming background
     
 ## 1. How to install Python and `stone`
 
+[![YouTube Video Views](https://img.shields.io/youtube/views/vu6whI0qcmU)](https://www.youtube.com/watch?v=vu6whI0qcmU&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=1)
+
 [![installation](https://img.youtube.com/vi/vu6whI0qcmU/0.jpg)](https://www.youtube.com/watch?v=vu6whI0qcmU&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=1)
 
 ## 2. Use `stone` in GUI mode
+
+[![YouTube Video Views](https://img.shields.io/youtube/views/08apMEogZgs)](https://www.youtube.com/watch?v=08apMEogZgs&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=2)
 
 [![use gui mode](https://img.youtube.com/vi/08apMEogZgs/0.jpg)](https://www.youtube.com/watch?v=08apMEogZgs&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=2)
 
 ## 3. Use `stone` in CLI mode
 
+[![YouTube Video Views](https://img.shields.io/youtube/views/rqJ62DijQaw)](https://www.youtube.com/watch?v=rqJ62DijQaw&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=3)
+
 [![use cli mode](https://img.youtube.com/vi/rqJ62DijQaw/0.jpg)](https://www.youtube.com/watch?v=rqJ62DijQaw&list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&index=3)
+
+## 4. Use `stone` in Python scripts
+
+Please refer to this notebook [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1k-cryEZ9PInJRXWIi17ib66ufYV2Ikwe?usp=sharing) for more information.
 
 _More videos are coming soon..._
 
@@ -123,13 +137,11 @@ pip install -e . --verbose
 
 > [!TIP]
 >
-> You can combine the following documents
-> and [running examples](https://colab.research.google.com/drive/1k-cryEZ9PInJRXWIi17ib66ufYV2Ikwe?usp=sharing) in
-> Google
-> Colab to understand the usage of this library more intuitively.
+> You can combine the following documents, [the video tutorials above](#video-tutorials)
+> and the running examples [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1k-cryEZ9PInJRXWIi17ib66ufYV2Ikwe?usp=sharing)
+> to understand the usage of this library more intuitively.
 >
-> See the running
-> examples [here](https://colab.research.google.com/drive/1k-cryEZ9PInJRXWIi17ib66ufYV2Ikwe?usp=sharing).
+> 
 
 ## Quick Start
 
