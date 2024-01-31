@@ -26,6 +26,10 @@ for me!*
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [Video tutorials](#video-tutorials)
+  - [Playlist](#playlist)
+  - [1. How to install Python and `stone`](#1-how-to-install-python-and-stone)
+  - [2. Use `stone` in GUI mode](#2-use-stone-in-gui-mode)
 - [Installation](#installation)
   - [Install from pip](#install-from-pip)
   - [Install from source](#install-from-source)
