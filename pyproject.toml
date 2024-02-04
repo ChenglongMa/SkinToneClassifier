@@ -151,7 +151,7 @@ all = [
 "Funding" = "https://github.com/sponsors/ChenglongMa"
 "Say Thanks!" = "https://saythanks.io/to/ChenglongMa"
 "Repository" = "https://github.com/ChenglongMa/SkinToneClassifier/"
-Changelog = "https://github.com/ChenglongMa/SkinToneClassifier/blob/main/CHANGELOD.md"
+Changelog = "https://github.com/ChenglongMa/SkinToneClassifier/blob/main/CHANGELOG.md"
 
 # The following would provide a command line executable called `sample`
 # which executes the function `main` from this package when invoked.
