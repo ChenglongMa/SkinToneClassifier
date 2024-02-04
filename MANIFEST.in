@@ -3,3 +3,8 @@ include LICENSE
 include MANIFEST.in
 recursive-include src/stone/ui *
 recursive-exclude * *.py[co]
+exclude .idea/*
+exclude CHANGELOG.md
+exclude _config.yml
+exclude docs/*
+exclude requirements.txt

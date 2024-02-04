@@ -22,8 +22,22 @@ class ArgumentError(ValueError):
     pass
 
 
-# @functools.cache # Python 3.9+
-@functools.lru_cache(maxsize=128)  # Python 3.2+
+def Gooey(*args, **kwargs):
+    """
+    Dummy decorator for Gooey.
+    Used in CLI mode to avoid the import error when the Gooey package is not installed.
+    :param args:
+    :param kwargs:
+    :return:
+    """
+
+    def inner(func):
+        return func
+
+    return inner
+
+
+@functools.cache
 def alphabet_id(n):
     letters = string.ascii_uppercase
     n_letters = len(letters)
@@ -104,161 +118,36 @@ def is_debugging():
     return gettrace is not None and gettrace()
 
 
-def build_arguments_deprecated():
-    print("Using CLI mode.")
-    LOG.info("LOG: Using CLI mode.")
-    parser = argparse.ArgumentParser(
-        description=f"{__app_name__} v{__version__}",
-        formatter_class=argparse.RawTextHelpFormatter,
-    )
-    parser.add_argument(
-        "-i",
-        "--images",
-        nargs="+",
-        default=["./"],
-        metavar="IMAGE FILENAME",
-        help="Image filename(s) or URLs to process;\n"
-        'Supports multiple values separated by space, e.g., "a.jpg b.png";\n'
-        'Supports directory or file name(s), e.g., "./path/to/images/ a.jpg";\n'
-        'Supports URL(s), e.g., "https://example.com/images/pic.jpg" since v1.1.0+.\n'
-        "The app will search all images in current directory in default.",
-    )
-    parser.add_argument(
-        "-r",
-        "--recursive",
-        action="store_true",
-        help="Whether to search images recursively in the specified directory.",
-    )
-
-    parser.add_argument(
-        "-t",
-        "--image_type",
-        default="auto",
-        metavar="IMAGE TYPE",
-        help="Specify whether the input image(s) is/are colored or black/white.\n"
-        'Valid choices are: "auto", "color" or "bw",\n'
-        'Defaults to "auto", which will be detected automatically.',
-        choices=["auto", "color", "bw"],
-    )
-    parser.add_argument(
-        "-p",
-        "--palette",
-        nargs="+",
-        metavar="PALETTE",
-        help="Skin tone palette;\n"
-        'Supports RGB hex value leading by "#" or RGB values separated by comma(,),\n'
-        'E.g., "-p #373028 #422811" or "-p 255,255,255 100,100,100"',
-    )
-    parser.add_argument(
-        "-l",
-        "--labels",
-        nargs="+",
-        metavar="LABELS",
-        help="Skin tone labels;\n"
-        "Default values are the uppercase alphabet list leading by the image type ('C' for 'color'; 'B' for 'Black&White'), "
-        "e.g., ['CA', 'CB', ..., 'CZ'] or ['BA', 'BB', ..., 'BZ'].\n"
-        "Since v1.2.0, supports range of labels, e.g., 'A-Z' or '1-10'.\n"
-        "Refer to https://github.com/ChenglongMa/SkinToneClassifier for more details.",
-    )
-    parser.add_argument(
-        "-d",
-        "--debug",
-        action="store_true",
-        help="Whether to generate report images, used for debugging and verification."
-        "The report images will be saved in the './debug' directory.",
-    )
-    parser.add_argument(
-        "-bw",
-        "--black_white",
-        action="store_true",
-        help="Whether to convert the input to black/white image(s).\n"
-        "If true, the app will use the black/white palette to classify the image.",
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        default="./",
-        metavar="DIRECTORY",
-        help="The path of output file, defaults to current directory.",
-    )
-    parser.add_argument(
-        "--n_workers",
-        type=int,
-        metavar="WORKERS",
-        help="The number of workers to process the images, defaults to the number of CPUs in the system.",
-        default=0,
-    )
-
-    parser.add_argument(
-        "--n_colors",
-        type=int,
-        metavar="COLORS",
-        help="CONFIG: the number of dominant colors to be extracted, defaults to 2.",
-        default=2,
-    )
-    parser.add_argument(
-        "--new_width",
-        type=int,
-        metavar="WIDTH",
-        help="CONFIG: resize the images with the specified width. Negative value will be ignored, defaults to 250.",
-        default=250,
-    )
-
-    # For the next parameters, refer to https://stackoverflow.com/a/20805153/8860079
-    parser.add_argument(
-        "--scale",
-        type=float,
-        metavar="SCALE",
-        help="CONFIG: how much the image size is reduced at each image scale, defaults to 1.1",
-        default=1.1,
-    )
-    parser.add_argument(
-        "--min_nbrs",
-        type=int,
-        metavar="NEIGHBORS",
-        help="CONFIG: how many neighbors each candidate rectangle should have to retain it.\n"
-        "Higher value results in less detections but with higher quality, defaults to 5.",
-        default=5,
-    )
-    parser.add_argument(
-        "--min_size",
-        type=int,
-        nargs="+",
-        metavar=("WIDTH", "HEIGHT"),
-        help='CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".',
-        default=(90, 90),
-    )
-    parser.add_argument(
-        "--threshold",
-        type=float,
-        metavar="THRESHOLD",
-        help="CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.15.",
-        default=0.15,
-    )
-    parser.add_argument(
-        "-v",
-        "--version",
-        action="version",
-        version=f"%(prog)s {__version__}",
-        help="Show the version number and exit.",
-    )
-
-    return parser.parse_args()
-
-
 def build_arguments():
-    from gooey import GooeyParser
+    try:
+        from gooey import GooeyParser
 
+        in_gui = True
+    except ImportError:
+        from argparse import ArgumentParser as GooeyParser
+
+        in_gui = False
+
+    kwargs = dict(formatter_class=argparse.RawTextHelpFormatter) if not in_gui else {}
     parser = GooeyParser(
         description=__description__,
+        **kwargs,
+    )
+    kwargs = (
+        {
+            "gooey_options": {"show_border": False, "columns": 1},
+        }
+        if in_gui
+        else {}
     )
     files = parser.add_argument_group(
         "Images to process",
         "The locations of images to process, which can be directories, files, or URLs.\n"
         "Multiple values are separated by space;\n"
         'You can mix folders, filenames and web links together, e.g., "/path/to/dir1 /path/to/pic.jpg https://example.com/pic.png".\n',
-        gooey_options={"show_border": False, "columns": 1},
+        **kwargs,
     )
+    kwargs = {"gooey_options": {"visible": False}} if in_gui else {}
 
     files.add_argument(
         "-i",
@@ -266,80 +155,82 @@ def build_arguments():
         nargs="+",
         default=[os.getcwd()],
         metavar="Image Filenames",
-        help="Image filename(s), Directories or URLs to process.",
-        gooey_options={"visible": False},
+        help="Image filename(s), Directories or URLs to process. Separated by space.",
+        **kwargs,
     )
-    files.add_argument(
-        "--image_dirs",
-        nargs="+",
-        metavar="Image Directories",
-        widget="DirChooser",
-        # widget="MultiDirChooser", # fixme: enable this widget when issues are fixed
-        gooey_options={
-            "message": "Select directories to process",
-            "initial_value": os.getcwd(),
-            "default_path": os.getcwd(),
-            "placeholder": "e.g., /path/to/dir1 /path/to/dir2",
-        },
-    )
+    if in_gui:
+        files.add_argument(
+            "--image_dirs",
+            nargs="+",
+            metavar="Image Directories",
+            widget="DirChooser",
+            # widget="MultiDirChooser", # fixme: enable this widget when issues are fixed
+            gooey_options={
+                "message": "Select directories to process",
+                "initial_value": os.getcwd(),
+                "default_path": os.getcwd(),
+                "placeholder": "e.g., /path/to/dir1 /path/to/dir2",
+            },
+        )
+    kwargs = dict(metavar="Recursive Search") if in_gui else {}
     files.add_argument(
         "-r",
         "--recursive",
-        metavar="Recursive Search",
         action="store_true",
         help="Search images recursively in the specified directory.",
+        **kwargs,
     )
+    if in_gui:
+        files.add_argument(
+            "--image_files",
+            nargs="+",
+            metavar="Image Filenames",
+            help="Add individual image file(s)",
+            widget="MultiFileChooser",
+            gooey_options={
+                "wildcard": "All images|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tif;*.webp|"
+                "JPG (*.jpg)|*.jpg|"
+                "JPEG (*.jpeg)|*.jpeg|"
+                "PNG (*.png)|*.png|"
+                "BMP (*.bmp)|*.bmp|"
+                "GIF (*.gif)|*.gif|"
+                "TIFF (*.tif)|*.tif|"
+                "WEBP (*.webp)|*.webp|"
+                "All files (*.*)|*.*",
+                "message": "Select the image file(s) to process",
+                "default_dir": os.getcwd(),
+                "full_width": False,
+                "placeholder": "e.g., a.jpg b.png",
+            },
+        )
 
-    files.add_argument(
-        "--image_files",
-        nargs="+",
-        metavar="Image Filenames",
-        help="Add individual image file(s)",
-        widget="MultiFileChooser",
-        gooey_options={
-            "wildcard": "All images|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tif;*.webp|"
-            "JPG (*.jpg)|*.jpg|"
-            "JPEG (*.jpeg)|*.jpeg|"
-            "PNG (*.png)|*.png|"
-            "BMP (*.bmp)|*.bmp|"
-            "GIF (*.gif)|*.gif|"
-            "TIFF (*.tif)|*.tif|"
-            "WEBP (*.webp)|*.webp|"
-            "All files (*.*)|*.*",
-            "message": "Select the image file(s) to process",
-            "default_dir": os.getcwd(),
-            "full_width": False,
-            "placeholder": "e.g., a.jpg b.png",
-        },
-    )
+        files.add_argument(
+            "--image_urls",
+            nargs="+",
+            metavar="Image URLs",
+            help="Add image URLs",
+            gooey_options={
+                "full_width": False,
+                "placeholder": "e.g., https://example.com/a.jpg https://example.com/b.png",
+            },
+        )
 
-    files.add_argument(
-        "--image_urls",
-        nargs="+",
-        metavar="Image URLs",
-        help="Add image URLs",
-        gooey_options={
-            "full_width": False,
-            "placeholder": "e.g., https://example.com/a.jpg https://example.com/b.png",
-        },
-    )
-
+    kwargs = {"gooey_options": {"show_border": False, "columns": 2}} if in_gui else {}
     images = parser.add_argument_group(
         "Image Settings",
-        gooey_options={
-            "show_border": False,
-            "columns": 2,
-        },
+        **kwargs,
     )
+    bw_option = "black/white" if in_gui else "bw"
     images.add_argument(
         "-t",
         "--image_type",
         default="auto",
         metavar="Image Type",
         help="Specify whether the input image(s) is/are colored or black/white.\n"
-        'Defaults to "auto", which will be detected automatically.',
-        choices=["auto", "color", "bw"],
+        f'Defaults to "auto", which will be detected automatically. Other options are "color" and "{bw_option}".\n',
+        choices=["auto", "color", bw_option],
     )
+    kwargs = {"gooey_options": {"full_width": True}} if in_gui else {}
     images.add_argument(
         "-p",
         "--palette",
@@ -349,7 +240,7 @@ def build_arguments():
         'Input RGB hex values leading by "#" or RGB values separated by comma(,),\n'
         "E.g., #373028 #422811 or 255,255,255 100,100,100\n"
         "Leave blank to use the default palette as mentioned in the document.\n",
-        gooey_options={"full_width": True},
+        **kwargs,
     )
     images.add_argument(
         "-l",
@@ -361,18 +252,24 @@ def build_arguments():
         "e.g., ['CA', 'CB', ..., 'CZ'] or ['BA', 'BB', ..., 'BZ'].\n"
         "Since v1.2.0, supports range of labels, e.g., 'A-Z' or '1-10'.\n"
         "Refer to https://github.com/ChenglongMa/SkinToneClassifier#3-specify-category-labels for more details.",
-        gooey_options={"full_width": True},
+        **kwargs,
     )
 
+    kwargs = dict(metavar="Convert to Black/White") if in_gui else {}
     images.add_argument(
         "-bw",
         "--black_white",
-        metavar="Convert to Black/White",
         action="store_true",
         help="Whether to convert the input to black/white image(s)?\n"
-        "If true, the app will use the black/white palette to classify the image.",
+        "If true, the app will convert the input to black/white image(s) and use the black/white palette for classification.",
+        **kwargs,
     )
 
+    kwargs = (
+        {"gooey_options": {"initial_value": 2, "min": 1, "max": 99999, "full_width": False}, "widget": "IntegerField"}
+        if in_gui
+        else {}
+    )
     images.add_argument(
         "--n_colors",
         metavar="Number of Dominant Colors",
@@ -380,8 +277,16 @@ def build_arguments():
         help="Specify the number of dominant colors to be extracted.\n"
         "The colors will be used to compare with the colors in the palette.\n",
         default=2,
-        widget="IntegerField",
-        gooey_options={"initial_value": 2, "min": 1, "max": 99999, "full_width": False},
+        **kwargs,
+    )
+
+    kwargs = (
+        {
+            "gooey_options": {"initial_value": 250, "min": 10, "max": 99999, "full_width": False},
+            "widget": "IntegerField",
+        }
+        if in_gui
+        else {}
     )
     images.add_argument(
         "--new_width",
@@ -391,37 +296,49 @@ def build_arguments():
         "Sometimes smaller images will be processed faster and more accurately.\n"
         "No resizing will be performed if the value is negative.",
         default=250,
-        widget="IntegerField",
-        gooey_options={"initial_value": 250, "min": 10, "max": 99999, "full_width": False},
+        **kwargs,
     )
 
-    outputs = parser.add_argument_group("Output Settings", gooey_options={"show_border": True})
+    kwargs = {"gooey_options": {"show_border": True}} if in_gui else {}
+    outputs = parser.add_argument_group("Output Settings", **kwargs)
+
+    kwargs = (
+        {
+            "gooey_options": {"message": "Select the output directory", "default_path": os.getcwd()},
+            "widget": "DirChooser",
+        }
+        if in_gui
+        else {}
+    )
     outputs.add_argument(
         "-o",
         "--output",
         metavar="Output Directory",
         default=os.getcwd(),
         help="Specify the path of output file, defaults to current directory.",
-        widget="DirChooser",
-        gooey_options={
-            "message": "Select the output directory",
-            "default_path": os.getcwd(),
-        },
+        **kwargs,
     )
+
+    kwargs = dict(metavar="Generate Report Images") if in_gui else {}
     outputs.add_argument(
         "-d",
         "--debug",
-        metavar="Generate Report Images",
         action="store_true",
-        default=True,
+        default=in_gui,
         help="Whether to generate report images?\n"
         "If true, the report images will be saved in the '<OUTPUT_DIRECTORY>/debug' directory.",
+        **kwargs,
     )
 
+    kwargs = {"gooey_options": {"show_border": False, "columns": 2}} if in_gui else {}
     advanced = parser.add_argument_group(
         "Advanced Settings",
         "For advanced users only, please refer to https://stackoverflow.com/a/20805153/8860079",
-        gooey_options={"show_border": False, "columns": 2},
+        **kwargs,
+    )
+
+    kwargs = (
+        {"gooey_options": {"initial_value": 1.1, "min": 0.1, "max": 2.0}, "widget": "DecimalField"} if in_gui else {}
     )
     advanced.add_argument(
         "--scale",
@@ -429,9 +346,10 @@ def build_arguments():
         metavar="Scale",
         help="Specify how much the image size is reduced at each image scale.",
         default=1.1,
-        widget="DecimalField",
-        gooey_options={"initial_value": 1.1, "min": 0.1, "max": 2.0},
+        **kwargs,
     )
+
+    kwargs = {"gooey_options": {"initial_value": 5, "min": 1, "max": 99999}, "widget": "IntegerField"} if in_gui else {}
     advanced.add_argument(
         "--min_nbrs",
         type=int,
@@ -439,59 +357,61 @@ def build_arguments():
         help="Specify how many neighbors each candidate rectangle should have to retain it.\n"
         "Higher value results in less detections but with higher quality.",
         default=5,
-        widget="IntegerField",
-        gooey_options={"initial_value": 5, "min": 1, "max": 99999},
+        **kwargs,
     )
     default_min_width = 90
     default_min_height = 90
 
+    kwargs = {"gooey_options": {"visible": False}} if in_gui else {}
     advanced.add_argument(
         "--min_size",
         type=int,
         nargs="+",
         metavar="Minimum Possible Face Size, format: <Width Height>",
-        help=f'[Alias --min_width, --min_height] Specify the minimum possible face size. Faces smaller than that are ignored, defaults to "{default_min_width} {default_min_height}".',
+        help=f'Specify the minimum possible face size. Faces smaller than that are ignored, defaults to "{default_min_width} {default_min_height}".',
         default=(default_min_width, default_min_height),
-        gooey_options={
-            "visible": False,
-        },
+        **kwargs,
     )
+    if in_gui:
+        min_size = advanced.add_argument_group(
+            "Minimum Possible Face Size (pixels)",
+            'Specify the minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".',
+            gooey_options={"show_border": True, "columns": 2},
+        )
 
-    min_size = advanced.add_argument_group(
-        "Minimum Possible Face Size (pixels)",
-        'Specify the minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".',
-        gooey_options={"show_border": True, "columns": 2},
+        min_size.add_argument(
+            "--min_width",
+            type=int,
+            metavar="Minimum Width",
+            # help="Specify the minimum possible face width. Faces smaller than that are ignored, defaults to 90.",
+            default=default_min_width,
+            widget="IntegerField",
+            gooey_options={"initial_value": default_min_width, "min": 10, "max": 99999},
+        )
+
+        min_size.add_argument(
+            "--min_height",
+            type=int,
+            metavar="Minimum Height",
+            # help="Specify the minimum possible face height. Faces smaller than that are ignored, defaults to 90.",
+            default=default_min_height,
+            widget="IntegerField",
+            gooey_options={"initial_value": default_min_height, "min": 10, "max": 99999},
+        )
+
+    kwargs = (
+        {"gooey_options": {"initial_value": 0.15, "min": 0.01, "max": 1.0}, "widget": "DecimalField"} if in_gui else {}
     )
-
-    min_size.add_argument(
-        "--min_width",
-        type=int,
-        metavar="Minimum Width",
-        # help="Specify the minimum possible face width. Faces smaller than that are ignored, defaults to 90.",
-        default=default_min_width,
-        widget="IntegerField",
-        gooey_options={"initial_value": default_min_width, "min": 10, "max": 99999},
-    )
-
-    min_size.add_argument(
-        "--min_height",
-        type=int,
-        metavar="Minimum Height",
-        # help="Specify the minimum possible face height. Faces smaller than that are ignored, defaults to 90.",
-        default=default_min_height,
-        widget="IntegerField",
-        gooey_options={"initial_value": default_min_height, "min": 10, "max": 99999},
-    )
-
     advanced.add_argument(
         "--threshold",
         type=float,
         metavar="Minimum Possible Face Proportion",
         help="Specify the minimum proportion of the skin area required to identify the face, defaults to 0.15.",
         default=0.15,
-        widget="DecimalField",
-        gooey_options={"initial_value": 0.15, "min": 0.01, "max": 1.0},
+        **kwargs,
     )
+
+    kwargs = {"gooey_options": {"initial_value": 0, "min": 0, "max": 99999}, "widget": "IntegerField"} if in_gui else {}
     advanced.add_argument(
         "--n_workers",
         type=int,
@@ -499,28 +419,32 @@ def build_arguments():
         help="Specify the number of workers to process the images.\n"
         "0 means the total number of CPU cores in the system.",
         default=0,
-        widget="IntegerField",
-        gooey_options={"initial_value": 0, "min": 0, "max": 99999},
+        **kwargs,
     )
 
+    kwargs = dict(gooey_options={"visible": False}) if in_gui else {}
     advanced.add_argument(
         "-v",
         "--version",
         action="version",
         version=f"%(prog)s {__version__}",
         help="Show the version number and exit.",
-        gooey_options={"visible": False},
+        **kwargs,
     )
     args = parser.parse_args()
     images = args.images or []
-    if args.image_dirs:
+    if getattr(args, "image_dirs", False):
         images.extend(args.image_dirs)
-    if args.image_files:
+    if getattr(args, "image_files", False):
         images.extend(args.image_files)
-    if args.image_urls:
+    if getattr(args, "image_urls", False):
         images.extend(args.image_urls)
     args.images = images
-    if tuple(args.min_size) == (default_min_width, default_min_height):
+    if (
+        tuple(args.min_size) == (default_min_width, default_min_height)
+        and getattr(args, "min_width", False)
+        and getattr(args, "min_height", False)
+    ):
         args.min_size = (args.min_width, args.min_height)
     return args
 
@@ -598,7 +522,7 @@ def check_version():
             print(
                 Fore.YELLOW + f"You are using an outdated version of {__package_name__} ({installed_version}).\n"
                 f"Please upgrade to the latest version ({latest_version}) with the following command:\n",
-                Fore.GREEN + f"pip install {__package_name__} --upgrade\n" + Fore.RESET,
+                Fore.GREEN + f"pip install {__package_name__}[all] --upgrade\n" + Fore.RESET,
             )
             os.environ["STONE_UPGRADE_FLAG"] = "1"
     except Exception:

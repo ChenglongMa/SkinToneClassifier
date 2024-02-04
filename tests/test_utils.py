@@ -1,13 +1,12 @@
 import unittest
 from pathlib import Path
-from unittest.mock import patch
 
 from stone.utils import build_image_paths, resolve_labels
 
 
 class TestUtils(unittest.TestCase):
     def setUp(self):
-        self.image_path = "./mock_data/images"
+        self.image_path = str(Path("./mock_data/images").resolve())
         # Sorted image paths
         self.expected_recursive_image_paths = [
             f"{self.image_path}/fake_img_1.gif",  # In default, sorted by the trailing number
@@ -60,7 +59,7 @@ class TestUtils(unittest.TestCase):
         self.should_exclude_folder(image_paths, ["subfolder", "debug", "log"])
         self.assertListEqual(
             image_paths,
-            [Path(p) for p in self.expected_non_recursive_image_paths],
+            [Path(p).resolve() for p in self.expected_non_recursive_image_paths],
         )
 
     def test_multiple_directories_recursive(self):
