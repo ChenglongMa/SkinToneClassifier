@@ -226,7 +226,11 @@ def main():
 
 sys.argv.remove("--gui") if "--gui" in sys.argv else None
 if not use_cli and "--ignore-gooey" not in sys.argv:
-    from gooey import Gooey
+    try:
+        from gooey import Gooey
+    except ImportError:
+        # If gooey is not installed, use a dummy decorator
+        from stone.utils import Gooey
 
     from importlib.resources import files
 
