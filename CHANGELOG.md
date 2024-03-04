@@ -9,7 +9,7 @@ In this version, we have made the following changes:
 
 1. 🐛 **FIX!**: We fixed a bug where the app will crash when using the `-bw` option.
      
-
+Thanks [ergo70](https://github.com/ergo70)'s feedback in [issue#25](https://github.com/ChenglongMa/SkinToneClassifier/issues/25).
 </details>
 
 ## v1.2.3
