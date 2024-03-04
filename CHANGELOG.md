@@ -1,5 +1,17 @@
 # Changelogs
 
+## v1.2.4
+
+<details markdown="1" open>
+  <summary><i>Click here to show more.</i></summary>
+
+In this version, we have made the following changes:
+
+1. 🐛 **FIX!**: We fixed a bug where the app will crash when using the `-bw` option.
+     
+
+</details>
+
 ## v1.2.3
 
 <details markdown="1" open>

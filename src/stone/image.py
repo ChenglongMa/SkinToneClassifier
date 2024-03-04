@@ -77,7 +77,7 @@ def normalize_color(color):
     raise ArgumentError(f"Invalid color code: {color}")
 
 
-@functools.lru_cache(maxsize=128)  # Python 3.2+
+# @functools.lru_cache(maxsize=128)  # Python 3.2+
 def normalize_palette(palette):
     return [normalize_color(color) for color in palette]
 
