@@ -446,48 +446,40 @@ stone -t (or --image_type) auto
 
 For `color` images, we use the `color` palette to detect faces:
 
-```shell
-#373028 #422811 #513b2e #6f503c #81654f #9d7a54 #bea07e #e5c8a6 #e7c1b8 #f3dad6 #fbf2f3
-```
-
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #373028; color: white">#373028</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #422811; color: white">#422811</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #513b2e; color: white">#513B2E</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #6f503c; color: white">#6F503C</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #81654f; color: white">#81654F</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #9d7a54; color: white">#9D7A54</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #bea07e;">#BEA07E</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #e5c8a6;">#E5C8A6</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #e7c1b8;">#E7C1B8</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #f3dad6;">#F3DAD6</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #fbf2f3;">#FBF2F3</div>
+`#373028`
+`#422811`
+`#513B2E`
+`#6F503C`
+`#81654F`
+`#9D7A54`
+`#BEA07E`
+`#E5C8A6`
+`#E7C1B8`
+`#F3DAD6`
+`#FBF2F3`
 
 
 (Please refer to our paper above for more details.)
 
 For `bw` images, we use the `bw` palette to detect faces:
 
-```shell
-#FFFFFF #F0F0F0 #E0E0E0 #D0D0D0 #C0C0C0 #B0B0B0 #A0A0A0 #909090 #808080 #707070 #606060 #505050 #404040 #303030 #202020 #101010 #000000
-```
-
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #FFFFFF;">#FFFFFF</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #F0F0F0;">#F0F0F0</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #E0E0E0;">#E0E0E0</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #D0D0D0;">#D0D0D0</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #C0C0C0;">#C0C0C0</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #B0B0B0;">#B0B0B0</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #A0A0A0;">#A0A0A0</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #909090;">#909090</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #808080; color: white">#808080</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #707070; color: white">#707070</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #606060; color: white">#606060</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #505050; color: white">#505050</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #404040; color: white">#404040</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #303030; color: white">#303030</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #202020; color: white">#202020</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #101010; color: white">#101010</div>
-<div style="display: inline-block; width: 85px; height: 30px; background-color: #000000; color: white">#000000</div>
+`#FFFFFF`
+`#F0F0F0`
+`#E0E0E0`
+`#D0D0D0`
+`#C0C0C0`
+`#B0B0B0`
+`#A0A0A0`
+`#909090`
+`#808080`
+`#707070`
+`#606060`
+`#505050`
+`#404040`
+`#303030`
+`#202020`
+`#101010`
+`#000000`
 
 (Please refer to
 **Leigh, A., & Susilo, T. (2009). Is voting skin-deep? Estimating the effect of candidate ballot photographs on election
