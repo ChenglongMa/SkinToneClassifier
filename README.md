@@ -296,17 +296,54 @@ NB: Supported image formats: `.jpg, .gif, .png, .jpeg, .webp, .tif`.
 
 In default (i.e., `stone` without `-i` option), the app will search images in current folder.
 
-#### 2. Specify color categories
+#### 2. Specify color palette
 
-2.1 Use HEX values
+2.1 Use the built-in palettes
+
+The built-in palettes are: `perla`, `yadon-ostfeld`, `proder` and `bw`.
+
+NB: The `bw` palette is used to classify the **black/white** images only.
+
+For example:
+```shell
+stone -p (or --palette) perla
+```
+
+The HEX values of each palette are:
+
+![PERLA](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-perla.svg)
+
+* `perla`:
+    * `#373028`, `#422811`, `#513B2E`, `#6F503C`, `#81654F`, `#9D7A54`, `#BEA07E`, `#E5C8A6`, `#E7C1B8`, `#F3DAD6`, `#FBF2F3`
+    * Citation: Rejón Piña, R. A., & Ma, C. (2021). Classification Algorithm for Skin Color (CASCo): A new tool to measure skin color in social science research.
+
+![YADON-OSTFELD](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-yadon-ostfeld.svg)
+
+* `yadon-ostfeld`:
+    * `#36251d`, `#48352c`, `#614539`, `#755848`, `#886958`, `#9b7966`, `#b18972`, `#c29c88`, `#d4afa3`, `#e6c6bf`
+    * Citation: Ostfeld, M. C., & Yadon, N. (2022). Skin color, power, and politics in America. Russell Sage Foundation.
+
+![PRODER](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-proder.svg)
+
+* `proder`:
+    * `#654d3e`, `#775741`, `#876249`, `#946c51`, `#a0765a`, `#a87f64`, `#b1886c`, `#b69279`, `#be9d86`, `#c5a691`, `#c8ac99`
+    * Citation: Proyecto sobre discriminación étnico-racial en México (PRODER). El Colegio de México. https://discriminacion.colmex.mx/encuesta-proder/
+
+![BW](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-bw.svg)
+
+* `bw`:
+    * `#FFFFFF`, `#F0F0F0`, `#E0E0E0`, `#D0D0D0`, `#C0C0C0`, `#B0B0B0`, `#A0A0A0`, `#909090`, `#808080`, `#707070`, `#606060`, `#505050`, `#404040`, `#303030`, `#202020`, `#101010`, `#000000`
+    * Citation: Leigh, A., & Susilo, T. (2009). Is voting skin-deep? Estimating the effect of candidate ballot photographs on election outcomes. Journal of Economic Psychology, 30(1), 61-70.
+
+2.2 Use HEX values
 
 ```shell
-stone -p (or --palette) #373028 #422811 #513B2E
+stone -p #373028 #422811 #513B2E
 ```
 
 NB: Values start with **'#'** and are separated by **space**.
 
-2.2 Use RGB tuple values
+2.3 Use RGB tuple values
 
 ```shell
 stone -p 55,48,40 66,40,17 251,242,243
@@ -327,7 +364,7 @@ You can assign the labels for the skin tone categories, for example:
 
 To achieve this, you can use the `-l` (or `--labels`) option:
 
-3.1 Specify the labels directly using _spaces_ as delimiters, e.g.,
+3.1 Specify the labels directly using __spaces__ as delimiters, e.g.,
 
 ```shell
 stone -l A B C D E F G H
@@ -422,47 +459,6 @@ stone -t (or --image_type) bw
 ```shell
 stone -t (or --image_type) auto
 ```
-
-For `color` images, we use the `color` palette to detect faces:
-
-`#373028`
-`#422811`
-`#513B2E`
-`#6F503C`
-`#81654F`
-`#9D7A54`
-`#BEA07E`
-`#E5C8A6`
-`#E7C1B8`
-`#F3DAD6`
-`#FBF2F3`
-
-
-(Please refer to our paper above for more details.)
-
-For `bw` images, we use the `bw` palette to detect faces:
-
-`#FFFFFF`
-`#F0F0F0`
-`#E0E0E0`
-`#D0D0D0`
-`#C0C0C0`
-`#B0B0B0`
-`#A0A0A0`
-`#909090`
-`#808080`
-`#707070`
-`#606060`
-`#505050`
-`#404040`
-`#303030`
-`#202020`
-`#101010`
-`#000000`
-
-(Please refer to
-**Leigh, A., & Susilo, T. (2009). Is voting skin-deep? Estimating the effect of candidate ballot photographs on election
-outcomes. _Journal of Economic Psychology_, 30(1), 61-70.** for more details.)
 
 #### 7. Convert the `color` images to `black/white` images
 

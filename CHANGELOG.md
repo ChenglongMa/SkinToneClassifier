@@ -1,8 +1,24 @@
 # Changelogs
 
-## v1.2.4
+## v1.2.5
 
 <details markdown="1" open>
+  <summary><i>Click here to show more.</i></summary>
+
+In this version, we have made the following changes:
+
+1. ✨ **NEW!**: We have added two new built-in skin tone palettes for the black/white images.
+    * The all available colored palettes are `perla`, `yadon-ostfeld`, `proder`.
+    * You can use the `-p` option to specify the palette for the processed images.
+      - For example, `stone -i ./path/to/images/ -p yadon-ostfeld`.
+    * The default palette `perla` is used for color images, and the `bw` palette is used for black/white
+      images.
+
+</details>
+
+## v1.2.4
+
+<details markdown="1">
   <summary><i>Click here to show more.</i></summary>
 
 In this version, we have made the following changes:
@@ -10,11 +26,12 @@ In this version, we have made the following changes:
 1. 🐛 **FIX!**: We fixed a bug where the app will crash when using the `-bw` option.
      
 Thanks [ergo70](https://github.com/ergo70)'s feedback in [issue#25](https://github.com/ChenglongMa/SkinToneClassifier/issues/25).
+
 </details>
 
 ## v1.2.3
 
-<details markdown="1" open>
+<details markdown="1">
   <summary><i>Click here to show more.</i></summary>
 
 In this version, we have made the following changes:
@@ -33,7 +50,7 @@ In this version, we have made the following changes:
 
 ## v1.2.0
 
-<details markdown="1" open>
+<details markdown="1">
   <summary><i>Click here to show more.</i></summary>
 
 In this version, we have made the following changes:

@@ -8,5 +8,6 @@ packaging~=24.2
 requests~=2.32.3
 # For GUI
 gooey~=1.0.8.1
-colored==2.2.4
-#re-wx==0.0.10
+# https://github.com/chriskiehl/Gooey/issues/887#issuecomment-1680192972
+colored==1.4.4
+re-wx==0.0.10

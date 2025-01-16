@@ -236,10 +236,10 @@ def build_arguments():
         nargs="+",
         metavar="Palette",
         help="Skin tone palette;\n"
-        "Valid choices are 'perla', 'yadon-ostfeld', 'proder'\n"
+        "Valid choices are 'perla', 'yadon-ostfeld', 'proder'.\n"
         'You can also input RGB hex values leading by "#" or RGB values separated by comma(,),\n'
         "E.g., #373028 #422811 or 255,255,255 100,100,100\n"
-        "Leave blank to use the default palette as mentioned in the document.\n",
+        "Leave blank to use the 'perla' palette.\n",
         **kwargs,
     )
     images.add_argument(

@@ -132,7 +132,8 @@ dependencies = [# Optional
 all = [
     "gooey>=1.0.8.1",
     "re-wx==0.0.10",
-    "colored==1.3.93",
+    # https://github.com/chriskiehl/Gooey/issues/887#issuecomment-1680192972
+    "colored==1.4.4",
 ]
 
 # List URLs that are relevant to your project
