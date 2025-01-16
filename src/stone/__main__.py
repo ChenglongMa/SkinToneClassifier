@@ -103,10 +103,12 @@ def main():
     args = build_arguments()
     # Setup logger
     now = datetime.now()
-    os.makedirs("./log", exist_ok=True)
+    output_dir = args.output
+    log_dir = os.path.join(output_dir, "./log")
+    os.makedirs(log_dir, exist_ok=True)
 
     logging.basicConfig(
-        filename=now.strftime("./log/log-%y%m%d%H%M.log"),
+        filename=now.strftime(f"{log_dir}/log-%y%m%d%H%M.log"),
         level=logging.INFO,
         format="[%(asctime)s] {%(filename)s:%(lineno)4d} %(levelname)s - %(message)s",
         datefmt="%H:%M:%S",
@@ -129,7 +131,7 @@ def main():
     min_size = args.min_size[:2]
     scale = args.scale
     min_nbrs = args.min_nbrs
-    output_dir = args.output
+
     os.makedirs(output_dir, exist_ok=True)
     result_filename = os.path.join(output_dir, "./result.csv")
     image_type_setting = args.image_type
