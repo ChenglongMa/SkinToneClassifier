@@ -38,19 +38,18 @@ def Gooey(*args, **kwargs):
 
 
 @functools.cache
-def alphabet_id(n):
+def alphabet_id(n:int) -> str:
     letters = string.ascii_uppercase
     n_letters = len(letters)
     if n < n_letters:
         return letters[n]
-    _id = ""
 
-    while n > 0:
-        remainder = (n - 1) % n_letters
-        _id = letters[remainder] + _id
-        n = (n - 1) // n_letters
+    prefix = ""
+    while n >= n_letters:
+        prefix += letters[(n // n_letters) - 1]
+        n %= n_letters
 
-    return _id
+    return prefix + letters[n]
 
 
 def is_url(text):
@@ -237,6 +236,7 @@ def build_arguments():
         nargs="+",
         metavar="Palette",
         help="Skin tone palette;\n"
+        "Valid choices are 'perla', 'yadon-ostfeld', 'proder', or\n"
         'Input RGB hex values leading by "#" or RGB values separated by comma(,),\n'
         "E.g., #373028 #422811 or 255,255,255 100,100,100\n"
         "Leave blank to use the default palette as mentioned in the document.\n",

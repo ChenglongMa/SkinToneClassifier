@@ -250,52 +250,27 @@ To see the usage and parameters, run:
 stone -h (or --help)
 ```
 
-Output in console:
+Detailed usage:
 
-```text
-usage: stone [-h] [-i IMAGE FILENAME [IMAGE FILENAME ...]] [-r] [-t IMAGE TYPE] [-p PALETTE [PALETTE ...]]
-             [-l LABELS [LABELS ...]] [-d] [-bw] [-o DIRECTORY] [--n_workers WORKERS] [--n_colors COLORS]
-             [--new_width WIDTH] [--scale SCALE] [--min_nbrs NEIGHBORS] [--min_size WIDTH [HEIGHT ...]]
-             [--threshold THRESHOLD] [-v]
-
-Skin Tone Classifier
-
-options:
-  -h, --help            show this help message and exit
-  -i IMAGE FILENAME [IMAGE FILENAME ...], --images IMAGE FILENAME [IMAGE FILENAME ...]
-                        Image filename(s) or URLs to process;
-                        Supports multiple values separated by space, e.g., "a.jpg b.png";
-                        Supports directory or file name(s), e.g., "./path/to/images/ a.jpg";
-                        Supports URL(s), e.g., "https://example.com/images/pic.jpg" since v1.1.0+.
-                        The app will search all images in current directory in default.
-  -r, --recursive       Whether to search images recursively in the specified directory.
-  -t IMAGE TYPE, --image_type IMAGE TYPE
-                        Specify whether the input image(s) is/are colored or black/white.
-                        Valid choices are: "auto", "color" or "bw",
-                        Defaults to "auto", which will be detected automatically.
-  -p PALETTE [PALETTE ...], --palette PALETTE [PALETTE ...]
-                        Skin tone palette;
-                        Supports RGB hex value leading by "#" or RGB values separated by comma(,),
-                        E.g., "-p #373028 #422811" or "-p 255,255,255 100,100,100"
-  -l LABELS [LABELS ...], --labels LABELS [LABELS ...]
-                        Skin tone labels; default values are the uppercase alphabet list leading by the image type ('C' for 'color'; 'B' for 'Black&White'), e.g., ['CA', 'CB', ..., 'CZ'] or ['BA', 'BB', ..., 'BZ'].
-  -d, --debug           Whether to generate report images, used for debugging and verification.The report images will be saved in the './debug' directory.
-  -bw, --black_white    Whether to convert the input to black/white image(s).
-                        If true, the app will use the black/white palette to classify the image.
-  -o DIRECTORY, --output DIRECTORY
-                        The path of output file, defaults to current directory.
-  --n_workers WORKERS   The number of workers to process the images, defaults to the number of CPUs in the system.
-  --n_colors COLORS     CONFIG: the number of dominant colors to be extracted, defaults to 2.
-  --new_width WIDTH     CONFIG: resize the images with the specified width. Negative value will be ignored, defaults to 250.
-  --scale SCALE         CONFIG: how much the image size is reduced at each image scale, defaults to 1.1
-  --min_nbrs NEIGHBORS  CONFIG: how many neighbors each candidate rectangle should have to retain it.
-                        Higher value results in less detections but with higher quality, defaults to 5.
-  --min_size WIDTH [HEIGHT ...]
-                        CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".
-  --threshold THRESHOLD
-                        CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.15.
-  -v, --version         Show the version number and exit.
-```
+| Short Option | Long Option   | Definition                                                                                                                                                                                                                                                                                                                                                                        |
+|--------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -h           | --help        | Show this help message and exit.                                                                                                                                                                                                                                                                                                                                                  |
+| -i           | --images      | Image filename(s) or URLs to process. <br>Supports multiple values separated by **space**, e.g., `a.jpg b.png`. <br>Supports directory or file name(s), e.g., `./path/to/images/ a.jpg`. <br>Supports URL(s), e.g., `https://example.com/images/pic.jpg` since v1.1.0+. <br>If you don't specify this option, the app will search all images in the current directory by default. |
+| -r           | --recursive   | Whether to search images **recursively** in the specified directory.                                                                                                                                                                                                                                                                                                              |
+| -t           | --image_type  | Specify whether the input image(s) is/are **colored** or **black/white**. Valid choices are: `auto`, `color`, or `bw`. Defaults to `auto`, which will be detected **automatically**.                                                                                                                                                                                              |
+| -p           | --palette     | Skin tone palette. <br>Valid choices can be `perla`, `yadon-ostfeld`, `proder`; <br>Or you can input RGB **hex** values starting with `#` or **RGB** values separated by **commas**, <br>e.g., `-p #373028 #422811` or `-p 255,255,255 100,100,100`.                                                                                                                              |
+| -l           | --labels      | Skin tone labels. <br>Default values are the **UPPERCASE** alphabet list leading by the image type (`C` for `color`; `B` for `Black&White`), <br>e.g., `['CA', 'CB', ..., 'CZ']` or `['BA', 'BB', ..., 'BZ']`.                                                                                                                                                                    |
+| -d           | --debug       | Whether to generate report images, used for debugging and verification. <br>The report images will be saved in the `./debug` directory.                                                                                                                                                                                                                                           |
+| -bw          | --black_white | Whether to convert the input to **black/white** image(s). <br>If `true`, the app will use a **black/white palette** to classify the image.                                                                                                                                                                                                                                        |
+| -o           | --output      | The path of the output file, defaults to **the current directory**.                                                                                                                                                                                                                                                                                                               |
+|              | --n_workers   | The number of workers to process the images, defaults to **the number of CPUs** in the system.                                                                                                                                                                                                                                                                                    |
+|              | --n_colors    | CONFIG: the number of dominant colors to be extracted, defaults to 2.                                                                                                                                                                                                                                                                                                             |
+|              | --new_width   | CONFIG: resize the images with the specified width. **Negative value will be ignored**, defaults to 250.                                                                                                                                                                                                                                                                          |
+|              | --scale       | CONFIG: how much the image size is reduced at each image scale, defaults to 1.1.                                                                                                                                                                                                                                                                                                  |
+|              | --min_nbrs    | CONFIG: how many neighbors each candidate rectangle should have to retain it. <br>**Higher value results in fewer detections but with higher quality**, defaults to 5.                                                                                                                                                                                                            |
+|              | --min_size    | CONFIG: minimum possible face size. **Faces smaller than that are ignored**. <br>Valid format: `width height`, defaults to `90 90`.                                                                                                                                                                                                                                               |
+|              | --threshold   | CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.15.                                                                                                                                                                                                                                                                                      |
+| -v           | --version     | Show the version number and exit.                                                                                                                                                                                                                                                                                                                                                 |
 
 ### Use Cases
 

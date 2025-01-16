@@ -1,7 +1,8 @@
 import unittest
 from pathlib import Path
 
-from stone.utils import build_image_paths, resolve_labels
+from stone.image import default_tone_labels
+from stone.utils import build_image_paths, resolve_labels, alphabet_id
 
 
 class TestUtils(unittest.TestCase):
@@ -113,6 +114,32 @@ class TestUtils(unittest.TestCase):
         expected = labels
         actual = resolve_labels(labels)
         self.assertListEqual(actual, expected)
+
+    def test_default_tone_labels(self):
+        tone_palette = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+        actual_labels = default_tone_labels(tone_palette)
+        self.assertListEqual(
+            actual_labels,
+            list("ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
+        )
+
+    def test_alphabet_id(self):
+        self.assertEqual(alphabet_id(0), "A")
+        self.assertEqual(alphabet_id(25), "Z")
+        self.assertEqual(alphabet_id(26), "AA")
+        self.assertEqual(alphabet_id(27), "AB")
+        self.assertEqual(alphabet_id(51), "AZ")
+        self.assertEqual(alphabet_id(52), "BA")
+        self.assertEqual(alphabet_id(77), "BZ")
+        self.assertEqual(alphabet_id(78), "CA")
+
+    def test_default_tone_labels_with_more_than_26_tones(self):
+        tone_palette = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ") * 2
+        actual_labels = default_tone_labels(tone_palette)
+        self.assertListEqual(
+            actual_labels,
+            list("ABCDEFGHIJKLMNOPQRSTUVWXYZ") + ["AA", "AB", "AC", "AD", "AE", "AF", "AG", "AH", "AI", "AJ", "AK", "AL", "AM", "AN", "AO", "AP", "AQ", "AR", "AS", "AT", "AU", "AV", "AW", "AX", "AY", "AZ"],
+        )
 
 
 if __name__ == "__main__":

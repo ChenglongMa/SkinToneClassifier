@@ -8,9 +8,8 @@ from stone.image import (
     load_image,
     is_black_white,
     DEFAULT_TONE_PALETTE,
-    DEFAULT_TONE_LABELS,
     process_image,
-    normalize_palette,
+    normalize_palette, default_tone_labels,
 )
 from stone.utils import ArgumentError
 
@@ -20,7 +19,7 @@ LOG = logging.getLogger(__name__)
 def process(
     filename_or_url: Union[str, Path],
     image_type: Literal["auto", "color", "bw"] = "auto",
-    tone_palette: list = None,
+    tone_palette: list|str = "perla",
     tone_labels: list = None,
     convert_to_black_white: bool = False,
     n_dominant_colors=2,
@@ -67,14 +66,22 @@ def process(
     else:
         is_bw = image_type == "bw"
 
-    if tone_palette is None or len(tone_palette) == 0:
-        skin_tone_palette = DEFAULT_TONE_PALETTE[decoded_image_type]
+    if not tone_palette:
+        tone_palette = "bw" if decoded_image_type == "bw" else "perla"
+    if len(tone_palette) == 1:
+        tone_palette = tone_palette[0]
+
+    if isinstance(tone_palette, str):
+        tone_palette = tone_palette.lower()
+        if tone_palette not in DEFAULT_TONE_PALETTE:
+            raise ArgumentError(f"Invalid `tone_palette`: {tone_palette}, valid choices are: {DEFAULT_TONE_PALETTE.keys()}")
+        skin_tone_palette = DEFAULT_TONE_PALETTE[tone_palette]
     else:
         skin_tone_palette = normalize_palette(tone_palette)
 
-    skin_tone_labels = tone_labels or DEFAULT_TONE_LABELS[decoded_image_type]
+    skin_tone_labels = tone_labels or default_tone_labels(skin_tone_palette, "C" if decoded_image_type == "color" else "B")
     if len(skin_tone_palette) != len(skin_tone_labels):
-        raise ArgumentError("argument -p/--palette and -l/--labels must have the same length.")
+        raise ArgumentError("Argument -p/--palette and -l/--labels must have the same length.")
 
     records, report_images = process_image(
         image,

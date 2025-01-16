@@ -121,8 +121,8 @@ def main():
 
     specified_palette: List[str] = args.palette
 
-    if specified_palette is not None and len(specified_palette) > 0:
-        specified_palette = normalize_palette(specified_palette)
+    # if isinstance(specified_palette, list) and len(specified_palette) == 1:
+    #     specified_palette = specified_palette[0]
 
     specified_tone_labels = resolve_labels(args.labels)
 
