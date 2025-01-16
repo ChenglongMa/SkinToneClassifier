@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import Union, Literal
+from typing import Union, Literal, List
 
 import cv2
 
@@ -19,8 +19,8 @@ LOG = logging.getLogger(__name__)
 def process(
     filename_or_url: Union[str, Path],
     image_type: Literal["auto", "color", "bw"] = "auto",
-    tone_palette: list|str = "perla",
-    tone_labels: list = None,
+    tone_palette: Union[List[str], Literal["perla", "yadon-ostfeld", "proder", "bw"]] = "perla",
+    tone_labels: List[str] = None,
     convert_to_black_white: bool = False,
     n_dominant_colors=2,
     new_width=250,
