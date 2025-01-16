@@ -1,3 +1,7 @@
+<head>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/icon.svg">
+</head>
+
 <div style="text-align:center;">
     <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/stone-logo.png" alt="stone logo">
     <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/illustration.svg" alt="model illustration">
