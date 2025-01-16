@@ -121,9 +121,6 @@ def main():
 
     specified_palette: List[str] = args.palette
 
-    # if isinstance(specified_palette, list) and len(specified_palette) == 1:
-    #     specified_palette = specified_palette[0]
-
     specified_tone_labels = resolve_labels(args.labels)
 
     new_width = args.new_width

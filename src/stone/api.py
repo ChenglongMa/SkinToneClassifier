@@ -35,7 +35,8 @@ def process(
     :param filename_or_url: The filename (in local devices) or URL (in Internet) of the image.
     :param image_type: Specify whether the input image(s) is/are colored or black/white.
            Valid choices are: "auto", "color" or "bw", Defaults to "auto", which will be detected automatically.
-    :param tone_palette: Skin tone palette; Supports RGB hex value leading by "#" or RGB values separated by comma(,).
+    :param tone_palette: Skin tone palette; Valid choices can be `perla`, `yadon-ostfeld`, `proder`;
+           You can also input RGB hex value leading by "#" or RGB values separated by comma(,).
            E.g., ['#373028', '#422811'] or ['255,255,255', '100,100,100']
     :param tone_labels: Skin tone labels; default values are the uppercase alphabet list leading by the image type
            ('C' for 'color'; 'B' for 'Black&White'), e.g., ['CA', 'CB', ..., 'CZ'] or ['BA', 'BB', ..., 'BZ'].
@@ -44,7 +45,7 @@ def process(
     :param new_width: Resize the images with the specified width. Negative value will be ignored, defaults to 250.
     :param scale: How much the image size is reduced at each image scale. Defaults to 1.1.
     :param min_nbrs: How many neighbors each candidate rectangle should have to retain it.
-           Higher value results in less detections but with higher quality, defaults to 5.
+           Higher value results in less detection but with higher quality, defaults to 5.
     :param min_size: Minimum possible face size. Faces smaller than that are ignored, defaults to (90, 90).
     :param threshold: What percentage of the skin area is required to identify the face, defaults to 0.15.
     :param return_report_image: Whether to return the report image(s) in the result. Defaults to False.
