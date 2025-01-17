@@ -585,7 +585,7 @@ The `result_json` will be like:
 }
 ```
 
-## 11. Used in a FAST API project
+#### 11. Used in a FAST API project
 
 `stone` can be used in a FAST API project to classify the skin tone of the uploaded image(s) via `POST` method.
 
