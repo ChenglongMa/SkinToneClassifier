@@ -70,6 +70,28 @@ for me!*
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+# Showcases
+
+The following are some examples of the classification results using different palettes.
+
+## PERLA Palette
+
+![PERLA Palette](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-perla.svg)
+
+![PERLA](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo-perla.png)
+
+## YADON-OSTFELD Palette
+
+![YADON-OSTFELD Palette](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-yadon-ostfeld.svg)
+
+![YADON-OSTFELD](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo-yadon-ostfeld.png)
+
+## PRODER Palette
+
+![PRODER Palette](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-proder.svg)
+
+![PRODER](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo-proder.png)
+
 # Video tutorials
 
 [![youtube](https://img.shields.io/badge/YouTube-Skin_Tone_Classifier-FF0000?logo=youtube)](https://youtube.com/playlist?list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&si=ezxUR7McUbZa4clT)
