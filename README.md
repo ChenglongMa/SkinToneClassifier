@@ -67,7 +67,7 @@ for me!*
       - [8. Tune parameters of face detection](#8-tune-parameters-of-face-detection)
       - [9. Multiprocessing settings](#9-multiprocessing-settings)
       - [10. Used as a library by importing into other projects](#10-used-as-a-library-by-importing-into-other-projects)
-  - [11. Used in a FAST API project](#11-used-in-a-fast-api-project)
+      - [11. Used in a FAST API project](#11-used-in-a-fast-api-project)
 - [Citation](#citation)
 - [Contributing](#contributing)
 - [Disclaimer](#disclaimer)
