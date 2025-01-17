@@ -14,7 +14,6 @@
 [![GitHub License](https://img.shields.io/github/license/ChenglongMa/SkinToneClassifier)](https://github.com/ChenglongMa/SkinToneClassifier/blob/main/LICENSE)
 [![youtube](https://img.shields.io/badge/YouTube-Skin_Tone_Classifier-FF0000?logo=youtube)](https://youtube.com/playlist?list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&si=ezxUR7McUbZa4clT)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1k-cryEZ9PInJRXWIi17ib66ufYV2Ikwe?usp=sharing)
-[![Discord](https://img.shields.io/discord/1217972508683407422)](https://discord.gg/nnt3YGUR)
 [![GitHub Repo stars](https://img.shields.io/github/stars/ChenglongMa/SkinToneClassifier)](https://github.com/ChenglongMa/SkinToneClassifier)
 
 An easy-to-use library for skin tone classification.
@@ -527,7 +526,7 @@ system.
 
 #### 10. Used as a library by importing into other projects
 
-You can refer to the following code snippet:
+You can refer to [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1k-cryEZ9PInJRXWIi17ib66ufYV2Ikwe?usp=sharing) or the following code snippet:
 
 ```python
 import stone
@@ -581,6 +580,71 @@ The `result_json` will be like:
 }
 ```
 
+## 11. Used in a FAST API project
+
+`stone` can be used in a FAST API project to classify the skin tone of the uploaded image(s) via `POST` method.
+
+Please refer to the following code snippet:
+
+```python
+# Description: This is a simple FastAPI server that receives an image file 
+# and processes it using the skin-tone-classifier library.
+
+# requirements.txt:
+#     fastapi
+#     uvicorn
+#     skin-tone-classifier
+#     python-multipart
+
+# Run the server:
+#     uvicorn main:app --reload
+
+from typing import Literal
+
+import stone
+from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi.responses import JSONResponse
+
+app = FastAPI()
+
+
+@app.post("/stone")
+async def process_image(
+        image_file: UploadFile,
+        image_type: Literal["auto", "color", "bw"] = "auto",
+        tone_palette: list = None,
+        tone_labels: list = None,
+        # other parameters...
+):
+    image_data = await image_file.read()
+    temp_file_path = "/tmp/temp_image.jpg"
+    with open(temp_file_path, "wb") as temp_file:
+        temp_file.write(image_data)
+    try:
+        result = stone.process(
+            temp_file_path,
+            image_type=image_type,
+            tone_palette=tone_palette,
+            tone_labels=tone_labels,
+            # other parameters...
+        )
+        result = JSONResponse(content=result)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    return result
+```
+
+To run the demo, please follow these steps:
+
+1. Install required packages:
+    * skin-tone-classifier
+    * [fastapi](https://fastapi.tiangolo.com/)
+    * [uvicorn](https://www.uvicorn.org/)
+    * [python-multipart](https://pypi.org/project/python-multipart/)
+2. Run the server:
+   `uvicorn main:app --reload`
+3. You can refine the implementation according to your project requirements. 
+4. Finally, you can use [Postman](https://www.postman.com/) or other HTTP Clients to test the API.
 
 # Citation
 

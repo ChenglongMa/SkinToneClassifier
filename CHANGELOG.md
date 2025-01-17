@@ -13,6 +13,7 @@ In this version, we have made the following changes:
       - For example, `stone -i ./path/to/images/ -p yadon-ostfeld`.
     * The default palette `perla` is used for color images, and the `bw` palette is used for black/white
       images.
+2. ✨ **NEW!**: We have added some new use cases like Web API based projects in the documentation.
 
 </details>
 
