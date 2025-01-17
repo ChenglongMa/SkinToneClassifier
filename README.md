@@ -1,3 +1,7 @@
+<head>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/icon.svg">
+</head>
+
 <div style="text-align:center;">
     <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/stone-logo.png" alt="stone logo">
     <img src="https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/illustration.svg" alt="model illustration">
@@ -10,7 +14,6 @@
 [![GitHub License](https://img.shields.io/github/license/ChenglongMa/SkinToneClassifier)](https://github.com/ChenglongMa/SkinToneClassifier/blob/main/LICENSE)
 [![youtube](https://img.shields.io/badge/YouTube-Skin_Tone_Classifier-FF0000?logo=youtube)](https://youtube.com/playlist?list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&si=ezxUR7McUbZa4clT)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1k-cryEZ9PInJRXWIi17ib66ufYV2Ikwe?usp=sharing)
-[![Discord](https://img.shields.io/discord/1217972508683407422)](https://discord.gg/nnt3YGUR)
 [![GitHub Repo stars](https://img.shields.io/github/stars/ChenglongMa/SkinToneClassifier)](https://github.com/ChenglongMa/SkinToneClassifier)
 
 An easy-to-use library for skin tone classification.
@@ -65,6 +68,28 @@ for me!*
 - [Disclaimer](#disclaimer)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+# Showcases
+
+The following are some examples of the classification results using different palettes.
+
+## PERLA Palette
+
+![PERLA Palette](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-perla.svg)
+
+![PERLA](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo-perla.png)
+
+## YADON-OSTFELD Palette
+
+![YADON-OSTFELD Palette](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-yadon-ostfeld.svg)
+
+![YADON-OSTFELD](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo-yadon-ostfeld.png)
+
+## PRODER Palette
+
+![PRODER Palette](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-proder.svg)
+
+![PRODER](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo-proder.png)
 
 # Video tutorials
 
@@ -250,52 +275,27 @@ To see the usage and parameters, run:
 stone -h (or --help)
 ```
 
-Output in console:
+Detailed usage:
 
-```text
-usage: stone [-h] [-i IMAGE FILENAME [IMAGE FILENAME ...]] [-r] [-t IMAGE TYPE] [-p PALETTE [PALETTE ...]]
-             [-l LABELS [LABELS ...]] [-d] [-bw] [-o DIRECTORY] [--n_workers WORKERS] [--n_colors COLORS]
-             [--new_width WIDTH] [--scale SCALE] [--min_nbrs NEIGHBORS] [--min_size WIDTH [HEIGHT ...]]
-             [--threshold THRESHOLD] [-v]
-
-Skin Tone Classifier
-
-options:
-  -h, --help            show this help message and exit
-  -i IMAGE FILENAME [IMAGE FILENAME ...], --images IMAGE FILENAME [IMAGE FILENAME ...]
-                        Image filename(s) or URLs to process;
-                        Supports multiple values separated by space, e.g., "a.jpg b.png";
-                        Supports directory or file name(s), e.g., "./path/to/images/ a.jpg";
-                        Supports URL(s), e.g., "https://example.com/images/pic.jpg" since v1.1.0+.
-                        The app will search all images in current directory in default.
-  -r, --recursive       Whether to search images recursively in the specified directory.
-  -t IMAGE TYPE, --image_type IMAGE TYPE
-                        Specify whether the input image(s) is/are colored or black/white.
-                        Valid choices are: "auto", "color" or "bw",
-                        Defaults to "auto", which will be detected automatically.
-  -p PALETTE [PALETTE ...], --palette PALETTE [PALETTE ...]
-                        Skin tone palette;
-                        Supports RGB hex value leading by "#" or RGB values separated by comma(,),
-                        E.g., "-p #373028 #422811" or "-p 255,255,255 100,100,100"
-  -l LABELS [LABELS ...], --labels LABELS [LABELS ...]
-                        Skin tone labels; default values are the uppercase alphabet list leading by the image type ('C' for 'color'; 'B' for 'Black&White'), e.g., ['CA', 'CB', ..., 'CZ'] or ['BA', 'BB', ..., 'BZ'].
-  -d, --debug           Whether to generate report images, used for debugging and verification.The report images will be saved in the './debug' directory.
-  -bw, --black_white    Whether to convert the input to black/white image(s).
-                        If true, the app will use the black/white palette to classify the image.
-  -o DIRECTORY, --output DIRECTORY
-                        The path of output file, defaults to current directory.
-  --n_workers WORKERS   The number of workers to process the images, defaults to the number of CPUs in the system.
-  --n_colors COLORS     CONFIG: the number of dominant colors to be extracted, defaults to 2.
-  --new_width WIDTH     CONFIG: resize the images with the specified width. Negative value will be ignored, defaults to 250.
-  --scale SCALE         CONFIG: how much the image size is reduced at each image scale, defaults to 1.1
-  --min_nbrs NEIGHBORS  CONFIG: how many neighbors each candidate rectangle should have to retain it.
-                        Higher value results in less detections but with higher quality, defaults to 5.
-  --min_size WIDTH [HEIGHT ...]
-                        CONFIG: minimum possible face size. Faces smaller than that are ignored, defaults to "90 90".
-  --threshold THRESHOLD
-                        CONFIG: what percentage of the skin area is required to identify the face, defaults to 0.15.
-  -v, --version         Show the version number and exit.
-```
+| Short Option | Long Option   | Definition                                                                                                                                                                                                                                                                                                                                                                        |
+|--------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| -h           | --help        | Show this help message and exit.                                                                                                                                                                                                                                                                                                                                                  |
+| -i           | --images      | Image filename(s) or URLs to process. <br>Supports multiple values separated by **space**, e.g., `a.jpg b.png`. <br>Supports directory or file name(s), e.g., `./path/to/images/ a.jpg`. <br>Supports URL(s), e.g., `https://example.com/images/pic.jpg` since v1.1.0+. <br>If you don't specify this option, the app will search all images in the current directory by default. |
+| -r           | --recursive   | Whether to search images **recursively** in the specified directory.                                                                                                                                                                                                                                                                                                              |
+| -t           | --image_type  | Specify whether the input image(s) is/are **colored** or **black/white**. <br>Valid choices are: `auto`, `color`, or `bw`. <br>Defaults to `auto`, which will be detected **automatically**.                                                                                                                                                                                      |
+| -p           | --palette     | Skin tone palette. <br>Valid choices can be `perla`, `yadon-ostfeld`, `proder`; <br>You can also input RGB **hex** values starting with `#` <br>or **RGB** values separated by **commas**, <br>e.g., `-p #373028 #422811` or `-p 255,255,255 100,100,100`.                                                                                                                        |
+| -l           | --labels      | Skin tone labels. <br>Default values are the **UPPERCASE** alphabet list leading by the image type <br>(`C` for `color`; `B` for `Black&White`), <br>e.g., `['CA', 'CB', ..., 'CZ']` or `['BA', 'BB', ..., 'BZ']`.                                                                                                                                                                |
+| -d           | --debug       | Whether to generate report images, used for debugging and verification. <br>The report images will be saved in the `./debug` directory.                                                                                                                                                                                                                                           |
+| -bw          | --black_white | Whether to convert the input to **black/white** image(s). <br>If `true`, the app will use a **black/white palette** to classify the image.                                                                                                                                                                                                                                        |
+| -o           | --output      | The path of the output file, defaults to **the current directory**.                                                                                                                                                                                                                                                                                                               |
+|              | --n_workers   | The number of workers to process the images, <br>defaults to **the number of CPUs** in the system.                                                                                                                                                                                                                                                                                |
+|              | --n_colors    | CONFIG: the number of dominant colors to be extracted, defaults to 2.                                                                                                                                                                                                                                                                                                             |
+|              | --new_width   | CONFIG: resize the images with the specified width. <br>**Negative value will be ignored**, defaults to 250.                                                                                                                                                                                                                                                                      |
+|              | --scale       | CONFIG: how much the image size is reduced at each image scale, defaults to 1.1.                                                                                                                                                                                                                                                                                                  |
+|              | --min_nbrs    | CONFIG: how many neighbors each candidate rectangle should have to retain it. <br>**Higher value results in fewer detections but with higher quality**, defaults to 5.                                                                                                                                                                                                            |
+|              | --min_size    | CONFIG: minimum possible face size. **Faces smaller than that are ignored**. <br>Valid format: `width height`, defaults to `90 90`.                                                                                                                                                                                                                                               |
+|              | --threshold   | CONFIG: what percentage of the skin area is required to identify the face, <br>defaults to 0.15.                                                                                                                                                                                                                                                                                  |
+| -v           | --version     | Show the version number and exit.                                                                                                                                                                                                                                                                                                                                                 |
 
 ### Use Cases
 
@@ -317,17 +317,54 @@ NB: Supported image formats: `.jpg, .gif, .png, .jpeg, .webp, .tif`.
 
 In default (i.e., `stone` without `-i` option), the app will search images in current folder.
 
-#### 2. Specify color categories
+#### 2. Specify color palette
 
-2.1 Use HEX values
+2.1 Use the built-in palettes
+
+The built-in palettes are: `perla`, `yadon-ostfeld`, `proder` and `bw`.
+
+NB: The `bw` palette is used to classify the **black/white** images only.
+
+For example:
+```shell
+stone -p (or --palette) perla
+```
+
+The HEX values of each palette are:
+
+![PERLA](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-perla.svg)
+
+* `perla`:
+    * `#373028`, `#422811`, `#513B2E`, `#6F503C`, `#81654F`, `#9D7A54`, `#BEA07E`, `#E5C8A6`, `#E7C1B8`, `#F3DAD6`, `#FBF2F3`
+    * Citation: Rejón Piña, R. A., & Ma, C. (2021). Classification Algorithm for Skin Color (CASCo): A new tool to measure skin color in social science research.
+
+![YADON-OSTFELD](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-yadon-ostfeld.svg)
+
+* `yadon-ostfeld`:
+    * `#36251d`, `#48352c`, `#614539`, `#755848`, `#886958`, `#9b7966`, `#b18972`, `#c29c88`, `#d4afa3`, `#e6c6bf`
+    * Citation: Ostfeld, M. C., & Yadon, N. (2022). Skin color, power, and politics in America. Russell Sage Foundation.
+
+![PRODER](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-proder.svg)
+
+* `proder`:
+    * `#654d3e`, `#775741`, `#876249`, `#946c51`, `#a0765a`, `#a87f64`, `#b1886c`, `#b69279`, `#be9d86`, `#c5a691`, `#c8ac99`
+    * Citation: Proyecto sobre discriminación étnico-racial en México (PRODER). El Colegio de México. https://discriminacion.colmex.mx/encuesta-proder/
+
+![BW](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-bw.svg)
+
+* `bw`:
+    * `#FFFFFF`, `#F0F0F0`, `#E0E0E0`, `#D0D0D0`, `#C0C0C0`, `#B0B0B0`, `#A0A0A0`, `#909090`, `#808080`, `#707070`, `#606060`, `#505050`, `#404040`, `#303030`, `#202020`, `#101010`, `#000000`
+    * Citation: Leigh, A., & Susilo, T. (2009). Is voting skin-deep? Estimating the effect of candidate ballot photographs on election outcomes. Journal of Economic Psychology, 30(1), 61-70.
+
+2.2 Use HEX values
 
 ```shell
-stone -p (or --palette) #373028 #422811 #513B2E
+stone -p #373028 #422811 #513B2E
 ```
 
 NB: Values start with **'#'** and are separated by **space**.
 
-2.2 Use RGB tuple values
+2.3 Use RGB tuple values
 
 ```shell
 stone -p 55,48,40 66,40,17 251,242,243
@@ -348,7 +385,7 @@ You can assign the labels for the skin tone categories, for example:
 
 To achieve this, you can use the `-l` (or `--labels`) option:
 
-3.1 Specify the labels directly using _spaces_ as delimiters, e.g.,
+3.1 Specify the labels directly using __spaces__ as delimiters, e.g.,
 
 ```shell
 stone -l A B C D E F G H
@@ -444,47 +481,6 @@ stone -t (or --image_type) bw
 stone -t (or --image_type) auto
 ```
 
-For `color` images, we use the `color` palette to detect faces:
-
-`#373028`
-`#422811`
-`#513B2E`
-`#6F503C`
-`#81654F`
-`#9D7A54`
-`#BEA07E`
-`#E5C8A6`
-`#E7C1B8`
-`#F3DAD6`
-`#FBF2F3`
-
-
-(Please refer to our paper above for more details.)
-
-For `bw` images, we use the `bw` palette to detect faces:
-
-`#FFFFFF`
-`#F0F0F0`
-`#E0E0E0`
-`#D0D0D0`
-`#C0C0C0`
-`#B0B0B0`
-`#A0A0A0`
-`#909090`
-`#808080`
-`#707070`
-`#606060`
-`#505050`
-`#404040`
-`#303030`
-`#202020`
-`#101010`
-`#000000`
-
-(Please refer to
-**Leigh, A., & Susilo, T. (2009). Is voting skin-deep? Estimating the effect of candidate ballot photographs on election
-outcomes. _Journal of Economic Psychology_, 30(1), 61-70.** for more details.)
-
 #### 7. Convert the `color` images to `black/white` images
 
 and then do the classification using `bw` palette
@@ -530,7 +526,7 @@ system.
 
 #### 10. Used as a library by importing into other projects
 
-You can refer to the following code snippet:
+You can refer to [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1k-cryEZ9PInJRXWIi17ib66ufYV2Ikwe?usp=sharing) or the following code snippet:
 
 ```python
 import stone
@@ -584,6 +580,71 @@ The `result_json` will be like:
 }
 ```
 
+## 11. Used in a FAST API project
+
+`stone` can be used in a FAST API project to classify the skin tone of the uploaded image(s) via `POST` method.
+
+Please refer to the following code snippet:
+
+```python
+# Description: This is a simple FastAPI server that receives an image file 
+# and processes it using the skin-tone-classifier library.
+
+# requirements.txt:
+#     fastapi
+#     uvicorn
+#     skin-tone-classifier
+#     python-multipart
+
+# Run the server:
+#     uvicorn main:app --reload
+
+from typing import Literal
+
+import stone
+from fastapi import FastAPI, UploadFile, HTTPException
+from fastapi.responses import JSONResponse
+
+app = FastAPI()
+
+
+@app.post("/stone")
+async def process_image(
+        image_file: UploadFile,
+        image_type: Literal["auto", "color", "bw"] = "auto",
+        tone_palette: list = None,
+        tone_labels: list = None,
+        # other parameters...
+):
+    image_data = await image_file.read()
+    temp_file_path = "/tmp/temp_image.jpg"
+    with open(temp_file_path, "wb") as temp_file:
+        temp_file.write(image_data)
+    try:
+        result = stone.process(
+            temp_file_path,
+            image_type=image_type,
+            tone_palette=tone_palette,
+            tone_labels=tone_labels,
+            # other parameters...
+        )
+        result = JSONResponse(content=result)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    return result
+```
+
+To run the demo, please follow these steps:
+
+1. Install required packages:
+    * skin-tone-classifier
+    * [fastapi](https://fastapi.tiangolo.com/)
+    * [uvicorn](https://www.uvicorn.org/)
+    * [python-multipart](https://pypi.org/project/python-multipart/)
+2. Run the server:
+   `uvicorn main:app --reload`
+3. You can refine the implementation according to your project requirements. 
+4. Finally, you can use [Postman](https://www.postman.com/) or other HTTP Clients to test the API.
 
 # Citation
 

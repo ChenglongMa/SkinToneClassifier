@@ -17,7 +17,8 @@ from stone.utils import is_url, extract_filename_and_extension, alphabet_id, Arg
 LOG = logging.getLogger(__name__)
 
 DEFAULT_TONE_PALETTE = {
-    "color": [
+    # Default skin tone palette
+    "perla": [
         "#373028",
         "#422811",
         "#513b2e",
@@ -29,6 +30,35 @@ DEFAULT_TONE_PALETTE = {
         "#e7c1b8",
         "#f3dad6",
         "#fbf2f3",
+    ],
+    # Refer to this paper:
+    # Ostfeld, M. C., & Yadon, N. (2022). Skin color, power, and politics in America. Russell Sage Foundation.
+    "yadon-ostfeld": [
+        "#36251d",
+        "#48352c",
+        "#614539",
+        "#755848",
+        "#886958",
+        "#9b7966",
+        "#b18972",
+        "#c29c88",
+        "#d4afa3",
+        "#e6c6bf",
+    ],
+    # Refer to this paper:
+    # Proyecto sobre discriminación étnico-racial en México (PRODER). El Colegio de México. https://discriminacion.colmex.mx/encuesta-proder/
+    "proder": [
+        "#654d3e",
+        "#775741",
+        "#876249",
+        "#946c51",
+        "#a0765a",
+        "#a87f64",
+        "#b1886c",
+        "#b69279",
+        "#be9d86",
+        "#c5a691",
+        "#c8ac99",
     ],
     # Refer to this paper:
     # Leigh, A., & Susilo, T. (2009). Is voting skin-deep? Estimating the effect of candidate ballot photographs on election outcomes.
@@ -54,11 +84,9 @@ DEFAULT_TONE_PALETTE = {
     ],
 }
 
-DEFAULT_TONE_LABELS = {
-    "color": ["C" + alphabet_id(i) for i in range(len(DEFAULT_TONE_PALETTE["color"]))],
-    "bw": ["B" + alphabet_id(i) for i in range(len(DEFAULT_TONE_PALETTE["bw"]))],
-}
-
+def default_tone_labels(tone_palette, prefix:str=""):
+    prefix = prefix or ""
+    return [f"{prefix}{alphabet_id(i)}" for i in range(len(tone_palette))]
 
 @functools.lru_cache(maxsize=128)  # Python 3.2+
 def normalize_color(color):

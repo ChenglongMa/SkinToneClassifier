@@ -6,23 +6,14 @@ import sys
 import threading
 from datetime import datetime
 from multiprocessing import freeze_support, cpu_count, Pool
+from typing import List
 
 import cv2
 import numpy as np
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
-from typing import List
 
 from stone.api import process
-from stone.image import normalize_palette
-from stone.utils import (
-    build_arguments,
-    build_image_paths,
-    is_windows,
-    ArgumentError,
-    is_debugging,
-    resolve_labels,
-)
 from stone.package import (
     __app_name__,
     __version__,
@@ -34,6 +25,14 @@ from stone.package import (
     __code__,
     __issues__,
     __package_name__,
+)
+from stone.utils import (
+    build_arguments,
+    build_image_paths,
+    is_windows,
+    ArgumentError,
+    is_debugging,
+    resolve_labels,
 )
 
 LOG = logging.getLogger(__name__)
@@ -103,10 +102,12 @@ def main():
     args = build_arguments()
     # Setup logger
     now = datetime.now()
-    os.makedirs("./log", exist_ok=True)
+    output_dir = args.output
+    log_dir = os.path.join(output_dir, "./log")
+    os.makedirs(log_dir, exist_ok=True)
 
     logging.basicConfig(
-        filename=now.strftime("./log/log-%y%m%d%H%M.log"),
+        filename=now.strftime(f"{log_dir}/log-%y%m%d%H%M.log"),
         level=logging.INFO,
         format="[%(asctime)s] {%(filename)s:%(lineno)4d} %(levelname)s - %(message)s",
         datefmt="%H:%M:%S",
@@ -119,9 +120,6 @@ def main():
 
     specified_palette: List[str] = args.palette
 
-    if specified_palette is not None and len(specified_palette) > 0:
-        specified_palette = normalize_palette(specified_palette)
-
     specified_tone_labels = resolve_labels(args.labels)
 
     new_width = args.new_width
@@ -129,7 +127,7 @@ def main():
     min_size = args.min_size[:2]
     scale = args.scale
     min_nbrs = args.min_nbrs
-    output_dir = args.output
+
     os.makedirs(output_dir, exist_ok=True)
     result_filename = os.path.join(output_dir, "./result.csv")
     image_type_setting = args.image_type
@@ -231,6 +229,15 @@ if not use_cli and "--ignore-gooey" not in sys.argv:
     except ImportError:
         # If gooey is not installed, use a dummy decorator
         from stone.utils import Gooey
+        from colorama import just_fix_windows_console, Fore
+
+        just_fix_windows_console()
+        print(
+            Fore.YELLOW + f"You are using a CLI version of {__package_name__}.\n"
+                          f"Please install the GUI version with the following command:\n",
+            Fore.GREEN + f"pip install {__package_name__}[all] --upgrade\n" + Fore.RESET,
+        )
+        sys.exit(0)
 
     from importlib.resources import files
 
