@@ -152,7 +152,7 @@ def build_arguments():
         "-i",
         "--images",
         nargs="+",
-        default=[os.getcwd()],
+        default=[] if in_gui else [os.getcwd()],
         metavar="Image Filenames",
         help="Image filename(s), Directories or URLs to process. Separated by space.",
         **kwargs,
@@ -432,7 +432,9 @@ def build_arguments():
         **kwargs,
     )
     args = parser.parse_args()
-    images = args.images or []
+    images = []
+    if getattr(args, "images", False):
+        images.extend(args.images)
     if getattr(args, "image_dirs", False):
         images.extend(args.image_dirs)
     if getattr(args, "image_files", False):
