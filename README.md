@@ -35,6 +35,10 @@ for me!*
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [Showcases](#showcases)
+  - [PERLA Palette](#perla-palette)
+  - [YADON-OSTFELD Palette](#yadon-ostfeld-palette)
+  - [PRODER Palette](#proder-palette)
 - [Video tutorials](#video-tutorials)
   - [Playlist](#playlist)
   - [1. How to install Python and `stone`](#1-how-to-install-python-and-stone)
@@ -54,7 +58,7 @@ for me!*
   - [Detailed Usage](#detailed-usage)
     - [Use Cases](#use-cases)
       - [1. Process multiple images](#1-process-multiple-images)
-      - [2. Specify color categories](#2-specify-color-categories)
+      - [2. Specify color palette](#2-specify-color-palette)
       - [3. Specify category labels](#3-specify-category-labels)
       - [4. Specify output folder](#4-specify-output-folder)
       - [5. Store report images for debugging](#5-store-report-images-for-debugging)
@@ -63,6 +67,7 @@ for me!*
       - [8. Tune parameters of face detection](#8-tune-parameters-of-face-detection)
       - [9. Multiprocessing settings](#9-multiprocessing-settings)
       - [10. Used as a library by importing into other projects](#10-used-as-a-library-by-importing-into-other-projects)
+  - [11. Used in a FAST API project](#11-used-in-a-fast-api-project)
 - [Citation](#citation)
 - [Contributing](#contributing)
 - [Disclaimer](#disclaimer)
