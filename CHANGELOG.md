@@ -1,5 +1,16 @@
 # Changelogs
 
+## v1.2.6
+
+<details markdown="1" open>
+  <summary><i>Click here to show more.</i></summary>
+
+In this version, we have made the following changes:
+
+1. ✨ **NEW!**: We have added one new built-in skin tone palette: Monk Skin Tone Palette.
+
+</details>
+
 ## v1.2.5
 
 <details markdown="1" open>
@@ -7,7 +18,7 @@
 
 In this version, we have made the following changes:
 
-1. ✨ **NEW!**: We have added two new built-in skin tone palettes for the black/white images.
+1. ✨ **NEW!**: We have added two new built-in skin tone palettes.
     * The all available colored palettes are `perla`, `yadon-ostfeld`, `proder`.
     * You can use the `-p` option to specify the palette for the processed images.
       - For example, `stone -i ./path/to/images/ -p yadon-ostfeld`.
