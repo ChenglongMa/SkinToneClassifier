@@ -36,7 +36,8 @@ for me!*
 **Table of Contents**
 
 - [Showcases](#showcases)
-  - [PERLA Palette](#perla-palette)
+  - [PERLA Palette (default)](#perla-palette-default)
+  - [Monk Skin Tone Palette](#monk-skin-tone-palette)
   - [YADON-OSTFELD Palette](#yadon-ostfeld-palette)
   - [PRODER Palette](#proder-palette)
 - [Video tutorials](#video-tutorials)
