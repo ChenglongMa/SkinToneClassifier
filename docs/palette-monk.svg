@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="818" height="68">
+  <rect x="0" y="14" width="80" height="40" fill="#f6ede4" />
+  <text x="40" y="34" font-size="14" fill="black" text-anchor="middle" alignment-baseline="middle">#F6EDE4</text>
+
+  <rect x="82" y="14" width="80" height="40" fill="#f3e7db" />
+  <text x="122" y="34" font-size="14" fill="black" text-anchor="middle" alignment-baseline="middle">#F3E7DB</text>
+
+  <rect x="164" y="14" width="80" height="40" fill="#f7ead0" />
+  <text x="204" y="34" font-size="14" fill="black" text-anchor="middle" alignment-baseline="middle">#F7EAD0</text>
+
+  <rect x="246" y="14" width="80" height="40" fill="#eadaba" />
+  <text x="286" y="34" font-size="14" fill="black" text-anchor="middle" alignment-baseline="middle">#EADABA</text>
+
+  <rect x="328" y="14" width="80" height="40" fill="#d7bd96" />
+  <text x="368" y="34" font-size="14" fill="black" text-anchor="middle" alignment-baseline="middle">#D7BD96</text>
+
+  <rect x="410" y="14" width="80" height="40" fill="#a07e56" />
+  <text x="450" y="34" font-size="14" fill="black" text-anchor="middle" alignment-baseline="middle">#A07E56</text>
+
+  <rect x="492" y="14" width="80" height="40" fill="#825c43" />
+  <text x="532" y="34" font-size="14" fill="white" text-anchor="middle" alignment-baseline="middle">#825C43</text>
+
+  <rect x="574" y="14" width="80" height="40" fill="#604134" />
+  <text x="614" y="34" font-size="14" fill="white" text-anchor="middle" alignment-baseline="middle">#604134</text>
+
+  <rect x="656" y="14" width="80" height="40" fill="#3a312a" />
+  <text x="696" y="34" font-size="14" fill="white" text-anchor="middle" alignment-baseline="middle">#3A312A</text>
+
+  <rect x="738" y="14" width="80" height="40" fill="#292420" />
+  <text x="778" y="34" font-size="14" fill="white" text-anchor="middle" alignment-baseline="middle">#292420</text>
+</svg>

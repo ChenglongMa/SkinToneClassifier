@@ -8,8 +8,9 @@
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/excluded" />
       <excludeFolder url="file://$MODULE_DIR$/src/skin_tone_classifier.egg-info" />
+      <excludeFolder url="file://$MODULE_DIR$/.venv" />
     </content>
-    <orderEntry type="jdk" jdkName="stone" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="uv (SkinToneClassifier)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">

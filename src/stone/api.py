@@ -7,9 +7,10 @@ import cv2
 from stone.image import (
     load_image,
     is_black_white,
-    DEFAULT_TONE_PALETTE,
+    build_full_palette,
     process_image,
-    normalize_palette, default_tone_labels,
+    normalize_palette,
+    default_tone_labels,
 )
 from stone.utils import ArgumentError
 
@@ -72,11 +73,12 @@ def process(
     if len(tone_palette) == 1:
         tone_palette = tone_palette[0]
 
+    default_tone_palette = build_full_palette()
     if isinstance(tone_palette, str):
         tone_palette = tone_palette.lower()
-        if tone_palette not in DEFAULT_TONE_PALETTE:
-            raise ArgumentError(f"Invalid `tone_palette`: {tone_palette}, valid choices are: {DEFAULT_TONE_PALETTE.keys()}")
-        skin_tone_palette = DEFAULT_TONE_PALETTE[tone_palette]
+        if tone_palette not in default_tone_palette:
+            raise ArgumentError(f"Invalid `tone_palette`: {tone_palette}, valid choices are: {default_tone_palette.keys()}")
+        skin_tone_palette = default_tone_palette[tone_palette]
     else:
         skin_tone_palette = normalize_palette(tone_palette)
 

@@ -32,6 +32,20 @@ DEFAULT_TONE_PALETTE = {
         "#fbf2f3",
     ],
     # Refer to this paper:
+    # Monk, Ellis. "Monk Skin Tone Scale," 2019. https://skintone.google.
+    "monk": [
+        "#f6ede4",
+        "#f3e7db",
+        "#f7ead0",
+        "#eadaba",
+        "#d7bd96",
+        "#a07e56",
+        "#825c43",
+        "#604134",
+        "#3a312a",
+        "#292420"
+    ],
+    # Refer to this paper:
     # Ostfeld, M. C., & Yadon, N. (2022). Skin color, power, and politics in America. Russell Sage Foundation.
     "yadon-ostfeld": [
         "#36251d",
@@ -83,6 +97,15 @@ DEFAULT_TONE_PALETTE = {
         "#000000",
     ],
 }
+
+TONE_ALIAS = {
+    "monk": ["mst", "google"],
+    "yadon-ostfeld": ["yo", "ostfeld", "yadon"],
+    "bw": ["black-white"],
+}
+
+def build_full_palette():
+    return {alias: palette for name, palette in DEFAULT_TONE_PALETTE.items() for alias in [name] + TONE_ALIAS.get(name, [])}
 
 def default_tone_labels(tone_palette, prefix:str=""):
     prefix = prefix or ""
