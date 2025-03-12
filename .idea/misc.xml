@@ -5,7 +5,7 @@
     <option name="enabledOnReformat" value="true" />
     <option name="sdkName" value="other" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="stone" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="uv (SkinToneClassifier)" project-jdk-type="Python SDK" />
   <component name="PythonCompatibilityInspectionAdvertiser">
     <option name="version" value="3" />
   </component>

@@ -78,11 +78,17 @@ for me!*
 
 The following are some examples of the classification results using different palettes.
 
-## PERLA Palette
+## PERLA Palette (default)
 
 ![PERLA Palette](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-perla.svg)
 
 ![PERLA](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo-perla.png)
+
+## Monk Skin Tone Palette
+
+![Monk Skin Tone Palette](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-monk.svg)
+
+![Monk Skin Tone](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/demo-monk.png)
 
 ## YADON-OSTFELD Palette
 
@@ -288,7 +294,7 @@ Detailed usage:
 | -i           | --images      | Image filename(s) or URLs to process. <br>Supports multiple values separated by **space**, e.g., `a.jpg b.png`. <br>Supports directory or file name(s), e.g., `./path/to/images/ a.jpg`. <br>Supports URL(s), e.g., `https://example.com/images/pic.jpg` since v1.1.0+. <br>If you don't specify this option, the app will search all images in the current directory by default. |
 | -r           | --recursive   | Whether to search images **recursively** in the specified directory.                                                                                                                                                                                                                                                                                                              |
 | -t           | --image_type  | Specify whether the input image(s) is/are **colored** or **black/white**. <br>Valid choices are: `auto`, `color`, or `bw`. <br>Defaults to `auto`, which will be detected **automatically**.                                                                                                                                                                                      |
-| -p           | --palette     | Skin tone palette. <br>Valid choices can be `perla`, `yadon-ostfeld`, `proder`; <br>You can also input RGB **hex** values starting with `#` <br>or **RGB** values separated by **commas**, <br>e.g., `-p #373028 #422811` or `-p 255,255,255 100,100,100`.                                                                                                                        |
+| -p           | --palette     | Skin tone palette. <br>Valid choices can be `perla`, `monk`, `yadon-ostfeld`, `proder`; <br>You can also input RGB **hex** values starting with `#` <br>or **RGB** values separated by **commas**, <br>e.g., `-p #373028 #422811` or `-p 255,255,255 100,100,100`.                                                                                                                |
 | -l           | --labels      | Skin tone labels. <br>Default values are the **UPPERCASE** alphabet list leading by the image type <br>(`C` for `color`; `B` for `Black&White`), <br>e.g., `['CA', 'CB', ..., 'CZ']` or `['BA', 'BB', ..., 'BZ']`.                                                                                                                                                                |
 | -d           | --debug       | Whether to generate report images, used for debugging and verification. <br>The report images will be saved in the `./debug` directory.                                                                                                                                                                                                                                           |
 | -bw          | --black_white | Whether to convert the input to **black/white** image(s). <br>If `true`, the app will use a **black/white palette** to classify the image.                                                                                                                                                                                                                                        |
@@ -326,7 +332,7 @@ In default (i.e., `stone` without `-i` option), the app will search images in cu
 
 2.1 Use the built-in palettes
 
-The built-in palettes are: `perla`, `yadon-ostfeld`, `proder` and `bw`.
+The built-in palettes are: `perla`, `monk`, yadon-ostfeld`, `proder` and `bw`.
 
 NB: The `bw` palette is used to classify the **black/white** images only.
 
@@ -342,6 +348,12 @@ The HEX values of each palette are:
 * `perla`:
     * `#373028`, `#422811`, `#513B2E`, `#6F503C`, `#81654F`, `#9D7A54`, `#BEA07E`, `#E5C8A6`, `#E7C1B8`, `#F3DAD6`, `#FBF2F3`
     * Citation: Rejón Piña, R. A., & Ma, C. (2021). Classification Algorithm for Skin Color (CASCo): A new tool to measure skin color in social science research.
+
+![MONK](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-monk.svg)
+
+* `monk`:
+    * `#3A2D1F`, `#4B3A2A`, `#5C4A3A`, `#6D5A4A`, `#7E6A5A`, `#8F7A6A`, `#A08A7A`, `#B09A8A`, `#C1AA9A`, `#D2BAAA`, `#E3CBCA`
+    * Citation: Monk, Ellis. "Monk Skin Tone Scale," 2019. https://skintone.google.
 
 ![YADON-OSTFELD](https://raw.githubusercontent.com/ChenglongMa/SkinToneClassifier/main/docs/palette-yadon-ostfeld.svg)
 
