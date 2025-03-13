@@ -10,6 +10,7 @@
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/skin-tone-classifier)
 [![PyPI](https://img.shields.io/pypi/v/skin-tone-classifier)](https://pypi.org/project/skin-tone-classifier/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/skin-tone-classifier)](https://pypi.org/project/skin-tone-classifier/)
+[![PyPI Downloads](https://static.pepy.tech/badge/skin-tone-classifier)](https://pepy.tech/projects/skin-tone-classifier)
 [![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/ChenglongMa/SkinToneClassifier?include_prereleases)](https://github.com/ChenglongMa/SkinToneClassifier/releases/latest)
 [![GitHub License](https://img.shields.io/github/license/ChenglongMa/SkinToneClassifier)](https://github.com/ChenglongMa/SkinToneClassifier/blob/main/LICENSE)
 [![youtube](https://img.shields.io/badge/YouTube-Skin_Tone_Classifier-FF0000?logo=youtube)](https://youtube.com/playlist?list=PLYRpHlp-9V_E5ZLhW1hbNaVjS5Zg6b6kQ&si=ezxUR7McUbZa4clT)
